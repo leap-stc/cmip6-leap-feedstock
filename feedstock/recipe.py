@@ -56,8 +56,9 @@ class StoreToZarr(beam.PTransform):
     # TODO: make it so we don't have to explictly specify combine_dims
     # Could be inferred from the pattern instead
     combine_dims: List[Dimension]
-    target_root: Union[str, FSSpecTarget]
-    store_name: str
+    # target_root: Union[str, FSSpecTarget] # temp renamed (bug)
+    target: Union[str, FSSpecTarget]
+    # store_name: str
     target_chunk_nbytes : int
     chunk_dim : str
     target_chunks: Dict[str, int] = field(default_factory=dict)
@@ -68,13 +69,13 @@ class StoreToZarr(beam.PTransform):
                                                target_chunk_nbytes=self.target_chunk_nbytes, 
                                                chunk_dim=self.chunk_dim)
         indexed_datasets = datasets | IndexItems(schema=schema)
-        if isinstance(self.target_root, str):
-            target_root = FSSpecTarget.from_url(self.target_root)
+        if isinstance(self.target, str):
+            target = FSSpecTarget.from_url(self.target)
         else:
-            target_root = self.target_root
-        full_target = target_root / self.store_name
+            target = self.target
+        # full_target = target / self.store_name
         target_store = schema | PrepareZarrTarget(
-            target=full_target, target_chunks=beam.pvalue.AsSingleton(self.target_chunks)
+            target=target, target_chunks=beam.pvalue.AsSingleton(self.target_chunks)
         )
         return indexed_datasets | StoreDatasetFragments(target_store=target_store)
 
@@ -159,7 +160,7 @@ for iid, input_dict in recipe_input_dict.items():
         | OpenURLWithFSSpec()
         | OpenWithXarray() # do not specify file type to accomdate both ncdf3 and ncdf4
         | StoreToZarr(
-            store_name=f"{iid}.zarr",
+            # store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
             target_chunk_nbytes=target_chunk_nbytes,
             chunk_dim=pattern.concat_dims[0] # not sure if this is better than hardcoding?
