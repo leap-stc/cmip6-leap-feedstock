@@ -2,7 +2,7 @@
 """Modified transforms from Pangeo Forge"""
 
 from dataclasses import dataclass, field
-from typing import List, Dict
+from typing import List, Dict, Union
 from pangeo_forge_recipes.patterns import Dimension
 from pangeo_forge_recipes.storage import FSSpecTarget
 from pangeo_forge_recipes.transforms import DetermineSchema, XarraySchema, IndexItems, PrepareZarrTarget, StoreDatasetFragments
@@ -56,7 +56,7 @@ class StoreToZarr(beam.PTransform):
     # TODO: make it so we don't have to explictly specify combine_dims
     # Could be inferred from the pattern instead
     combine_dims: List[Dimension]
-    target_root: str | FSSpecTarget
+    target_root: Union[str, FSSpecTarget]
     store_name: str
     target_chunk_nbytes : int
     chunk_dim : str
@@ -158,7 +158,7 @@ for iid, input_dict in recipe_input_dict.items():
         beam.Create(pattern.items())
         | OpenURLWithFSSpec()
         | OpenWithXarray() # do not specify file type to accomdate both ncdf3 and ncdf4
-        | StoreToZarrLegacyDynamic(
+        | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
             target_chunk_nbytes=target_chunk_nbytes,
