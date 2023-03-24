@@ -1,2 +1,2 @@
-git+https://github.com/pangeo-forge/pangeo-forge-recipes.git@08364b5aad7762fde7773d1c2b6d0ff947abde62#pangeo-forge-recipes
+git+https://github.com/pangeo-forge/pangeo-forge-recipes.git@08364b5aad7762fde7773d1c2b6d0ff947abde62
 esgf-pyclient
