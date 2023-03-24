@@ -100,7 +100,7 @@ iids = [
 # 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r5i1p1f1.day.psl.gn.v20210907',
 # 'CMIP6.ScenarioMIP.MIROC.MIROC6.ssp585.r2i1p1f1.day.psl.gn.v20200623',
 # 'CMIP6.ScenarioMIP.MIROC.MIROC6.ssp585.r3i1p1f1.day.psl.gn.v20200623', 
-# 'CMIP6.ScenarioMIP.MIROC.MIROC6.ssp585.r4i1p1f1.day.psl.gn.v20200623', 
+'CMIP6.ScenarioMIP.MIROC.MIROC6.ssp585.r4i1p1f1.day.psl.gn.v20200623', 
 # 'CMIP6.ScenarioMIP.MIROC.MIROC6.ssp585.r5i1p1f1.day.psl.gn.v20200623', 
 # 'CMIP6.ScenarioMIP.EC-Earth-Consortium.EC-Earth3.ssp585.r6i1p1f1.day.sfcWind.gr.v20200201', 
 # 'CMIP6.ScenarioMIP.EC-Earth-Consortium.EC-Earth3.ssp585.r9i1p1f1.day.sfcWind.gr.v20200201', 
