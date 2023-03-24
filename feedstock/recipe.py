@@ -88,9 +88,9 @@ from pangeo_forge_recipes.transforms import OpenURLWithFSSpec, OpenWithXarray
 from pyesgf.search import SearchConnection
 
 iids = [
-'CMIP6.CMIP.BCC.BCC-CSM2-MR.historical.r1i1p1f1.day.pr.gn.v20181126',
+# 'CMIP6.CMIP.BCC.BCC-CSM2-MR.historical.r1i1p1f1.day.pr.gn.v20181126',
 # 'CMIP6.CMIP.BCC.BCC-CSM2-MR.historical.r1i1p1f1.day.sfcWind.gn.v20181126',
-# 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r2i1p1f1.day.sfcWind.gn.v20210907',
+'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r2i1p1f1.day.sfcWind.gn.v20210907',
 # 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r3i1p1f1.day.sfcWind.gn.v20210907',
 # 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r4i1p1f1.day.sfcWind.gn.v20210907',
 # 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r5i1p1f1.day.sfcWind.gn.v20210907',
