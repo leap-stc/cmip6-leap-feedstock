@@ -40,7 +40,7 @@ def dynamic_target_chunks_from_schema(
         chunk_size = target_chunk_nbytes//nbytes_single
         
     target_chunks[chunk_dim] = chunk_size
-    return target_chunks
+    return {k:int(v) for k,v in target_chunks.items()} # make sure the values are integers, maybe this fixes the dataflow error
 
 @dataclass
 class StoreToZarr(beam.PTransform):
