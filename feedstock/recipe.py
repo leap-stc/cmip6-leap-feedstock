@@ -107,6 +107,8 @@ iids = [
 # 'CMIP6.ScenarioMIP.EC-Earth-Consortium.EC-Earth3.ssp585.r11i1p1f1.day.sfcWind.gr.v20200201', 
 'CMIP6.ScenarioMIP.MOHC.HadGEM3-GC31-MM.ssp585.r2i1p1f3.day.psl.gn.v20200515',
 # 'CMIP6.ScenarioMIP.MOHC.HadGEM3-GC31-MM.ssp585.r3i1p1f3.day.psl.gn.v20200507',
+# try a big dataset
+'CMIP6.CMIP.NOAA-GFDL.GFDL-CM4.historical.r1i1p1f1.Omon.thetao.gn.v20180701',
 ]
 
 
