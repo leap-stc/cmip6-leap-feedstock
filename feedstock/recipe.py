@@ -6,7 +6,6 @@ from typing import List, Dict, Union
 from pangeo_forge_recipes.patterns import Dimension
 from pangeo_forge_recipes.storage import FSSpecTarget
 from pangeo_forge_recipes.transforms import DetermineSchema, XarraySchema, IndexItems, PrepareZarrTarget, StoreDatasetFragments
-from pangeo_forge_recipes.aggregation import schema_to_template_ds
 
 import apache_beam as beam
 from pangeo_forge_recipes.transforms import OpenURLWithFSSpec, OpenWithXarray
@@ -18,6 +17,7 @@ def dynamic_target_chunks_from_schema(
 ) -> dict[str, int]:
     """Dynamically determine target_chunks from schema based on desired chunk size"""
     # convert schema to dataset
+    from pangeo_forge_recipes.aggregation import schema_to_template_ds # weird but apparently necessary for dataflow
     ds = schema_to_template_ds(schema)
     
     # create full chunk dictionary for all other dimensions
