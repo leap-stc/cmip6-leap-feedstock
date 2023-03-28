@@ -111,7 +111,7 @@ iids = [
 # 'CMIP6.CMIP.NOAA-GFDL.GFDL-CM4.historical.r1i1p1f1.Omon.thetao.gn.v20180701',
 # # try another not quite so big dataset
 # 'CMIP6.CMIP.NCAR.CESM2.historical.r9i1p1f1.Omon.thetao.gn.v20190311'
-"/Users/juliusbusecke/Downloads/keys/leap-pangeo-dataflow_service_account.json"
+"CMIP6.ScenarioMIP.EC-Earth-Consortium.EC-Earth3.ssp585.r107i1p1f1.day.psl.gr.v20200412"
 ]
 
 
