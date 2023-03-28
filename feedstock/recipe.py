@@ -143,7 +143,7 @@ for iid, input_dict in recipe_input_dict.items():
     transforms = (
         beam.Create(pattern.items())
         | OpenURLWithFSSpec()
-        | OpenWithXarray() # do not specify file type to accomdate both ncdf3 and ncdf4
+        | OpenWithXarray(xarray_open_kwargs={'use_cftime':True}) # do not specify file type to accomdate both ncdf3 and ncdf4
         | StoreToZarr(
             # store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
