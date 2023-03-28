@@ -87,32 +87,12 @@ import apache_beam as beam
 from pangeo_forge_recipes.transforms import OpenURLWithFSSpec, OpenWithXarray
 from pyesgf.search import SearchConnection
 
-iids = [
-# # 'CMIP6.CMIP.BCC.BCC-CSM2-MR.historical.r1i1p1f1.day.pr.gn.v20181126',
-# # 'CMIP6.CMIP.BCC.BCC-CSM2-MR.historical.r1i1p1f1.day.sfcWind.gn.v20181126',
-# 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r2i1p1f1.day.sfcWind.gn.v20210907',
-# # 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r3i1p1f1.day.sfcWind.gn.v20210907',
-# # 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r4i1p1f1.day.sfcWind.gn.v20210907',
-# # 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r5i1p1f1.day.sfcWind.gn.v20210907',
-# 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r2i1p1f1.day.psl.gn.v20210907',
-# # 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r3i1p1f1.day.psl.gn.v20210907',
-# # 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r4i1p1f1.day.psl.gn.v20210907',
-# # 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r5i1p1f1.day.psl.gn.v20210907',
-# # 'CMIP6.ScenarioMIP.MIROC.MIROC6.ssp585.r2i1p1f1.day.psl.gn.v20200623',
-# # 'CMIP6.ScenarioMIP.MIROC.MIROC6.ssp585.r3i1p1f1.day.psl.gn.v20200623', 
-# 'CMIP6.ScenarioMIP.MIROC.MIROC6.ssp585.r4i1p1f1.day.psl.gn.v20200623', 
-# # 'CMIP6.ScenarioMIP.MIROC.MIROC6.ssp585.r5i1p1f1.day.psl.gn.v20200623', 
-# # 'CMIP6.ScenarioMIP.EC-Earth-Consortium.EC-Earth3.ssp585.r6i1p1f1.day.sfcWind.gr.v20200201', 
-# # 'CMIP6.ScenarioMIP.EC-Earth-Consortium.EC-Earth3.ssp585.r9i1p1f1.day.sfcWind.gr.v20200201', 
-# # 'CMIP6.ScenarioMIP.EC-Earth-Consortium.EC-Earth3.ssp585.r11i1p1f1.day.sfcWind.gr.v20200201', 
-# 'CMIP6.ScenarioMIP.MOHC.HadGEM3-GC31-MM.ssp585.r2i1p1f3.day.psl.gn.v20200515',
-# # 'CMIP6.ScenarioMIP.MOHC.HadGEM3-GC31-MM.ssp585.r3i1p1f3.day.psl.gn.v20200507',
-# # try a big dataset
-# 'CMIP6.CMIP.NOAA-GFDL.GFDL-CM4.historical.r1i1p1f1.Omon.thetao.gn.v20180701',
-# # try another not quite so big dataset
-# 'CMIP6.CMIP.NCAR.CESM2.historical.r9i1p1f1.Omon.thetao.gn.v20190311'
-"CMIP6.ScenarioMIP.EC-Earth-Consortium.EC-Earth3.ssp585.r107i1p1f1.day.psl.gr.v20200412"
-]
+iids = []
+with open('../iids.txt') as f:
+    for line in f:
+        if not '#' in line:
+            iids.append(str(line).replace(" ", "").replace("',\n", "").replace("'",""))
+print(iids)
 
 
 ## Query ESGF for the urls
