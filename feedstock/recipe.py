@@ -88,7 +88,7 @@ from pangeo_forge_recipes.transforms import OpenURLWithFSSpec, OpenWithXarray
 from pyesgf.search import SearchConnection
 
 iids = []
-with open('../iids.txt') as f:
+with open('iids.txt') as f:
     for line in f:
         if not '#' in line:
             iids.append(str(line).replace(" ", "").replace("',\n", "").replace("'",""))
