@@ -1,13 +1,12 @@
 ### needs to be here otherwise the import fails
 """Modified transforms from Pangeo Forge"""
-
+import json
+import apache_beam as beam
 from dataclasses import dataclass, field
 from typing import List, Dict, Union
-from pangeo_forge_recipes.patterns import Dimension
+from pangeo_forge_recipes.patterns import Dimension, pattern_from_file_sequence
 from pangeo_forge_recipes.storage import FSSpecTarget
 from pangeo_forge_recipes.transforms import DetermineSchema, XarraySchema, IndexItems, PrepareZarrTarget, StoreDatasetFragments
-
-import apache_beam as beam
 from pangeo_forge_recipes.transforms import OpenURLWithFSSpec, OpenWithXarray
 
 def dynamic_target_chunks_from_schema(
@@ -79,58 +78,11 @@ class StoreToZarr(beam.PTransform):
         )
         return indexed_datasets | StoreDatasetFragments(target_store=target_store)
 
+# load recipe input dictionary from json file
 
+with open('../recipe_input_dict.json', 'r') as f:
+    recipe_input_dict = json.load(f)
 
-# from transforms import StoreToZarrLegacyDynamic as StoreToZarr
-from pangeo_forge_recipes.patterns import pattern_from_file_sequence
-import apache_beam as beam
-from pangeo_forge_recipes.transforms import OpenURLWithFSSpec, OpenWithXarray
-from pyesgf.search import SearchConnection
-
-iids = []
-with open('iids.txt') as f:
-    for line in f:
-        if not '#' in line:
-            iids.append(str(line).replace(" ", "").replace("',\n", "").replace("'",""))
-print(iids)
-
-
-## Query ESGF for the urls
-iid_schema = 'mip_era.activity_id.institution_id.source_id.experiment_id.member_id.table_id.variable_id.grid_label.version'
-
-conn = SearchConnection(
-    "https://esgf-node.llnl.gov/esg-search",
-    distrib=True
-)
-recipe_input_dict = {}
-for iid in iids:
-    context_kwargs = {'replica':None,'facets':['doi']} # this assumes that I can use replicas just as master records. I think that is fine
-    for label, value in zip(iid_schema.split('.'), iid.split('.')):
-        context_kwargs[label] = value
-        
-    # is this a problem with the `v...` in version?
-    context_kwargs['version'] = context_kwargs['version'].replace('v','')
-        
-    # testing
-    # del context_kwargs['version']
-    ctx = conn.new_context(**context_kwargs)
-    print(f"{iid}: Found {ctx.hit_count} hits")
-    
-    results = ctx.search() # these might include several data nodes (curiously even if I set replica to false?)
-    
-    if len(results)<1:
-        print(f'Nothing found for {iid}. Skipping.')
-    else:
-        # for now take the first one that has any urls at all
-        for ri,result in enumerate(results):
-            print(f"{iid}-{result.dataset_id}: Extracting URLS")
-            urls = [f.download_url for f in result.file_context().search()] # this raises an annoying warning each time. FIXME
-            if len(urls)>0:
-                recipe_input_dict[iid] = {}
-                recipe_input_dict[iid]['urls'] = urls
-                # populate this to pass to the database later
-                recipe_input_dict[iid]['instance_id'],recipe_input_dict[iid]['data_node'] = result.dataset_id.split('|')
-                break
 
 # create recipe dictionary
 target_chunk_nbytes = int(100e6)
