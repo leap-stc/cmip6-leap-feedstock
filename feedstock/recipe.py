@@ -80,7 +80,7 @@ class StoreToZarr(beam.PTransform):
 
 # load recipe input dictionary from json file
 
-with open('../recipe_input_dict.json', 'r') as f:
+with open('recipe_input_dict.json', 'r') as f:
     recipe_input_dict = json.load(f)
 
 
