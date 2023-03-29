@@ -1,8 +1,8 @@
 title: "CMIP6"
 description: "CMIP6 datasets converted to zarr stores from ESGF files" 
-# pangeo_forge_version: "0.8.3"
 recipes:
-  dict_object: "recipe:recipes"
+  - id: cmip6-template
+    object: "recipe:transforms"
 provenance:
   providers: #TODO: Ask in the cloud call...
     - name: "ESGF" 
