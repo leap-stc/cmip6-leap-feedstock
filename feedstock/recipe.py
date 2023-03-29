@@ -17,6 +17,7 @@ def urls_from_gcs() -> List[str]:
     import gcsfs
     import json
     iid = inject_func() # gets injected by the dataflow runner
+    print(f"Fetching urls from GCS for {iid}")
     url_bucket = 'leap-persistent/jbusecke/cmip6urls'
     fs = gcsfs.GCSFileSystem(project='leap-pangeo')
     with fs.open(f"gs://{url_bucket}/{iid}.json", 'r') as f:
@@ -96,9 +97,10 @@ class StoreToZarr(beam.PTransform):
 
 
 # create recipe dictionary
+
 target_chunk_nbytes = int(100e6)
 input_urls = urls_from_gcs() # The iid input here gets ingected from pangeo-forge-runner (https://github.com/pangeo-forge/pangeo-forge-runner/pull/67)
-
+print(f'Creating recipe from {input_urls}')
 pattern = pattern_from_file_sequence(input_urls, concat_dim='time')
 transforms = (
     beam.Create(pattern.items())
