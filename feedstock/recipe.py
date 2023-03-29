@@ -9,10 +9,14 @@ from pangeo_forge_recipes.storage import FSSpecTarget
 from pangeo_forge_recipes.transforms import DetermineSchema, XarraySchema, IndexItems, PrepareZarrTarget, StoreDatasetFragments
 from pangeo_forge_recipes.transforms import OpenURLWithFSSpec, OpenWithXarray
 
-def urls_from_gcs(iid:str=None) -> List[str]:
+def inject_func(iid:str=None):
+    return iid
+
+def urls_from_gcs() -> List[str]:
     """Get urls from GCS bucket"""
     import gcsfs
     import json
+    iid = inject_func() # gets injected by the dataflow runner
     url_bucket = 'leap-persistent/jbusecke/cmip6urls'
     fs = gcsfs.GCSFileSystem(project='leap-pangeo')
     with fs.open(f"gs://{url_bucket}/{iid}.json", 'r') as f:
