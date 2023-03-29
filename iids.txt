@@ -17,8 +17,6 @@
 #'CMIP6.ScenarioMIP.EC-Earth-Consortium.EC-Earth3.ssp585.r11i1p1f1.day.sfcWind.gr.v20200201', 
 #'CMIP6.ScenarioMIP.MOHC.HadGEM3-GC31-MM.ssp585.r2i1p1f3.day.psl.gn.v20200515',
 #'CMIP6.ScenarioMIP.MOHC.HadGEM3-GC31-MM.ssp585.r3i1p1f3.day.psl.gn.v20200507',
-
-# Test from from https://github.com/pangeo-forge/cmip6-feedstock/issues/22 
 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r19i1p1f2.Omon.zmeso.gn.v20200430',
 'CMIP6.CMIP.CCCma.CanESM5-CanOE.historical.r2i1p2f1.Omon.zmeso.gn.v20190429',
 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r4i1p1f2.Omon.zmeso.gn.v20200204',
