@@ -9,14 +9,11 @@ from pangeo_forge_recipes.storage import FSSpecTarget
 from pangeo_forge_recipes.transforms import DetermineSchema, XarraySchema, IndexItems, PrepareZarrTarget, StoreDatasetFragments
 from pangeo_forge_recipes.transforms import OpenURLWithFSSpec, OpenWithXarray
 
-def inject_func(iid:str=None):
-    return iid
 
-def urls_from_gcs() -> List[str]:
+def urls_from_gcs(iid: str=None) -> List[str]: #iid gets injected by the dataflow runner
     """Get urls from GCS bucket"""
     import gcsfs
     import json
-    iid = inject_func() # gets injected by the dataflow runner
     print(f"Fetching urls from GCS for {iid}")
     url_bucket = 'leap-persistent/jbusecke/cmip6urls'
     fs = gcsfs.GCSFileSystem(project='leap-pangeo')
@@ -55,6 +52,7 @@ def dynamic_target_chunks_from_schema(
         
     target_chunks[chunk_dim] = chunk_size
     return {k:int(v) for k,v in target_chunks.items()} # make sure the values are integers, maybe this fixes the dataflow error
+    # return {k:int(v) for k,v in target_chunks.items() if k=='time'} # quick fix to work around 
 
 @dataclass
 class StoreToZarr(beam.PTransform):
