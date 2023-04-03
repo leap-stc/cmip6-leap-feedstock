@@ -1,5 +1,5 @@
 # git+https://github.com/pangeo-forge/pangeo-forge-recipes.git@08364b5aad7762fde7773d1c2b6d0ff947abde62
-git+https://github.com/rabernat/pangeo-forge-recipes.git@fix-target_chunks-bug
+git+https://github.com/jbusecke/pangeo-forge-recipes.git@dynamic-target-chunks
 esgf-pyclient
 xarray
 cftime
