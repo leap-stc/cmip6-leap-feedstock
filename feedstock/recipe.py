@@ -15,8 +15,7 @@ def get_jobname(jobname: str=None) -> str:
     return jobname
 
 iid = get_iid() # this gets injected by pangeo-forge-runner
-# make a unique iid for the target store
-unique_iid = iid+'.'+''.join(random.choices(alphabet, k=8))
+jobname = get_jobname()
 
 def urls_from_gcs(iid: str) -> List[str]:
     """Get urls from GCS bucket"""
