@@ -59,7 +59,7 @@ transforms = (
     beam.Create(pattern.items())
     | OpenURLWithFSSpec()
     | OpenWithXarray(xarray_open_kwargs={"use_cftime":True, "decode_coords": "all"}) # do not specify file type to accomdate both ncdf3 and ncdf4
-    | KeepOnlyVariableId()
+    # | KeepOnlyVariableId() # disable to see if necessary
     | StoreToZarr(
         store_name=f"{jobname}.zarr", # use jobname for now to have a unique store? 
         combine_dims=pattern.combine_dim_keys,
