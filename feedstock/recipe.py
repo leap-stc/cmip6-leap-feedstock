@@ -30,6 +30,26 @@ def urls_from_gcs(iid: str) -> List[str]:
         urls = json.load(f)['urls']
     return urls
 
+# just to be sure that only the actual variable_id is used as a dataset variable
+class KeepOnlyVariableId(beam.PTransform):
+    """
+    Set all data_variables except for `variable_id` attrs to coord
+    """
+    
+    @staticmethod
+    def _keep_only_variable_id(item: Indexed[T]) -> Indexed[T]:
+        """
+        Many netcdfs contain variables other than the one specified in the `variable_id` facet. 
+        Set them all to coords
+        """
+        index, ds = item
+        new_coords_vars = [var for var in ds.data_vars if var != ds.attrs['variable_id']]
+        ds = ds.set_coords(new_coords_vars)
+        return index, ds
+    
+    def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
+        return pcoll | beam.Map(self._keep_only_variable_id)
+
 # create recipe dictionary
 target_chunk_nbytes = int(100e6)
 input_urls = urls_from_gcs(iid)
@@ -39,9 +59,9 @@ transforms = (
     beam.Create(pattern.items())
     | OpenURLWithFSSpec()
     | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomdate both ncdf3 and ncdf4
-    # | KeepOnlyVariableId() # disable to see if necessary
+    | KeepOnlyVariableId() #still necessary ('CMIP6.CMIP.IPSL.IPSL-CM5A2-INCA.historical.r1i1p1f1.Omon.zmeso.gn.v20200729' is an example)
     | StoreToZarr(
-        store_name=f"{iid}.zarr", 
+        store_name=f"{jobname}.zarr", # use jobname for now to have a unique store? 
         combine_dims=pattern.combine_dim_keys,
         target_chunk_nbytes=target_chunk_nbytes,
         chunk_dim='time'
