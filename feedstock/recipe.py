@@ -16,8 +16,8 @@ def get_jobname(jobname: str=None) -> str:
     """pangeo-forge-runner injection func"""
     return jobname
 
-iid = get_iid() # this gets injected by pangeo-forge-runner
-jobname = get_jobname()
+iid = get_iid() # The iid input here gets ingected from pangeo-forge-runner (https://github.com/pangeo-forge/pangeo-forge-runner/pull/67)
+jobname = get_jobname() # same here with the jobname
 
 def urls_from_gcs(iid: str) -> List[str]:
     """Get urls from GCS bucket"""
@@ -52,7 +52,7 @@ class KeepOnlyVariableId(beam.PTransform):
 
 # create recipe dictionary
 target_chunk_nbytes = int(100e6)
-input_urls = urls_from_gcs(iid) # The iid input here gets ingected from pangeo-forge-runner (https://github.com/pangeo-forge/pangeo-forge-runner/pull/67)
+input_urls = urls_from_gcs(iid)
 print(f'Creating recipe from {input_urls}')
 pattern = pattern_from_file_sequence(input_urls, concat_dim='time')
 transforms = (
