@@ -12,12 +12,7 @@ def get_iid(iid: str=None) -> str:
     """pangeo-forge-runner injection func"""
     return iid
 
-def get_jobname(jobname: str=None) -> str:
-    """pangeo-forge-runner injection func"""
-    return jobname
-
 iid = get_iid() # The iid input here gets ingected from pangeo-forge-runner (https://github.com/pangeo-forge/pangeo-forge-runner/pull/67)
-jobname = get_jobname() # same here with the jobname
 
 def urls_from_gcs(iid: str) -> List[str]:
     """Get urls from GCS bucket"""
@@ -61,7 +56,7 @@ transforms = (
     | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomdate both ncdf3 and ncdf4
     | KeepOnlyVariableId() #still necessary ('CMIP6.CMIP.IPSL.IPSL-CM5A2-INCA.historical.r1i1p1f1.Omon.zmeso.gn.v20200729' is an example)
     | StoreToZarr(
-        store_name=f"{jobname}.zarr", # use jobname for now to have a unique store? 
+        store_name=f"{iid}.zarr",
         combine_dims=pattern.combine_dim_keys,
         target_chunk_nbytes=target_chunk_nbytes,
         chunk_dim='time'
