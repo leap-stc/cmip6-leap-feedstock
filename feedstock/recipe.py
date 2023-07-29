@@ -68,6 +68,8 @@ class KeepOnlyVariableId(beam.PTransform):
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
         return pcoll | beam.Map(self._keep_only_variable_id)
 
+print(beam.__version__)
+print(dir(beam.pvalue))
 # create recipe dictionary
 input_urls = urls_from_bq(iid)
 print(f'Creating recipe from {input_urls}')
