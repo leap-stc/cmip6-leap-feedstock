@@ -1,0 +1,13 @@
+# Dev environment
+name: cmip6-leap-feedstock
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - ipykernel
+  - pip:
+      - gcsfs
+      - apache_beam[interactive]
+      - google-cloud-bigquery
+      # - git+https://github.com/pangeo-forge/pangeo-forge-runner.git@arbitrary-injections # need to install this with no-deps
+      - -r feedstock/requirements.txt
