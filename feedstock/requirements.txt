@@ -3,3 +3,4 @@ git+https://github.com/jbusecke/pangeo-forge-esgf.git@beam-refactor
 esgf-pyclient
 xarray
 cftime
+apache-beam[interactive]
