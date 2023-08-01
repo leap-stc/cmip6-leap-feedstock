@@ -7,7 +7,7 @@ dependencies:
   - ipykernel
   - pip:
       - gcsfs
-      - apache_beam[interactive]
+      - apache_beam[interactive, gcp, dataframe]==2.42.0
       - google-cloud-bigquery
       # - git+https://github.com/pangeo-forge/pangeo-forge-runner.git@arbitrary-injections # need to install this with no-deps
       - -r feedstock/requirements.txt

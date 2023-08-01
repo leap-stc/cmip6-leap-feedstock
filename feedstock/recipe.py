@@ -148,9 +148,10 @@ class StoreToZarr(beam.PTransform, ZarrWriterMixin):
         if self.target_chunks_aspect_ratio is not None:
             target_chunks = dynamic_target_chunks_from_schema(
                 schema,
-                target_chunk_size=cast(Union[int, str], self.target_chunk_size),
-                target_chunks_aspect_ratio=cast(Dict[str, int], self.target_chunks_aspect_ratio),
-                size_tolerance=self.size_tolerance,
+                target_chunks = {'time':10},
+                # target_chunk_size=cast(Union[int, str], self.target_chunk_size),
+                # target_chunks_aspect_ratio=cast(Dict[str, int], self.target_chunks_aspect_ratio),
+                # size_tolerance=self.size_tolerance,
             )
         else:
             target_chunks = cast(Dict[str, int], self.target_chunks)
