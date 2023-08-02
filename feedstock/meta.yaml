@@ -1,11 +1,11 @@
 title: "CMIP6"
-description: "CMIP6 datasets converted to zarr stores from ESGF files" 
+description: "CMIP6 datasets converted to zarr stores from ESGF files"
 recipes:
   - id: cmip6-template
-    object: "recipe:transforms"
+    object: "recipe:TEST_CMIP"
 provenance:
   providers: #TODO: Ask in the cloud call...
-    - name: "ESGF" 
+    - name: "ESGF"
       description: "Earth System Grid Federation"
       roles:
         - producer
