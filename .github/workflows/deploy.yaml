@@ -1,0 +1,58 @@
+name: Deploy recipes
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+    types: [opened, reopened, synchronize, labeled]
+
+jobs:
+  deploy-recipes:
+    name: deploy-recipes
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Authenticate to Google Cloud"
+        id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
+      - name: "Set prune config based on github event type"
+        run: >
+          if ${{ github.event_name == 'pull_request' }}; then
+            echo prune=true >> $GITHUB_ENV
+          else
+            echo prune=false >> $GITHUB_ENV
+          fi
+      - name: "Deploy recipes"
+        uses: "pangeo-forge/deploy-recipe-action@v0.1"
+        with:
+          select_recipe_by_label: true
+          pangeo_forge_runner_config: >
+            {
+            "Bake": {
+                "prune": ${{ env.prune }},
+                "bakery_class": "pangeo_forge_runner.bakery.dataflow.DataflowBakery"
+            },
+            "DataflowBakery": {
+                "use_public_ips": true,
+                "service_account_email": "julius-leap-dataflow@leap-pangeo.iam.gserviceaccount.com",
+                "project_id": "leap-pangeo",
+                "temp_gcs_location": "gs://leap-scratch/data-library/temp",
+                "max_num_workers": ${{ env.max_num_workers }}
+            },
+            "TargetStorage": {
+                "fsspec_class": "gcsfs.GCSFileSystem",
+                "root_path": "gs://leap-persistent-ro/data-library/{job_name}"
+            },
+            "InputCacheStorage": {
+                "fsspec_class": "gcsfs.GCSFileSystem",
+                "root_path": "gs://leap-scratch/data-library/cache"
+            }
+            }
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
