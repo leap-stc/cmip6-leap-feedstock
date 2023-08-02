@@ -1,3 +1,3 @@
 # git+https://github.com/jbusecke/pangeo-forge-recipes.git@dynamic_chunks_2
 git+https://github.com/pangeo-forge/pangeo-forge-recipes.git@main #testing first without dyn chunking
-git+https://github.com/jbusecke/pangeo-forge-esgf.git@beam-refactor
+# git+https://github.com/jbusecke/pangeo-forge-esgf.git@beam-refactor
