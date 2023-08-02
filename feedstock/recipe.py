@@ -187,9 +187,9 @@ TEST_CMIP = (
         store_name=f"{iid}.zarr",
         combine_dims=pattern.combine_dim_keys,
         # for now try with static chunking
-        target_chunks={'time':1000},
-        # target_chunk_size='200MB',
-        # target_chunks_aspect_ratio = {'x': 1, 'y': 1, 'time': 10}, # TODO: this will fail for many of the datasets with different naming. 
+        # target_chunks={'time':1000},
+        target_chunk_size='200MB',
+        target_chunks_aspect_ratio = {'lon': 1, 'lat': 1, 'time': 10}, # TODO: this will fail for many of the datasets with different naming. 
         # Need to improve this upstream (but how do I generalize this?)
     )
 )
