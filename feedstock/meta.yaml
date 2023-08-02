@@ -1,0 +1,23 @@
+title: "CMIP6"
+description: "CMIP6 datasets converted to zarr stores from ESGF files" 
+recipes:
+  - id: cmip6-template
+    object: "recipe:transforms"
+provenance:
+  providers: #TODO: Ask in the cloud call...
+    - name: "ESGF" 
+      description: "Earth System Grid Federation"
+      roles:
+        - producer
+        - licensor
+      url: https://esgf-node.llnl.gov/projects/cmip6/
+  license: "CC-BY-4.0" #TODO...
+maintainers:
+  - name: "Julius Busecke"
+    orcid: "0000-0001-8571-865X"
+    github: jbusecke
+  - name: "Charles Stern"
+    orcid: "0000-0002-4078-0852"
+    github: cisaacstern
+# bakery:
+#   id: "pangeo-ldeo-nsf-earthcube"
