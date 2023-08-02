@@ -175,11 +175,11 @@ class KeepOnlyVariableId(beam.PTransform):
 
 
 # create recipe dictionary
-# transforms = {}
+transforms = {}
 input_urls = urls_from_bq(iid)
 print(f'Creating recipe from {input_urls}')
 pattern = pattern_from_file_sequence(input_urls, concat_dim='time')
-transforms = (
+transforms['test'] = (
     beam.Create(pattern.items())
     | OpenURLWithFSSpec()
     | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomdate both ncdf3 and ncdf4
