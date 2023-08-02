@@ -21,13 +21,6 @@ jobs:
         uses: "google-github-actions/auth@v1"
         with:
           credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
-      - name: "Set prune config based on github event type"
-        run: >
-          if ${{ github.event_name == 'pull_request' }}; then
-            echo prune=true >> $GITHUB_ENV
-          else
-            echo prune=false >> $GITHUB_ENV
-          fi
       - name: "Deploy recipes"
         uses: "pangeo-forge/deploy-recipe-action@v0.1"
         with:
@@ -35,7 +28,6 @@ jobs:
           pangeo_forge_runner_config: >
             {
             "Bake": {
-                "prune": ${{ env.prune }},
                 "bakery_class": "pangeo_forge_runner.bakery.dataflow.DataflowBakery"
             },
             "DataflowBakery": {
