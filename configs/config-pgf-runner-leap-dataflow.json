@@ -16,4 +16,4 @@
         "fsspec_class": "gcsfs.GCSFileSystem",
         "root_path": "gs://leap-scratch/data-library/cache"
     }
-    }
+}

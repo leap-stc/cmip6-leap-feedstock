@@ -25,6 +25,6 @@ jobs:
         uses: "pangeo-forge/deploy-recipe-action@file-based-config"
         with:
           select_recipe_by_label: true
-          pangeo_forge_runner_config: "../configs/config-pgf-runner-leap-dataflow.json"
+          pangeo_forge_runner_config: "../../configs/config-pgf-runner-leap-dataflow.json"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
