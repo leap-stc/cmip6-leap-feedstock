@@ -180,7 +180,7 @@ print(f'Creating recipe from {input_urls}')
 pattern = pattern_from_file_sequence(input_urls, concat_dim='time')
 transforms = (
     beam.Create(pattern.items())
-    | OpenURLWithFSSpec()
+    | OpenURLWithFSSpec(cache="local_storage/cache/")
     | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomdate both ncdf3 and ncdf4
     | KeepOnlyVariableId()
     | StoreToZarr(
@@ -189,5 +189,7 @@ transforms = (
         target_chunk_size='200MB',
         target_chunks_aspect_ratio = {'x': 1, 'y': 1, 'time': 10}, # TODO: this will fail for many of the datasets with different naming. 
         # Need to improve this upstream (but how do I generalize this?)
+        # for fully manual debugging
+        target_root="../local_storage/target/"
     )
 )

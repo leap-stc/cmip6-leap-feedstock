@@ -10,7 +10,7 @@
         "temp_gcs_location": "gs://leap-scratch/jbusecke/data/CMIP6/dataflow_test/temp",
     },
     "TargetStorage": {
-        "fsspec_class": "gcsfs.GCSFileSystem"
+        "fsspec_class": "gcsfs.GCSFileSystem",
         "root_path": "gs://leap-persistent/jbusecke/data/CMIP6/dataflow_test_production"
     },
     "InputCacheStorage": {
