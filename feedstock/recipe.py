@@ -13,7 +13,8 @@ from pangeo_forge_recipes.transforms import (
 def get_iid(iid: str=None) -> str:
     """pangeo-forge-runner injection func"""
     # return iid
-    return 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r3i1p1f1.day.pr.gn.v20190603'
+    # return 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r3i1p1f1.day.pr.gn.v20190603'
+    return 'CMIP6.ScenarioMIP.NCC.NorESM2-LM.ssp245.r1i1p1f1.day.sfcWind.gn.v20191108'
 
 iid = get_iid() # The iid input here gets ingected from pangeo-forge-runner (https://github.com/pangeo-forge/pangeo-forge-runner/pull/67)
 
@@ -44,11 +45,19 @@ def urls_from_bq(iid: str) -> List[str]:
     # return list(iid_obj.results)[0][2] #FIXME: This is pretty ugly...just a quick test for now.
     
     # !!!Bypass for now and hardcode the urls
-    return ['http://aims3.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/MRI/MRI-ESM2-0/historical/r3i1p1f1/day/pr/gn/v20190603/pr_day_MRI-ESM2-0_historical_r3i1p1f1_gn_18500101-18991231.nc',
- 'http://aims3.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/MRI/MRI-ESM2-0/historical/r3i1p1f1/day/pr/gn/v20190603/pr_day_MRI-ESM2-0_historical_r3i1p1f1_gn_19000101-19491231.nc',
- 'http://aims3.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/MRI/MRI-ESM2-0/historical/r3i1p1f1/day/pr/gn/v20190603/pr_day_MRI-ESM2-0_historical_r3i1p1f1_gn_19500101-19991231.nc',
- 'http://aims3.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/MRI/MRI-ESM2-0/historical/r3i1p1f1/day/pr/gn/v20190603/pr_day_MRI-ESM2-0_historical_r3i1p1f1_gn_20000101-20141231.nc']
-
+#     return ['http://aims3.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/MRI/MRI-ESM2-0/historical/r3i1p1f1/day/pr/gn/v20190603/pr_day_MRI-ESM2-0_historical_r3i1p1f1_gn_18500101-18991231.nc',
+#  'http://aims3.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/MRI/MRI-ESM2-0/historical/r3i1p1f1/day/pr/gn/v20190603/pr_day_MRI-ESM2-0_historical_r3i1p1f1_gn_19000101-19491231.nc',
+#  'http://aims3.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/MRI/MRI-ESM2-0/historical/r3i1p1f1/day/pr/gn/v20190603/pr_day_MRI-ESM2-0_historical_r3i1p1f1_gn_19500101-19991231.nc',
+#  'http://aims3.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/MRI/MRI-ESM2-0/historical/r3i1p1f1/day/pr/gn/v20190603/pr_day_MRI-ESM2-0_historical_r3i1p1f1_gn_20000101-20141231.nc']
+    return ['https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/NCC/NorESM2-LM/ssp245/r1i1p1f1/day/sfcWind/gn/v20191108/sfcWind_day_NorESM2-LM_ssp245_r1i1p1f1_gn_20150101-20201231.nc',
+ 'https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/NCC/NorESM2-LM/ssp245/r1i1p1f1/day/sfcWind/gn/v20191108/sfcWind_day_NorESM2-LM_ssp245_r1i1p1f1_gn_20210101-20301231.nc',
+ 'https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/NCC/NorESM2-LM/ssp245/r1i1p1f1/day/sfcWind/gn/v20191108/sfcWind_day_NorESM2-LM_ssp245_r1i1p1f1_gn_20310101-20401231.nc',
+ 'https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/NCC/NorESM2-LM/ssp245/r1i1p1f1/day/sfcWind/gn/v20191108/sfcWind_day_NorESM2-LM_ssp245_r1i1p1f1_gn_20410101-20501231.nc',
+ 'https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/NCC/NorESM2-LM/ssp245/r1i1p1f1/day/sfcWind/gn/v20191108/sfcWind_day_NorESM2-LM_ssp245_r1i1p1f1_gn_20510101-20601231.nc',
+ 'https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/NCC/NorESM2-LM/ssp245/r1i1p1f1/day/sfcWind/gn/v20191108/sfcWind_day_NorESM2-LM_ssp245_r1i1p1f1_gn_20610101-20701231.nc',
+ 'https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/NCC/NorESM2-LM/ssp245/r1i1p1f1/day/sfcWind/gn/v20191108/sfcWind_day_NorESM2-LM_ssp245_r1i1p1f1_gn_20710101-20801231.nc',
+ 'https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/NCC/NorESM2-LM/ssp245/r1i1p1f1/day/sfcWind/gn/v20191108/sfcWind_day_NorESM2-LM_ssp245_r1i1p1f1_gn_20810101-20901231.nc',
+ 'https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/NCC/NorESM2-LM/ssp245/r1i1p1f1/day/sfcWind/gn/v20191108/sfcWind_day_NorESM2-LM_ssp245_r1i1p1f1_gn_20910101-21001231.nc']
 
 # just to be sure that only the actual variable_id is used as a dataset variable
 class KeepOnlyVariableId(beam.PTransform):
