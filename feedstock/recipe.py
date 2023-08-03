@@ -79,7 +79,7 @@ pattern = pattern_from_file_sequence(input_urls, concat_dim='time')
 TEST_CMIP = (
     beam.Create(pattern.items())
     | OpenURLWithFSSpec()
-    | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomdate both ncdf3 and ncdf4
+    | OpenWithXarray(xarray_open_kwargs={"use_cftime":True, "decode_coords": "all"}) # do not specify file type to accomdate both ncdf3 and ncdf4
     | KeepOnlyVariableId()
     | StoreToZarr(
         store_name=f"{iid}.zarr",
