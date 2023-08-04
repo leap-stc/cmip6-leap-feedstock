@@ -91,7 +91,7 @@ TEST_CMIP = (
         # Try to use the dynamically inferred chunking statically (see https://github.com/leap-stc/cmip6-leap-feedstock/pull/4#issuecomment-1663137723)
         # target_chunks={'time':3545, 'lat':80, 'lon':160},
         target_chunk_size='200MB',
-        target_chunks_aspect_ratio = {'lon': 10, 'lat': 1, 'time': 1, 'bnds':-1}, # TODO: this will fail for many of the datasets with different naming. 
+        target_chunks_aspect_ratio = {'lon': -1, 'lat': -1, 'time': 1, 'bnds':-1}, # TODO: this will fail for many of the datasets with different naming. 
         # Need to improve this upstream (but how do I generalize this?)
     )
 )

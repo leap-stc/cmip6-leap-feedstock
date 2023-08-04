@@ -2,6 +2,17 @@
 
 This repository is similar to [data-management](https://github.com/leap-stc/data-management) but due to the sheer size of the CMIP archive, we chose to keep this feedstock separate to enable custom solutions and fast development not necessary for other data ingestion recipes.
 
+## How to run recipes locally (with PGF runner)
+- Make sure to set up the environment (TODO: Add this as docs on pangeo-forge-runner)
+- Create a scratch dir (e.g. on the desktop it should not be within a repo)
+- call  pfg with a local path `pangeo-forge-runner bake --repo path_to_repo -f path_to_config.json`
+- data will be generated in this (scratch) dir.
+> Example call: `pangeo-forge-runner bake --repo=/Users/juliusbusecke/Code/CMIP6-LEAP-feedstock -f /Users/juliusbusecke/Code/CMIP6-LEAP-feedstock/configs/config_local.json --Bake.job_name=cmip6test`
+- TODO: In pgf-runner error if all the storage locations are not just an abstract filestystem
+- From charles: install pgf recipes locally with editable flag
+  - Get a debugger running within the pgf code (TODO: ask charles again how to do ti.
+  )
+
 ## Dev Guide
 
 - Set up a local conda environment with `mamba env create -f environment.yml`
