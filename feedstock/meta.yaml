@@ -2,7 +2,7 @@ title: "CMIP6"
 description: "CMIP6 datasets converted to zarr stores from ESGF files"
 recipes:
   - id: cmip6-template
-    object: "recipe:transforms"
+    dict_object: "recipe:transforms"
 provenance:
   providers: #TODO: Ask in the cloud call...
     - name: "ESGF"
