@@ -70,6 +70,7 @@ template_a = (
             combine_dims=pattern_a.combine_dim_keys,
             target_chunk_size='200MB',
             target_chunks_aspect_ratio = target_chunks_aspect_ratio,
+            size_tolerance=0.5,
         )
     )
 
