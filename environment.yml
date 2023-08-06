@@ -3,13 +3,12 @@ name: cmip6-leap-feedstock
 channels:
   - conda-forge
 dependencies:
-  - python=3.9
+  - python=3.9.13 # see https://github.com/pangeo-forge/pangeo-forge-runner/issues/78
   - ipykernel
   - gcsfs
   - fsspec
   - apache-beam-with-gcp==2.42.0
   - pip:
-      # - apache_beam[interactive, gcp, dataframe]==2.42.0
       - google-cloud-bigquery
-      # - git+https://github.com/pangeo-forge/pangeo-forge-runner.git@arbitrary-injections # need to install this with no-deps
-      # - -r feedstock/requirements.txt
+      - git+https://github.com/pangeo-forge/pangeo-forge-runner.git@main
+      - git+https://github.com/pangeo-forge/pangeo-forge-recipes.git@main
