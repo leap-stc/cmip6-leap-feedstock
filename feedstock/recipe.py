@@ -53,7 +53,7 @@ url_dict = {
         ],
     }
 
-target_chunks_aspect_ratio = {'lon': -1, 'lat': -1, 'time': 1} # all bounds should remain unchunked
+target_chunks_aspect_ratio = {'lon': 1, 'lat': 1, 'time': 10} # all bounds should remain unchunked
 
 iid_a = 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r3i1p1f1.day.pr.gn.v20190603'
 pattern_a = pattern_from_file_sequence(
