@@ -74,14 +74,18 @@ template_a = (
     )
 
 iid_b = 'CMIP6.CMIP.NOAA-GFDL.GFDL-CM4.historical.r1i1p1f1.Amon.tas.gr1.v20180701'
-pattern_b = url_dict[iid_b]
+pattern_b = pattern_from_file_sequence(
+    url_dict[iid_b],
+    concat_dim='time'
+    )
+
 template_b = (
         beam.Create(pattern_b.items())
         | OpenURLWithFSSpec()
         | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomdate both ncdf3 and ncdf4
         | KeepOnlyVariableId()
         | StoreToZarr(
-            store_name=f"{iid_a}.zarr",
+            store_name=f"{iid_b}.zarr",
             combine_dims=pattern_b.combine_dim_keys,
             target_chunk_size='200MB',
             target_chunks_aspect_ratio = target_chunks_aspect_ratio,
