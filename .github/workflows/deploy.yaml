@@ -22,28 +22,9 @@ jobs:
         with:
           credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
       - name: "Deploy recipes"
-        uses: "pangeo-forge/deploy-recipe-action@v0.1"
+        uses: "pangeo-forge/deploy-recipe-action@file-based-config"
         with:
-          select_recipe_by_label: false
-          pangeo_forge_runner_config: >
-            {
-            "Bake": {
-                "bakery_class": "pangeo_forge_runner.bakery.dataflow.DataflowBakery"
-            },
-            "DataflowBakery": {
-                "use_public_ips": true,
-                "service_account_email": "julius-leap-dataflow@leap-pangeo.iam.gserviceaccount.com",
-                "project_id": "leap-pangeo",
-                "temp_gcs_location": "gs://leap-scratch/data-library/temp"
-            },
-            "TargetStorage": {
-                "fsspec_class": "gcsfs.GCSFileSystem",
-                "root_path": "gs://leap-persistent-ro/data-library/cmip6-testing/{job_name}"
-            },
-            "InputCacheStorage": {
-                "fsspec_class": "gcsfs.GCSFileSystem",
-                "root_path": "gs://leap-scratch/data-library/cache"
-            }
-            }
+          select_recipe_by_label: true
+          pangeo_forge_runner_config: "./configs/config-pgf-runner-leap-dataflow.json"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
