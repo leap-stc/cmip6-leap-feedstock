@@ -36,7 +36,7 @@ class KeepOnlyVariableId(beam.PTransform):
 # checking in with Charles (https://github.com/leap-stc/cmip6-leap-feedstock/pull/4#issuecomment-1666929555)
 
 
-with open('first_batch.json') as json_file:
+with open('feedstock/first_batch.json') as json_file:
     url_dict = json.load(json_file)
 
 target_chunks_aspect_ratio = {'time': 1}
