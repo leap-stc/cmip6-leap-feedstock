@@ -7,7 +7,7 @@
         "service_account_email": "julius-leap-dataflow@leap-pangeo.iam.gserviceaccount.com",
         "project_id": "leap-pangeo",
         "temp_gcs_location": "gs://leap-scratch/data-library/temp",
-        "machine_type": "e2-highmem-8"
+        "machine_type": "e2-standard-4"
     },
     "TargetStorage": {
         "fsspec_class": "gcsfs.GCSFileSystem",

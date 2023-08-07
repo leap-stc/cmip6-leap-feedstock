@@ -35,7 +35,6 @@ class KeepOnlyVariableId(beam.PTransform):
 # will start a new PR to try to refactor this as a dict-object, after 
 # checking in with Charles (https://github.com/leap-stc/cmip6-leap-feedstock/pull/4#issuecomment-1666929555)
 
-
 with open('feedstock/first_batch.json') as json_file:
     url_dict = json.load(json_file)
 
@@ -50,7 +49,7 @@ for iid, urls in url_dict.items():
     recipes[iid] = (
         beam.Create(pattern.items())
         | OpenURLWithFSSpec()
-        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomdate both ncdf3 and ncdf4
+        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomodate both ncdf3 and ncdf4
         | KeepOnlyVariableId()
         | StoreToZarr(
             store_name=f"{iid}.zarr",
