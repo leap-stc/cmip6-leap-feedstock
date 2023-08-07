@@ -56,6 +56,6 @@ for iid, urls in url_dict.items():
             combine_dims=pattern.combine_dim_keys,
             target_chunk_size='150MB',
             target_chunks_aspect_ratio = target_chunks_aspect_ratio,
-            size_tolerance=0.3
+            size_tolerance=0.5
             )
         )
