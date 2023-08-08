@@ -70,7 +70,7 @@ for iid, urls in url_dict.items():
         beam.Create(pattern.items())
         | OpenURLWithFSSpec()
         | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomodate both ncdf3 and ncdf4
-        | Preprocessor(urls=urls)
+        # | Preprocessor(urls=urls)
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
