@@ -78,4 +78,5 @@ for iid, urls in url_dict.items():
             target_chunks_aspect_ratio = target_chunks_aspect_ratio,
             size_tolerance=0.5
             )
+        | beam.Map(lambda x: print(x)) # Just a naive try to get the output here
         )
