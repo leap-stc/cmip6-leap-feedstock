@@ -74,8 +74,8 @@ for iid, urls in url_dict.items():
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
-            target_chunk_size='100MB',
+            target_chunk_size='200MB',
             target_chunks_aspect_ratio = target_chunks_aspect_ratio,
-            size_tolerance=1.0
+            size_tolerance=0.5
             )
         )
