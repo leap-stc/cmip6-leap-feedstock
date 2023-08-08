@@ -44,7 +44,10 @@ class Preprocessor(beam.PTransform):
         return index, ds
     
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
-        return pcoll | beam.Map(self._keep_only_variable_id) | beam.Map(self._add_bake_info)
+        return ( pcoll 
+            | "Fix coordinates" >> beam.Map(self._keep_only_variable_id) 
+            | "Write bake info to datasets " >> beam.Map(self._add_bake_info)
+        )
 
 
 # NOTE: This is a simplified setup, mainly to test the changes to StoreToZarr
@@ -67,7 +70,7 @@ for iid, urls in url_dict.items():
         beam.Create(pattern.items())
         | OpenURLWithFSSpec()
         | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomodate both ncdf3 and ncdf4
-        # | Preprocessor(urls=urls)
+        | Preprocessor(urls=urls)
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
