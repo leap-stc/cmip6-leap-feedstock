@@ -21,6 +21,8 @@ class Preprocessor(beam.PTransform):
     :param urls: List of urls to the files to be opened
     """
     urls: List[str] #??? @cisaacstern Is there a way to get this info from the pipeline?
+    def __post_init__(self):
+        self.timestamp = 'just some dummy for now' # Dependent on fix here: https://github.com/leap-stc/cmip6-leap-feedstock/pull/9#issuecomment-1669823908
 
     @staticmethod
     def _keep_only_variable_id(item: Indexed[T]) -> Indexed[T]:
@@ -40,7 +42,7 @@ class Preprocessor(beam.PTransform):
         """
         index, ds = item
         ds.attrs['pangeo_forge_bake_urls'] = self.urls
-        ds.attrs['pangeo_forge_bake_timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        ds.attrs['pangeo_forge_bake_timestamp'] = self.timestamp
         return index, ds
     
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
@@ -74,9 +76,9 @@ for iid, urls in url_dict.items():
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
-            target_chunk_size='200MB',
+            target_chunk_size='150MB',
             target_chunks_aspect_ratio = target_chunks_aspect_ratio,
-            size_tolerance=0.5
+            size_tolerance=0.4
             )
         | beam.Map(lambda x: print(x)) # Just a naive try to get the output here
         )
