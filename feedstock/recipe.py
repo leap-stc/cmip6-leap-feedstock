@@ -2,6 +2,7 @@
 """Modified transforms from Pangeo Forge"""
 
 import apache_beam as beam
+from dataclasses import dataclass
 import datetime
 from typing import List
 import json
@@ -10,8 +11,6 @@ from pangeo_forge_recipes.transforms import (
     OpenURLWithFSSpec, OpenWithXarray, StoreToZarr, Indexed, T
 )
 
-# just to be sure that only the actual variable_id is used as a dataset variable
-from dataclasses import dataclass
 @dataclass
 class Preprocessor(beam.PTransform):
     """
@@ -68,7 +67,7 @@ for iid, urls in url_dict.items():
         beam.Create(pattern.items())
         | OpenURLWithFSSpec()
         | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomodate both ncdf3 and ncdf4
-        | KeepOnlyVariableId()
+        # | Preprocessor(urls=urls)
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
