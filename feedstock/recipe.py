@@ -3,7 +3,7 @@
 
 import apache_beam as beam
 from dataclasses import dataclass
-import datetime
+from datetime import datetime
 from typing import List
 import json
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
