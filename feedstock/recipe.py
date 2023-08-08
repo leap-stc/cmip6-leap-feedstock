@@ -2,6 +2,7 @@
 """Modified transforms from Pangeo Forge"""
 
 import apache_beam as beam
+import datetime
 from typing import List
 import json
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
@@ -10,11 +11,18 @@ from pangeo_forge_recipes.transforms import (
 )
 
 # just to be sure that only the actual variable_id is used as a dataset variable
-class KeepOnlyVariableId(beam.PTransform):
+from dataclasses import dataclass
+@dataclass
+class Preprocessor(beam.PTransform):
     """
+    Preprocessor for xarray datasets.
     Set all data_variables except for `variable_id` attrs to coord
+    Add additional information 
+
+    :param urls: List of urls to the files to be opened
     """
-    
+    urls: List[str] #??? @cisaacstern Is there a way to get this info from the pipeline?
+
     @staticmethod
     def _keep_only_variable_id(item: Indexed[T]) -> Indexed[T]:
         """
@@ -25,9 +33,19 @@ class KeepOnlyVariableId(beam.PTransform):
         new_coords_vars = [var for var in ds.data_vars if var != ds.attrs['variable_id']]
         ds = ds.set_coords(new_coords_vars)
         return index, ds
+
+    def _add_bake_info(self,item: Indexed[T]) -> Indexed[T]:
+        """
+        Add the exact urls and the time stamp to the dataset attributes
+    
+        """
+        index, ds = item
+        ds.attrs['pangeo_forge_bake_urls'] = self.urls
+        ds.attrs['pangeo_forge_bake_timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return index, ds
     
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
-        return pcoll | beam.Map(self._keep_only_variable_id)
+        return pcoll | beam.Map(self._keep_only_variable_id) | beam.Map(self._add_bake_info)
 
 
 # NOTE: This is a simplified setup, mainly to test the changes to StoreToZarr
