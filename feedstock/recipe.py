@@ -128,5 +128,5 @@ for iid, urls in url_dict.items():
             # target_chunks_aspect_ratio = target_chunks_aspect_ratio,
             # size_tolerance=0.4
             )
-        | TestDataset(iid=iid)
+        # | TestDataset(iid=iid)
         )
