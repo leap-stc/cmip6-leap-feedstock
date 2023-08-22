@@ -103,8 +103,8 @@ class TestDataset(beam.PTransform):
 # will start a new PR to try to refactor this as a dict-object, after 
 # checking in with Charles (https://github.com/leap-stc/cmip6-leap-feedstock/pull/4#issuecomment-1666929555)
 
-# with open('feedstock/tim_batch.json') as json_file:
-with open('feedstock/first_batch.json') as json_file:
+with open('feedstock/tim_batch.json') as json_file:
+# with open('feedstock/first_batch.json') as json_file:
     url_dict = json.load(json_file)
 
 target_chunks_aspect_ratio = {'time': 1}
