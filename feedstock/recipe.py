@@ -123,11 +123,10 @@ for iid, urls in url_dict.items():
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
-            # target_chunks={'time':400},
             target_chunk_size='150MB',
             target_chunks_aspect_ratio = target_chunks_aspect_ratio,
             size_tolerance=0.3,
             allow_fallback_algo=True,
             )
-        | TestDataset(iid=iid)
+        # | TestDataset(iid=iid)
         )
