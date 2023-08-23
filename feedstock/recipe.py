@@ -12,7 +12,6 @@ from pangeo_forge_recipes.transforms import (
 )
 import xarray as xr
 import zarr
-from bigquery_interface import BQInterface, IIDEntry
 
 # from bigquery_interface import BQInterface, IIDEntry
 ## copy and paste of bigquery_interface.py until I can import 
