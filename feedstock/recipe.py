@@ -236,6 +236,26 @@ class LogToBigQuery(beam.PTransform):
         from dataclasses import dataclass
 
         @dataclass
+        class IIDEntry:
+            """Single row/entry for an iid
+            :param iid: CMIP6 instance id
+            :param store: URL to zarr store
+            """
+            iid: str
+            store: str #TODO: should this allow other objects?
+
+            # Check if the iid conforms to a schema
+            def __post_init__(self):
+                
+                schema = 'mip_era.activity_id.institution_id.source_id.experiment_id.member_id.table_id.variable_id.grid_label.version'
+                facets = self.iid.split('.')
+                if len(facets) != len(schema.split('.')):
+                    raise ValueError(f'IID does not conform to CMIP6 {schema =}. Got {self.iid =}')
+                #TODO: Check each facet with the controlled CMIP vocabulary
+
+                #TODO Check store validity?
+
+        @dataclass
         class IIDResult:
             """Class to handle the results pertaining to a single IID. 
             """
