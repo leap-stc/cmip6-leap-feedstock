@@ -110,7 +110,7 @@ class BQInterface:
         results = self._get_query_job(iid).result() # TODO: `.result()` is waiting for the query. Should I do this here?
         return IIDResult(results, iid)
     
-    def does_iid_exist(self, iid:str) -> bool:
+    def iid_exists(self, iid:str) -> bool:
         """Check if iid exists in the table"""
         return self._get_iid_results(iid).exists
 

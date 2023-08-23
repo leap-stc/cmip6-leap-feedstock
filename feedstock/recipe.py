@@ -128,9 +128,11 @@ class BQInterface:
         results = self._get_query_job(iid).result() # TODO: `.result()` is waiting for the query. Should I do this here?
         return IIDResult(results, iid)
     
-    def does_iid_exist(self, iid:str) -> bool:
+    def iid_exists(self, iid:str) -> bool:
         """Check if iid exists in the table"""
         return self._get_iid_results(iid).exists
+    
+# Custom Beam Transforms
 
 @dataclass
 class Preprocessor(beam.PTransform):
@@ -233,9 +235,6 @@ table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
 bq_interface = BQInterface(table_id=table_id)
 url_dict_pruned = {}
 for iid, urls in url_dict.items():
-    ## some debugging prints
-    print(f"{bq_interface._get_iid_results(iid) =}")
-    ## end debugging prints
     if not bq_interface.iid_exists(iid):
         url_dict_pruned[iid] = urls
     else:
