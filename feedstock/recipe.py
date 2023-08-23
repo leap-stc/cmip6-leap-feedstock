@@ -233,6 +233,9 @@ table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
 bq_interface = BQInterface(table_id=table_id)
 url_dict_pruned = {}
 for iid, urls in url_dict.items():
+    ## some debugging prints
+    print(f"{bq_interface._get_iid_results(iid) =}")
+    ## end debugging prints
     if not bq_interface.iid_exists(iid):
         url_dict_pruned[iid] = urls
     else:
