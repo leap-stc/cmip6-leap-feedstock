@@ -391,7 +391,7 @@ del bq_interface # beam does NOT like to pickle client objects (https://github.c
 target_chunks_aspect_ratio = {'time': 1}
 recipes = {}
 
-for iid, urls in url_dict.items():
+for iid, urls in url_dict_pruned.items():
     pattern = pattern_from_file_sequence(
         urls,
         concat_dim='time'
