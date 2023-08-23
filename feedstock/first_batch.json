@@ -3,5 +3,11 @@
         "https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/MRI/MRI-ESM2-0/ssp245/r2i1p1f1/day/sfcWind/gn/v20210830/sfcWind_day_MRI-ESM2-0_ssp245_r2i1p1f1_gn_20150101-20301231.nc",
         "https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/MRI/MRI-ESM2-0/ssp245/r2i1p1f1/day/sfcWind/gn/v20210830/sfcWind_day_MRI-ESM2-0_ssp245_r2i1p1f1_gn_20310101-20801231.nc",
         "https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/ScenarioMIP/MRI/MRI-ESM2-0/ssp245/r2i1p1f1/day/sfcWind/gn/v20210830/sfcWind_day_MRI-ESM2-0_ssp245_r2i1p1f1_gn_20810101-21001231.nc"
+    ],
+    "CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r10i1p1f1.day.psl.gn.v20220819": [
+        "https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/CSIRO-ARCCSS/ACCESS-CM2/historical/r10i1p1f1/day/psl/gn/v20220819/psl_day_ACCESS-CM2_historical_r10i1p1f1_gn_18500101-18991231.nc",
+        "https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/CSIRO-ARCCSS/ACCESS-CM2/historical/r10i1p1f1/day/psl/gn/v20220819/psl_day_ACCESS-CM2_historical_r10i1p1f1_gn_19000101-19491231.nc",
+        "https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/CSIRO-ARCCSS/ACCESS-CM2/historical/r10i1p1f1/day/psl/gn/v20220819/psl_day_ACCESS-CM2_historical_r10i1p1f1_gn_19500101-19991231.nc",
+        "https://esgf-data1.llnl.gov/thredds/fileServer/css03_data/CMIP6/CMIP/CSIRO-ARCCSS/ACCESS-CM2/historical/r10i1p1f1/day/psl/gn/v20220819/psl_day_ACCESS-CM2_historical_r10i1p1f1_gn_20000101-20141231.nc"
     ]
 }
