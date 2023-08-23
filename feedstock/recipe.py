@@ -219,6 +219,25 @@ class TestDataset(beam.PTransform):
             | "Testing - Attributes" >> beam.Map(self._test_attributes)
             | "Testing - Time Dimension" >> beam.Map(self._test_time)
         )
+    
+@dataclass
+class LogToBigQuery(beam.PTransform):
+    """
+    Logging stage for data written to zarr store
+    """
+    iid: str
+
+    def _log_to_bigquery(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
+        table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2' # FIXME is now defined in two places...centralize this
+        bq_interface = BQInterface(table_id=table_id)
+        iid_entry = IIDEntry(iid=self.iid, store=store.path)
+        bq_interface.insert(iid_entry)
+        return store
+
+    def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
+        return (pcoll
+            | "Logging - BigQuery" >> beam.Map(self._log_to_bigquery)
+        )
 
 
 # NOTE: This is a simplified setup, mainly to test the changes to StoreToZarr
@@ -268,5 +287,5 @@ for iid, urls in url_dict.items():
             allow_fallback_algo=True,
             )
         | TestDataset(iid=iid)
-        # | LogToBigQuery(iid=iid)
+        | LogToBigQuery(iid=iid)
         )
