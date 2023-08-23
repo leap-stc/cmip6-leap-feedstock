@@ -229,6 +229,12 @@ class LogToBigQuery(beam.PTransform):
 
     def _log_to_bigquery(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
         # FIXME: This is extremely silly: I am yet *again* copying the content of `bigqury_interface.py`
+        from google.cloud import bigquery
+        from typing import Optional
+        from google.api_core.exceptions import NotFound
+        import datetime
+        from dataclasses import dataclass
+
         @dataclass
         class IIDResult:
             """Class to handle the results pertaining to a single IID. 
@@ -328,6 +334,13 @@ class LogToBigQuery(beam.PTransform):
         return (pcoll
             | "Logging - BigQuery" >> beam.Map(self._log_to_bigquery)
         )
+    
+def log_to_bq(iid: str):
+    table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2' # FIXME is now defined in two places...centralize this
+    bq_interface = BQInterface(table_id=table_id)
+    iid_entry = IIDEntry(iid=self.iid, store=store.path)
+    bq_interface.insert(iid_entry)
+
 
 
 # NOTE: This is a simplified setup, mainly to test the changes to StoreToZarr
