@@ -234,7 +234,7 @@ class LogToBigQuery(beam.PTransform):
     table_id: str
 
     def _log_to_bigquery(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
-        log_to_bq(self.iid, store)
+        log_to_bq(self.iid, store, self.table_id)
         return store
 
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
