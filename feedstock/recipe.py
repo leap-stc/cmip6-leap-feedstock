@@ -272,6 +272,7 @@ for iid, urls in url_dict.items():
     else:
         print(f"{iid =} already exists in {table_id =}")
 print(f"Pruned {len(url_dict) - len(url_dict_pruned)} items from url_dict")
+print(f"Running a total of {len(url_dict_pruned)} iids")
 
 # beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
 del bq_interface 
