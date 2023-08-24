@@ -239,7 +239,7 @@ class LogToBigQuery(beam.PTransform):
 
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
         return (pcoll
-            | "Logging - BigQuery" >> beam.Map(self._log_to_bigquery)
+            | f"Logging - BigQuery (table: {self.table_id})" >> beam.Map(self._log_to_bigquery)
         )
 
 
@@ -266,7 +266,8 @@ bq_interface_nonqc = BQInterface(table_id=table_id_nonqc)
 url_dict_pruned = {}
 for iid, urls in url_dict.items():
     # ignore iids that are either in the qc or nonqc table (should maybe be an option later)
-    if not (bq_interface.iid_exists(iid) or bq_interface_nonqc.iid_exists(iid)) :
+    if not (bq_interface.iid_exists(iid) or bq_interface_nonqc.iid_exists(iid)):
+        # TODO: Print which tabe the iid is in
         url_dict_pruned[iid] = urls
     else:
         print(f"{iid =} already exists in {table_id =}")
