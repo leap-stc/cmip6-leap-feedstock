@@ -134,8 +134,7 @@ class BQInterface:
         return self._get_iid_results(iid).exists
 
 # wrapper functions (not sure if this works instead of the repeated copy and paste in the transform below)
-def log_to_bq(iid: str, store: zarr.storage.FSStore):
-    table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2' # FIXME is now defined in two places...centralize this
+def log_to_bq(iid: str, store: zarr.storage.FSStore, table_id: str):
     bq_interface = BQInterface(table_id=table_id)
     iid_entry = IIDEntry(iid=iid, store=store.path)
     bq_interface.insert(iid_entry)
@@ -232,6 +231,7 @@ class LogToBigQuery(beam.PTransform):
     Logging stage for data written to zarr store
     """
     iid: str
+    table_id: str
 
     def _log_to_bigquery(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
         log_to_bq(self.iid, store)
@@ -257,15 +257,24 @@ with open('feedstock/tim_batch.json') as json_file:
 # Prune the url dict to only include items that have not been logged to BQ yet
 print("Pruning url_dict")
 table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
+table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
+# TODO: To create a non-QC catalog I need to find the difference between the two tables iids
+
 bq_interface = BQInterface(table_id=table_id)
+bq_interface_nonqc = BQInterface(table_id=table_id_nonqc)
+
 url_dict_pruned = {}
 for iid, urls in url_dict.items():
-    if not bq_interface.iid_exists(iid):
+    # ignore iids that are either in the qc or nonqc table (should maybe be an option later)
+    if not (bq_interface.iid_exists(iid) or bq_interface_nonqc.iid_exists(iid)) :
         url_dict_pruned[iid] = urls
     else:
         print(f"{iid =} already exists in {table_id =}")
 print(f"Pruned {len(url_dict) - len(url_dict_pruned)} items from url_dict")
-del bq_interface # beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
+
+# beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
+del bq_interface 
+del bq_interface_nonqc
 
 ## Create the recipes
 target_chunks_aspect_ratio = {'time': 1}
@@ -289,6 +298,7 @@ for iid, urls in url_dict_pruned.items():
             size_tolerance=0.5,
             allow_fallback_algo=True,
             )
+        | LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
-        | LogToBigQuery(iid=iid)
+        | LogToBigQuery(iid=iid, table_id=table_id)
         )
