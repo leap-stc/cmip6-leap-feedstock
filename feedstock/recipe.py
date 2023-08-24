@@ -239,7 +239,7 @@ class LogToBigQuery(beam.PTransform):
 
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
         return (pcoll
-            | f"Logging - BigQuery (table: {self.table_id})" >> beam.Map(self._log_to_bigquery)
+            | beam.Map(self._log_to_bigquery)
         )
 
 
@@ -299,7 +299,7 @@ for iid, urls in url_dict_pruned.items():
             size_tolerance=0.5,
             allow_fallback_algo=True,
             )
-        | LogToBigQuery(iid=iid, table_id=table_id_nonqc)
+        | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
-        | LogToBigQuery(iid=iid, table_id=table_id)
+        | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
         )
