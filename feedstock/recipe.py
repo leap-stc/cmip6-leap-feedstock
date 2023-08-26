@@ -289,7 +289,7 @@ for iid, urls in url_dict_pruned.items():
         )
     recipes[iid] = (
         beam.Create(pattern.items())
-        | OpenURLWithFSSpec()
+        | OpenURLWithFSSpec(max_concurrency=4)
         | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomodate both ncdf3 and ncdf4
         | Preprocessor()
         | StoreToZarr(
