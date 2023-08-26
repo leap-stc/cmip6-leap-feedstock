@@ -1,6 +1,6 @@
 from google.cloud import bigquery
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
 from google.api_core.exceptions import NotFound
 import datetime
 
@@ -88,7 +88,7 @@ class BQInterface:
         if errors:
             raise RuntimeError(f'Error inserting row: {errors}')
         
-    def _get_query_job(self, iid:str) -> bigquery.job.query.QueryJob:
+    def _get_query_job(self, query:str) -> bigquery.job.query.QueryJob:
         """Get result object corresponding to a given iid"""
         # keep this in case I ever need the row index again...
         # query = f"""
@@ -97,6 +97,10 @@ class BQInterface:
         # FROM `table_with_index`
         # WHERE instance_id='{iid}'
         # """
+        return self.client.query(query)
+    
+    def _get_iid_results(self, iid: str) -> IIDResult:
+        """Get the full result object for a given iid"""
         query = f"""
         SELECT *
         FROM `{self.table_id}`
@@ -104,17 +108,26 @@ class BQInterface:
         ORDER BY timestamp DESC
         LIMIT {self.result_limit}
         """
-        return self.client.query(query)
-    
-    def _get_iid_results(self, iid: str) -> IIDResult:
-        results = self._get_query_job(iid).result() # TODO: `.result()` is waiting for the query. Should I do this here?
+        results = self._get_query_job(query).result() # TODO: `.result()` is waiting for the query. Should I do this here?
         return IIDResult(results, iid)
     
     def iid_exists(self, iid:str) -> bool:
         """Check if iid exists in the table"""
         return self._get_iid_results(iid).exists
-
-
+    
+    def iid_list_exists(self, iids: List[str]) -> List[str]:
+        """More efficient way to check if a list of iids exists in the table
+        Passes the entire list to a single SQL query.
+        Returns a list of iids that exist in the table"""
+        # source: https://stackoverflow.com/questions/26441928/how-do-i-check-if-multiple-values-exists-in-database
+        query = f"""
+        SELECT instance_id, store
+        FROM {self.table_id}
+        WHERE instance_id IN ({",".join([f"'{iid}'" for iid in iids])})
+        """
+        results = self._get_query_job(query).result()
+        # this is a full row iterator, for now just return the iids
+        return list(set([r['instance_id'] for r in results]))
 
     # outline
     # This class should be able to:

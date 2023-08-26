@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 from pangeo_forge_esgf import get_urls_from_esgf
-from pangeo_forge_recipes.patterns import pattern_from_file_sequence, FilePattern
+from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
     OpenURLWithFSSpec, OpenWithXarray, StoreToZarr, Indexed, T
 )
@@ -72,10 +72,10 @@ class BQInterface:
     table_id: str
     client: Optional[bigquery.client.Client] = None
     result_limit: Optional[int] = 10
-
+   
 
     def __post_init__(self):
-        # TODO how do I handle the schema? This class could be used for any table, but for 
+         # TODO how do I handle the schema? This class could be used for any table, but for 
         # TODO this specific case I want to prescribe the schema
         # for now just hardcode it
         self.schema = [
@@ -108,7 +108,7 @@ class BQInterface:
         if errors:
             raise RuntimeError(f'Error inserting row: {errors}')
         
-    def _get_query_job(self, iid:str) -> bigquery.job.query.QueryJob:
+    def _get_query_job(self, query:str) -> bigquery.job.query.QueryJob:
         """Get result object corresponding to a given iid"""
         # keep this in case I ever need the row index again...
         # query = f"""
@@ -117,6 +117,10 @@ class BQInterface:
         # FROM `table_with_index`
         # WHERE instance_id='{iid}'
         # """
+        return self.client.query(query)
+    
+    def _get_iid_results(self, iid: str) -> IIDResult:
+        """Get the full result object for a given iid"""
         query = f"""
         SELECT *
         FROM `{self.table_id}`
@@ -124,15 +128,26 @@ class BQInterface:
         ORDER BY timestamp DESC
         LIMIT {self.result_limit}
         """
-        return self.client.query(query)
-    
-    def _get_iid_results(self, iid: str) -> IIDResult:
-        results = self._get_query_job(iid).result() # TODO: `.result()` is waiting for the query. Should I do this here?
+        results = self._get_query_job(query).result() # TODO: `.result()` is waiting for the query. Should I do this here?
         return IIDResult(results, iid)
     
     def iid_exists(self, iid:str) -> bool:
         """Check if iid exists in the table"""
         return self._get_iid_results(iid).exists
+    
+    def iid_list_exists(self, iids: List[str]) -> List[str]:
+        """More efficient way to check if a list of iids exists in the table
+        Passes the entire list to a single SQL query.
+        Returns a list of iids that exist in the table"""
+        # source: https://stackoverflow.com/questions/26441928/how-do-i-check-if-multiple-values-exists-in-database
+        query = f"""
+        SELECT instance_id, store
+        FROM {self.table_id}
+        WHERE instance_id IN ({",".join([f"'{iid}'" for iid in iids])})
+        """
+        results = self._get_query_job(query).result()
+        # this is a full row iterator, for now just return the iids
+        return list(set([r['instance_id'] for r in results]))
 
 # wrapper functions (not sure if this works instead of the repeated copy and paste in the transform below)
 def log_to_bq(iid: str, store: zarr.storage.FSStore, table_id: str):
@@ -2074,7 +2089,19 @@ iids_sub_issue_22 = [
  'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r6i1p1f1.Omon.zmeso.gn.v20191121',
  'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r8i1p1f2.Omon.zmeso.gn.v20200721'
 ]
-iids = iids_sub_tim
+iids_PMIP_vel = [
+    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gn.v20191002',
+    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.uo.gn.v20200212',
+    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200212',
+    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gr1.v20200911',
+    'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200909',
+    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.vo.gn.v20200212',
+    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gn.v20191002',
+    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.vo.gn.v20200212',
+    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911',
+    'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710'
+]
+iids = iids_PMIP_vel # Try with yet another request
 
 # exclude dupes
 iids = list(set(iids))
@@ -2088,23 +2115,23 @@ table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
 bq_interface = BQInterface(table_id=table_id)
 bq_interface_nonqc = BQInterface(table_id=table_id_nonqc)
 
-iids_pruned = []
-for iid in iids:
-    # ignore iids that are either in the qc or nonqc table (should maybe be an option later)
-    if not (bq_interface.iid_exists(iid) or bq_interface_nonqc.iid_exists(iid)):
-        # TODO: Print which tabe the iid is in
-        iids_pruned.append(iid)
-    else:
-        print(f"{iid =} already exists in {table_id =} or {table_id_nonqc =}")
+# get lists of the iids already logged
+iids_in_table = bq_interface.iid_list_exists(iids)
+iids_in_table_nonqc = bq_interface_nonqc.iid_list_exists(iids)
+
+# beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
+del bq_interface 
+del bq_interface_nonqc
+
+# Maybe I want a more finegrained check here at some point, but for now this will prevent logged iids from rerunning
+iids_to_skip = set(iids_in_table + iids_in_table_nonqc)
+iids_pruned = list(set(iids) - iids_to_skip)
 print(f"Pruned {len(iids) - len(iids_pruned)} iids from input list")
 print(f"Running a total of {len(iids_pruned)} iids")
 
 # for testing: Only run 10 iids
 iids_pruned = iids_pruned[:3]
 
-# beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
-del bq_interface 
-del bq_interface_nonqc
 
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
 url_dict = asyncio.run(get_urls_from_esgf(iids_pruned))
