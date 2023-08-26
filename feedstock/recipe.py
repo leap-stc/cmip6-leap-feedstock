@@ -1920,6 +1920,7 @@ iids_sub_tim = [
 ]
 iids = iids_sub_issue_20+[]
 
+
 # exclude dupes
 iids = list(set(iids))
 
@@ -1947,6 +1948,9 @@ print(f"Running a total of {len(iids_pruned)} iids")
 del bq_interface 
 del bq_interface_nonqc
 
+#TODO: remove again
+iids_pruned = [iids_sub_tim[0]] # just a test for the labelling
+
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
 url_dict = asyncio.run(get_urls_from_esgf(iids_pruned))
 
@@ -1961,7 +1965,7 @@ for iid, urls in url_dict.items():
         )
     recipes[iid] = (
         beam.Create(pattern.items())
-        | OpenURLWithFSSpec(max_concurrency=5)
+        | f"Testing label {iid=}" >> OpenURLWithFSSpec(max_concurrency=5)
         | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomodate both ncdf3 and ncdf4
         | Preprocessor()
         | StoreToZarr(
