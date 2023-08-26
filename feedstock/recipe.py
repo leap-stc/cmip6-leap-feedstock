@@ -6,10 +6,12 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 import json
+from pangeo_forge_esgf import get_urls_from_esgf
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence, FilePattern
 from pangeo_forge_recipes.transforms import (
     OpenURLWithFSSpec, OpenWithXarray, StoreToZarr, Indexed, T
 )
+import asyncio
 import xarray as xr
 import zarr
 
@@ -242,20 +244,17 @@ class LogToBigQuery(beam.PTransform):
             | beam.Map(self._log_to_bigquery)
         )
 
-
-
-# NOTE: This is a simplified setup, mainly to test the changes to StoreToZarr
-# here (https://github.com/pangeo-forge/pangeo-forge-recipes/pull/546). I 
-# will start a new PR to try to refactor this as a dict-object, after 
-# checking in with Charles (https://github.com/leap-stc/cmip6-leap-feedstock/pull/4#issuecomment-1666929555)
-
-# with open('feedstock/first_batch.json') as json_file:
-with open('feedstock/tim_batch_new_pgf-esgf.json') as json_file:
-# with open('feedstock/second_batch.json') as json_file:
-    url_dict = json.load(json_file)
+# starting an example with a small part of https://github.com/pangeo-forge/cmip6-feedstock/issues/20
+iids = [
+    'CMIP6.CMIP.THU.CIESM.piControl.r1i1p1f1.Omon.uo.gn.v20200220',
+ 'CMIP6.CMIP.THU.CIESM.piControl.r1i1p1f1.Omon.vo.gn.v20200220',
+ 'CMIP6.CMIP.CNRM-CERFACS.CNRM-CM6-1-HR.historical.r1i1p1f2.Omon.so.gn.v20191021',
+ 'CMIP6.CMIP.CNRM-CERFACS.CNRM-CM6-1-HR.historical.r1i1p1f2.Omon.hfds.gn.v20191021',
+ 'CMIP6.CMIP.CNRM-CERFACS.CNRM-CM6-1-HR.historical.r1i1p1f2.Omon.wfo.gn.v20191021',
+]
 
 # Prune the url dict to only include items that have not been logged to BQ yet
-print("Pruning url_dict")
+print("Pruning iids that already exist")
 table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
 table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
 # TODO: To create a non-QC catalog I need to find the difference between the two tables iids
@@ -263,33 +262,36 @@ table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
 bq_interface = BQInterface(table_id=table_id)
 bq_interface_nonqc = BQInterface(table_id=table_id_nonqc)
 
-url_dict_pruned = {}
-for iid, urls in url_dict.items():
+iids_pruned = []
+for iid in iids:
     # ignore iids that are either in the qc or nonqc table (should maybe be an option later)
     if not (bq_interface.iid_exists(iid) or bq_interface_nonqc.iid_exists(iid)):
         # TODO: Print which tabe the iid is in
-        url_dict_pruned[iid] = urls
+        iids_pruned.append(iid)
     else:
-        print(f"{iid =} already exists in {table_id =}")
-print(f"Pruned {len(url_dict) - len(url_dict_pruned)} items from url_dict")
-print(f"Running a total of {len(url_dict_pruned)} iids")
+        print(f"{iid =} already exists in {table_id =} or {table_id_nonqc =}")
+print(f"Pruned {len(iids) - len(iids_pruned)} iids from input list")
+print(f"Running a total of {len(iids_pruned)} iids")
 
 # beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
 del bq_interface 
 del bq_interface_nonqc
 
+# Get the urls from ESGF at Runtime (only for the pruned list to save time)
+url_dict = asyncio.run(get_urls_from_esgf(iids_pruned))
+
 ## Create the recipes
 target_chunks_aspect_ratio = {'time': 1}
 recipes = {}
 
-for iid, urls in url_dict_pruned.items():
+for iid, urls in url_dict.items():
     pattern = pattern_from_file_sequence(
         urls,
         concat_dim='time'
         )
     recipes[iid] = (
         beam.Create(pattern.items())
-        | OpenURLWithFSSpec(max_concurrency=4)
+        | OpenURLWithFSSpec(max_concurrency=5)
         | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomodate both ncdf3 and ncdf4
         | Preprocessor()
         | StoreToZarr(
