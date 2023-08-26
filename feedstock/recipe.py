@@ -2074,7 +2074,7 @@ iids_sub_issue_22 = [
  'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r6i1p1f1.Omon.zmeso.gn.v20191121',
  'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r8i1p1f2.Omon.zmeso.gn.v20200721'
 ]
-iids = iids_sub_issue_22
+iids = iids_sub_issue_20
 
 
 # exclude dupes
