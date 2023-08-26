@@ -2120,7 +2120,7 @@ for iid, urls in url_dict.items():
         )
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
-        | OpenURLWithFSSpec(max_concurrency=5)
+        | OpenURLWithFSSpec()
         | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomodate both ncdf3 and ncdf4
         | Preprocessor()
         | StoreToZarr(
