@@ -250,7 +250,7 @@ class LogToBigQuery(beam.PTransform):
 # checking in with Charles (https://github.com/leap-stc/cmip6-leap-feedstock/pull/4#issuecomment-1666929555)
 
 # with open('feedstock/first_batch.json') as json_file:
-with open('feedstock/tim_batch.json') as json_file:
+with open('feedstock/tim_batch_new_pgf-esgf.json') as json_file:
 # with open('feedstock/second_batch.json') as json_file:
     url_dict = json.load(json_file)
 
