@@ -1964,8 +1964,8 @@ for iid, urls in url_dict.items():
         concat_dim='time'
         )
     recipes[iid] = (
-        beam.Create(pattern.items())
-        | f"Testing label {iid=}" >> OpenURLWithFSSpec(max_concurrency=5)
+        f"Creating {iid}" >> beam.Create(pattern.items())
+        | OpenURLWithFSSpec(max_concurrency=5)
         | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomodate both ncdf3 and ncdf4
         | Preprocessor()
         | StoreToZarr(
