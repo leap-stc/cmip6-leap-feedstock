@@ -2074,8 +2074,7 @@ iids_sub_issue_22 = [
  'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r6i1p1f1.Omon.zmeso.gn.v20191121',
  'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r8i1p1f2.Omon.zmeso.gn.v20200721'
 ]
-iids = iids_sub_issue_20
-
+iids = iids_sub_tim
 
 # exclude dupes
 iids = list(set(iids))
@@ -2099,6 +2098,9 @@ for iid in iids:
         print(f"{iid =} already exists in {table_id =} or {table_id_nonqc =}")
 print(f"Pruned {len(iids) - len(iids_pruned)} iids from input list")
 print(f"Running a total of {len(iids_pruned)} iids")
+
+# for testing: Only run 10 iids
+iids_pruned = iids_pruned[:3]
 
 # beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
 del bq_interface 
