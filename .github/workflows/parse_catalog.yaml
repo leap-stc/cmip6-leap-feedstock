@@ -50,5 +50,7 @@ jobs:
         uses: "google-github-actions/auth@v1"
         with:
           credentials_json: "${{ secrets.GCP_PUBLIC_CMIP6_SERVICE_ACCOUNT }}"
-      - name: Check content
-        run: ls -l
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+      - name: 'Upload csv files'
+        run: 'gcloud storage cp *.csv gs://cmip6/leap/testing/catalogs/'
