@@ -2129,10 +2129,6 @@ iids_pruned = list(set(iids) - iids_to_skip)
 print(f"Pruned {len(iids) - len(iids_pruned)} iids from input list")
 print(f"Running a total of {len(iids_pruned)} iids")
 
-# for testing: Only run 10 iids
-iids_pruned = iids_pruned[:3]
-
-
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
 url_dict = asyncio.run(get_urls_from_esgf(iids_pruned))
 
