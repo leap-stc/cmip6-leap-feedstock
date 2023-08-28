@@ -34,7 +34,6 @@ jobs:
         with:
           name: csv-files
           path: "*.csv"
-
   write-to-gcs:
     name: write-csv-to-gcs
     runs-on: ubuntu-latest
