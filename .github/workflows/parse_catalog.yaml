@@ -1,0 +1,45 @@
+name: Parse Catalog
+
+on:
+  workflow_dispatch:
+
+jobs:
+  parse-catalog:
+    name: parse-catalog-from-bq
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Authenticate to Google Cloud"
+        id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: python -m pip install pandas pangeo-forge-esgf google-cloud-bigquery db-dtypes
+      - name: "Parse catalog"
+        shell: bash
+        run: |
+          python parse-catalog-from-bq.py
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
+      - name: Save csv file as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: csv-files
+          path: "*.csv"
+  # write-to-gcs:
+  #   name: write-csv-to-gcs
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     fail-fast: false
+  #   requires: [parse-catalog]
+
+  #   - name: Download all workflow run artifacts
+  #     uses: actions/download-artifact@v3
+  #     with:
+  #       name: csv-files
