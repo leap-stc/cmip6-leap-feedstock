@@ -49,11 +49,14 @@ jobs:
         id: "auth"
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: "${{ secrets.GCP_PUBLIC_CMIP6_SERVICE_ACCOUNT }}"
+          # credentials_json: "${{ secrets.GCP_PUBLIC_CMIP6_SERVICE_ACCOUNT }}"
+          credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
       - name: Set up Cloud SDK and upload csv files
         uses: google-github-actions/setup-gcloud@v1
       - name: Upload csv files to GCS
-        run: |
-          gcloud storage cp *.csv gs://cmip6/leap/testing/catalogs/
+        # run: |
+        #   gcloud storage cp *.csv gs://cmip6/leap/testing/catalogs/
+        run: | 
+          gcloud storage cp *.csv gs://leap-persistent-ro/data-library/catalogs/cmip6-test/
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
