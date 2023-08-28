@@ -34,14 +34,22 @@ jobs:
         with:
           name: csv-files
           path: "*.csv"
-  # write-to-gcs:
-  #   name: write-csv-to-gcs
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     fail-fast: false
-  #   requires: [parse-catalog]
 
-  #   - name: Download all workflow run artifacts
-  #     uses: actions/download-artifact@v3
-  #     with:
-  #       name: csv-files
+  write-to-gcs:
+    name: write-csv-to-gcs
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    needs: [parse-catalog]
+    steps:
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: csv-files
+      - name: "Authenticate to Google Cloud"
+        id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GCP_PUBLIC_CMIP6_SERVICE_ACCOUNT }}"
+      - name: Check content
+        run: ls -l
