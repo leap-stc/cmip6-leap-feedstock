@@ -69,5 +69,5 @@ df_qc = convert_bq_to_cmip6_df(table_id)
 df_nonqc = convert_bq_to_cmip6_df(table_id_nonqc)
 
 # write to csv
-df_qc.to_csv("leap-pangeo-cmip6-test.csv")
-df_nonqc.to_csv("leap-pangeo-cmip6-noqc-test.csv")
+df_qc.to_csv("leap-pangeo-cmip6-test.csv", index=False)
+df_nonqc.to_csv("leap-pangeo-cmip6-noqc-test.csv", index=False)
