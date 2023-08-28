@@ -2,7 +2,20 @@
 
 This repository is similar to [data-management](https://github.com/leap-stc/data-management) but due to the sheer size of the CMIP archive, we chose to keep this feedstock separate to enable custom solutions and fast development not necessary for other data ingestion recipes.
 
-## How to run recipes locally (with PGF runner)
+## How to access the newly uploaded data?
+The cataloging and uploading are very much a work in progress.
+For the moment you can access the data separately from the [main CMIP6 zarr catalog](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) by using the following catalog:
+
+```python
+import intake
+col = intake.open_esm_datastore(
+    "https://storage.googleapis.com/leap-persistent-ro/data-library/catalogs/cmip6-test/leap-pangeo-cmip6-test.json"
+)
+cat = col.search(variable_id='pr', experiment_id='historical')
+```
+You can then perform the same operations as with the main catalog.
+
+### How to run recipes locally (with PGF runner)
 - Make sure to set up the environment (TODO: Add this as docs on pangeo-forge-runner)
 - Create a scratch dir (e.g. on the desktop it should not be within a repo)
 - call  pfg with a local path `pangeo-forge-runner bake --repo path_to_repo -f path_to_config.json`
@@ -13,16 +26,16 @@ This repository is similar to [data-management](https://github.com/leap-stc/data
   - Get a debugger running within the pgf code (TODO: ask charles again how to do ti.
   )
 
-## Dev Guide
+### Dev Guide
 
 - Set up a local conda environment with `mamba env create -f environment.yml`
 - Make sure to update this (`mamba env update -f environment.yml`) when any changes are made e.g. in `feedstock/requirements.txt` ``
 
-## How to develop
+### How to develop
 
 - I find it super irritating how hard it is to develop recipes locally. When I run into trouble with running PGF-runnner locally i have to rewrite my whole recipe (add target_root etc). Is there a better way to do this? Some bare bones debug call to PGF runner?
 
-### Common pitfalls
+#### Common pitfalls
 
 - Dependencies: This is quite the minefield. Here are some common things and the solutions:
   - `unpickled = cloudpickle.loads(s);ModuleNotFoundError: No module named '__builtin__'`: Wrong version of cloudpickle. I solved this by reinstalling beam with `pip install apache-beam[gcp]`
