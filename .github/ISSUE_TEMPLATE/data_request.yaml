@@ -8,6 +8,9 @@ body:
       value: |
         Thank you for using the Pangeo CMIP6 cloud data and making a request for additional data.
         Please paste a list of strings like this in the field below:
+  - type: shell
+    attributes:
+      value: |
         <details><summary>Click for historical instance_ids [sifb]</summary>
 
         ```
