@@ -179,9 +179,22 @@ class Preprocessor(beam.PTransform):
         print(f"Preprocessing after {ds =}")
         return index, ds
     
+    @staticmethod
+    def _sanitize_attrs(item: Indexed[T]) -> Indexed[T]:
+        """Removes non-ascii characters from attributes see https://github.com/pangeo-forge/pangeo-forge-recipes/issues/586"""
+        index, ds = item
+        for att, att_value in ds.attrs.items():
+            if isinstance(att_value, str):
+                new_value=att_value.encode("utf-8", 'ignore').decode()
+                if new_value != att_value:
+                    print(f"Sanitized datasets attributes field {att}: \n {att_value} \n ----> \n {new_value}")
+                    ds.attrs[att] = new_value
+        return index, ds
+  
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
         return ( pcoll 
-            | "Fix coordinates" >> beam.Map(self._keep_only_variable_id) 
+            | "Fix coordinates" >> beam.Map(self._keep_only_variable_id)
+            | "Sanitize Attrs" >> beam.Map(self._sanitize_attrs)
         )
 
 @dataclass
@@ -2207,6 +2220,9 @@ url_dict = asyncio.run(get_urls_from_esgf(iids_pruned))
 
 if prune_submission:
     url_dict = {iid: url_dict[iid] for iid in list(url_dict.keys())[0:10]}
+
+# Print the actual urls
+print(url_dict)
 
 ## Create the recipes
 target_chunks_aspect_ratio = {'time': 1}
