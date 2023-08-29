@@ -8,18 +8,14 @@ body:
       value: |
         Thank you for using the Pangeo CMIP6 cloud data and making a request for additional data.
         Please paste a list of strings like this in the field below:
-  - type: shell
-    attributes:
-      value: |
-        <details><summary>Click for historical instance_ids [sifb]</summary>
-
         ```
         'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r1i1p1f1.SImon.sifb.gn.v20200817',
-        ...
         'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r2i1p1f1.SImon.sifb.gn.v20200817',
+        'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r3i1p1f1.SImon.sifb.gn.v20200817',
+        'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r4i1p1f1.SImon.sifb.gn.v20210607',
+        'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r5i1p1f1.SImon.sifb.gn.v20210607',
         ```
-        
-        </details>
+        > Please include the commas at the end to make this easier to copy and paste.
 
   - type: textarea
     id: file_list
