@@ -2172,10 +2172,9 @@ iids_sub_issue_24 = [
  'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r8i1p1f2.SImon.sifb.gn.v20200310'
 ]
 
-# iids = iids_PMIP_vel + iids_sub_tim + iids_sub_issue_20 + iids_sub_issue_22 # Let em rip!
-iids = iids_sub_issue_24
+iids = iids_sub_issue_24 + iids_PMIP_vel + iids_sub_tim + iids_sub_issue_20 + iids_sub_issue_22 # Let em rip!
 
-prune_submission = True # if set, only submits a subset of the iids in the final step
+prune_submission = False # if set, only submits a subset of the iids in the final step
 
 # exclude dupes
 iids = list(set(iids))
