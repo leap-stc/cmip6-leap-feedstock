@@ -32,6 +32,17 @@ cat = col.search(variable_id='pr', experiment_id='historical')
 ```
 You can then perform the same operations as with the main catalog.
 
+### Non quality-controlled catalog (⛔️use with caution⛔️)
+Some datasets are successfully written to zarr stores, but do not pass our [quality control tests](https://github.com/leap-stc/cmip6-leap-feedstock/blob/9e6290ed2c29a8da93285aeffaea0b639dca79eb/feedstock/recipe.py#L188-L235). You can inspect these datasets in the same way as the quality controlled ones, but the datasets might contain issues like gaps in time, missing attributes etc. Some of these might be fixable, but will require manual work that is for now out of scope of this project.
+Be very careful when using these datasets, in particular for publications!
+```python
+import intake
+col = intake.open_esm_datastore(
+    "https://storage.googleapis.com/leap-persistent-ro/data-library/catalogs/cmip6-test/leap-pangeo-cmip6-noqc-test.json"
+)
+cat = col.search(variable_id='pr', experiment_id='historical')
+```
+
 ### How to run recipes locally (with PGF runner)
 - Make sure to set up the environment (TODO: Add this as docs on pangeo-forge-runner)
 - Create a scratch dir (e.g. on the desktop it should not be within a repo)
