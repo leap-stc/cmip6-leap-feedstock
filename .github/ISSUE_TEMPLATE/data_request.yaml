@@ -1,6 +1,6 @@
 name: New File Request
 description: Propose a list of CMIP6 datasets to be ingested to the cloud.
-title: "New File Request [Dataset Name]"
+title: "[REQUEST]: "
 labels: ["request"]
 body:
   - type: markdown
