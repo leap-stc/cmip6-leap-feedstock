@@ -2195,7 +2195,8 @@ iids = list(set(iids))
 # Prune the url dict to only include items that have not been logged to BQ yet
 print("Pruning iids that already exist")
 table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
-table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
+# table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc' # this possibly contained stores that were wrongly failed (see https://github.com/leap-stc/cmip6-leap-feedstock/issues/30)
+table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test3_nonqc'
 # TODO: To create a non-QC catalog I need to find the difference between the two tables iids
 
 bq_interface = BQInterface(table_id=table_id)
