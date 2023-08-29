@@ -2101,7 +2101,7 @@ iids_PMIP_vel = [
     'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911',
     'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710'
 ]
-iids = iids_PMIP_vel # Try with yet another request
+iids = iids_PMIP_vel + iids_sub_tim + iids_sub_issue_20 + iids_sub_issue_22 # Let em rip!
 
 # exclude dupes
 iids = list(set(iids))
