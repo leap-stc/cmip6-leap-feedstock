@@ -12,18 +12,9 @@ body:
     id: file_list
     attributes:
         label: List of requested idds
-        placeholder: >
-            <details>
-            ```
-            'CMIP6.CMIP.THU.CIESM.piControl.r1i1p1f1.Omon.uo.gn.v20200220',
-            ...
-            'CMIP6.CMIP.THU.CIESM.piControl.r1i1p1f1.Omon.vo.gn.v20200220',
-            'CMIP6.CMIP.CNRM-CERFACS.CNRM-CM6-1-HR.historical.r1i1p1f2.Omon.so.gn.v20191021',
-            ```
-            <details/>
         render: markdown
-      validations:
-         required: true
+    validations:
+        required: true
   - type: textarea
     id: comments
     attributes:
