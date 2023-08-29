@@ -15,7 +15,9 @@ body:
         'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r4i1p1f1.SImon.sifb.gn.v20210607',
         'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r5i1p1f1.SImon.sifb.gn.v20210607',
         ```
-        > Please include the commas at the end to make this easier to copy and paste.
+        You can use [pangeo-forge-esgf](https://github.com/jbusecke/pangeo-forge-esgf#parsing-a-list-of-instance-ids-using-wildcards) to make your life easier here.
+        
+        > ⚠️ Please include the commas at the end to make this easier to copy and paste.
 
   - type: textarea
     id: file_list
