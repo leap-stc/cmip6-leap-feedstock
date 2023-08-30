@@ -2234,10 +2234,10 @@ for iid, urls in url_dict.items():
         concat_dim='time'
         )
     recipes[iid] = (
-        f"Creating {iid}" >> beam.Create(pattern.items())
-        | OpenURLWithFSSpec()
-        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomodate both ncdf3 and ncdf4
-        | Preprocessor()
+        f"Creating {iid}" >> beam.Create(pattern.items()).with_resource_hints(min_ram="4GB", max_ram="64GB")
+        | OpenURLWithFSSpec().with_resource_hints(min_ram="4GB", max_ram="64GB")
+        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}).with_resource_hints(min_ram="4GB", max_ram="64GB") # do not specify file type to accomodate both ncdf3 and ncdf4
+        | Preprocessor().with_resource_hints(min_ram="4GB", max_ram="64GB")
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
@@ -2245,7 +2245,7 @@ for iid, urls in url_dict.items():
             target_chunks_aspect_ratio = target_chunks_aspect_ratio,
             size_tolerance=0.5,
             allow_fallback_algo=True,
-            )
+            ).with_resource_hints(min_ram="4GB", max_ram="64GB")
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
         | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
