@@ -63,7 +63,7 @@ def convert_bq_to_cmip6_df(table_id: str) -> pd.DataFrame:
 
 # I need a query to get the latest row for each instance_id
 table_id = "leap-pangeo.testcmip6.cmip6_feedstock_test2"
-table_id_nonqc = "leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc"
+table_id_nonqc = "leap-pangeo.testcmip6.cmip6_feedstock_test3_nonqc"
 
 df_qc = convert_bq_to_cmip6_df(table_id)
 df_nonqc = convert_bq_to_cmip6_df(table_id_nonqc)
