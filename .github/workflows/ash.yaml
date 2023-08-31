@@ -1,4 +1,4 @@
-name: Deploy recipes
+name: Kill all the zombies 🧟‍♂️
 
 on:
   workflow_dispatch:
