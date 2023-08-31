@@ -8,7 +8,7 @@
         "project_id": "leap-pangeo",
         "temp_gcs_location": "gs://leap-scratch/data-library/temp",
         "use_dataflow_prime": true,
-        "max_num_workers": 20
+        "max_num_workers": 40
     },
     "TargetStorage": {
         "fsspec_class": "gcsfs.GCSFileSystem",
