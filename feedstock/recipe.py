@@ -2186,7 +2186,6 @@ iids_sub_issue_24 = [
 ]
 
 iids = iids_sub_issue_24 + iids_PMIP_vel + iids_sub_tim + iids_sub_issue_20 + iids_sub_issue_22 # Let em rip!
-iids = ['CMIP6.CMIP.EC-Earth-Consortium.EC-Earth3.historical.r16i1p1f1.day.psl.gr.v20201230'] #debugging
 
 prune_submission = True # if set, only submits a subset of the iids in the final step
 
