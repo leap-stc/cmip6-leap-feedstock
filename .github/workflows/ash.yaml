@@ -1,0 +1,25 @@
+name: Deploy recipes
+
+on:
+  workflow_dispatch:
+
+jobs:
+  kill-zombies:
+    name: deploy-recipes
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Authenticate to Google Cloud
+        id: "auth"
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
+      - name: Set up Cloud SDK and upload csv files
+        uses: google-github-actions/setup-gcloud@v1
+      - name: Kill all active jobs older than 6 hours
+        run: |
+          gcloud dataflow jobs list --created-before=-p6h --status=active --filter="name:a618127503*" --format=json --region=us-central | jq -r ".[].id" | xargs -L1 gcloud dataflow jobs cancel --region=us-central1
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
