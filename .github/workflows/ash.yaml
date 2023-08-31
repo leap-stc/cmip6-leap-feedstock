@@ -1,15 +1,16 @@
 name: Kill all the zombies 🧟‍♂️
 
 on:
+  schedule:
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 jobs:
   kill-zombies:
-    name: deploy-recipes
+    name: I am here to chew gum, and kill stuck jobs, and I am all out of gum!
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-
     steps:
       - name: Authenticate to Google Cloud
         id: "auth"
