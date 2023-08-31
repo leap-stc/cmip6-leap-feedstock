@@ -2187,6 +2187,7 @@ iids_sub_issue_24 = [
 
 iids = iids_sub_issue_24 + iids_PMIP_vel + iids_sub_tim + iids_sub_issue_20 + iids_sub_issue_22 # Let em rip!
 
+prune_iids = False
 prune_submission = True # if set, only submits a subset of the iids in the final step
 
 # exclude dupes
@@ -2211,12 +2212,15 @@ del bq_interface_nonqc
 
 # Maybe I want a more finegrained check here at some point, but for now this will prevent logged iids from rerunning
 iids_to_skip = set(iids_in_table + iids_in_table_nonqc)
-iids_pruned = list(set(iids) - iids_to_skip)
-print(f"Pruned {len(iids) - len(iids_pruned)} iids from input list")
-print(f"Running a total of {len(iids_pruned)} iids")
+iids_filtered = list(set(iids) - iids_to_skip)
+print(f"Pruned {len(iids) - len(iids_filtered)} iids from input list")
+print(f"Running a total of {len(iids_filtered)} iids")
+
+if prune_iids:
+    iids = iids_filtered[0:10]
 
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
-url_dict = asyncio.run(get_urls_from_esgf(iids_pruned))
+url_dict = asyncio.run(get_urls_from_esgf(iids_filtered))
 
 if prune_submission:
     url_dict = {iid: url_dict[iid] for iid in list(url_dict.keys())[0:10]}
@@ -2239,8 +2243,9 @@ for iid, urls in url_dict.items():
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items()).with_resource_hints(min_ram=min_ram)
         | OpenURLWithFSSpec().with_resource_hints(min_ram=min_ram)
-        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}).with_resource_hints(min_ram=min_ram) # do not specify file type to accomodate both ncdf3 and ncdf4
+         # do not specify file type to accomodate both ncdf3 and ncdf4
         | Preprocessor().with_resource_hints(min_ram=min_ram)
+        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}).with_resource_hints(min_ram=min_ram)
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
