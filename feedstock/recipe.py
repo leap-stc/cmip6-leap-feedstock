@@ -2188,7 +2188,7 @@ iids_sub_issue_24 = [
 iids = iids_sub_issue_24 + iids_PMIP_vel # Let em rip! #+ iids_sub_tim  + iids_sub_issue_20 + iids_sub_issue_22
 
 prune_iids = False
-prune_submission = True # if set, only submits a subset of the iids in the final step
+prune_submission = False # if set, only submits a subset of the iids in the final step
 
 # exclude dupes
 iids = list(set(iids))
