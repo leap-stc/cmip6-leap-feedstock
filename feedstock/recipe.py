@@ -2188,7 +2188,7 @@ iids_sub_issue_24 = [
 iids = iids_sub_issue_24 #+ iids_PMIP_vel # Let em rip! #+ iids_sub_tim  + iids_sub_issue_20 + iids_sub_issue_22
 
 prune_iids = False
-prune_submission = False # if set, only submits a subset of the iids in the final step
+prune_submission = True # if set, only submits a subset of the iids in the final step
 
 # exclude dupes
 iids = list(set(iids))
@@ -2253,7 +2253,7 @@ for iid, urls in url_dict.items():
             target_chunks_aspect_ratio = target_chunks_aspect_ratio,
             size_tolerance=0.5,
             allow_fallback_algo=True,
-            ).with_resource_hints(min_ram=min_ram)
+            )
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
         | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
