@@ -2185,10 +2185,10 @@ iids_sub_issue_24 = [
  'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r8i1p1f2.SImon.sifb.gn.v20200310'
 ]
 
-iids = iids_sub_issue_24 #+ iids_PMIP_vel # Let em rip! #+ iids_sub_tim  + iids_sub_issue_20 + iids_sub_issue_22
+iids = iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel + iids_sub_issue_24
 
 prune_iids = False
-prune_submission = True # if set, only submits a subset of the iids in the final step
+prune_submission = False # if set, only submits a subset of the iids in the final step
 
 # exclude dupes
 iids = list(set(iids))
@@ -2241,8 +2241,8 @@ for iid, urls in url_dict.items():
         f"Creating {iid}" >> beam.Create(pattern.items())
         | OpenURLWithFSSpec()
          # do not specify file type to accomodate both ncdf3 and ncdf4
-        | Preprocessor()
         | OpenWithXarray(xarray_open_kwargs={"use_cftime":True})
+        | Preprocessor()
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
