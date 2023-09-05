@@ -179,9 +179,22 @@ class Preprocessor(beam.PTransform):
         print(f"Preprocessing after {ds =}")
         return index, ds
     
+    @staticmethod
+    def _sanitize_attrs(item: Indexed[T]) -> Indexed[T]:
+        """Removes non-ascii characters from attributes see https://github.com/pangeo-forge/pangeo-forge-recipes/issues/586"""
+        index, ds = item
+        for att, att_value in ds.attrs.items():
+            if isinstance(att_value, str):
+                new_value=att_value.encode("utf-8", 'ignore').decode()
+                if new_value != att_value:
+                    print(f"Sanitized datasets attributes field {att}: \n {att_value} \n ----> \n {new_value}")
+                    ds.attrs[att] = new_value
+        return index, ds
+  
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
         return ( pcoll 
-            | "Fix coordinates" >> beam.Map(self._keep_only_variable_id) 
+            | "Fix coordinates" >> beam.Map(self._keep_only_variable_id)
+            | "Sanitize Attrs" >> beam.Map(self._sanitize_attrs)
         )
 
 @dataclass
@@ -2101,7 +2114,81 @@ iids_PMIP_vel = [
     'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911',
     'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710'
 ]
-iids = iids_PMIP_vel # Try with yet another request
+iids_sub_issue_24 = [
+ 'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r1i1p1f1.SImon.sifb.gn.v20200817',
+ 'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r2i1p1f1.SImon.sifb.gn.v20200817',
+ 'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r3i1p1f1.SImon.sifb.gn.v20200817',
+ 'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r4i1p1f1.SImon.sifb.gn.v20210607',
+ 'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r5i1p1f1.SImon.sifb.gn.v20210607',
+ 'CMIP6.CMIP.NCAR.CESM2-WACCM.historical.r1i1p1f1.SImon.sifb.gn.v20190227',
+ 'CMIP6.CMIP.NCAR.CESM2.historical.r10i1p1f1.SImon.sifb.gn.v20190313',
+ 'CMIP6.CMIP.NCAR.CESM2.historical.r11i1p1f1.SImon.sifb.gn.v20190514',
+ 'CMIP6.CMIP.NCAR.CESM2.historical.r4i1p1f1.SImon.sifb.gn.v20190308',
+ 'CMIP6.CMIP.THU.CIESM.historical.r1i1p1f1.SImon.sifb.gn.v20200420',
+ 'CMIP6.CMIP.CMCC.CMCC-CM2-SR5.historical.r1i1p1f1.SImon.sifb.gn.v20200616',
+ 'CMIP6.CMIP.CMCC.CMCC-ESM2.historical.r1i1p1f1.SImon.sifb.gn.v20210114',
+ 'CMIP6.CMIP.CNRM-CERFACS.CNRM-CM6-1-HR.historical.r1i1p1f2.SImon.sifb.gn.v20191021',
+ 'CMIP6.CMIP.CNRM-CERFACS.CNRM-CM6-1.historical.r1i1p1f2.SImon.sifb.gn.v20180917',
+ 'CMIP6.CMIP.MOHC.HadGEM3-GC31-LL.historical.r1i1p1f3.SImon.sifb.gn.v20200330',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r14i1p1f1.SImon.sifb.gn.v20180803',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r1i1p1f1.SImon.sifb.gn.v20180803',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r2i1p1f1.SImon.sifb.gn.v20180803',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r3i1p1f1.SImon.sifb.gn.v20180803',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r4i1p1f1.SImon.sifb.gn.v20180803',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r6i1p1f1.SImon.sifb.gn.v20180803',
+ 'CMIP6.CMIP.NIMS-KMA.KACE-1-0-G.historical.r1i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.CMIP.NIMS-KMA.KACE-1-0-G.historical.r2i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.CMIP.NIMS-KMA.KACE-1-0-G.historical.r3i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-HR.historical.r1i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-HR.historical.r2i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r10i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r11i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r12i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r13i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r14i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r15i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r16i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r17i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r18i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r19i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r1i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r20i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r21i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r22i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r23i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r24i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r25i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r26i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r27i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r28i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r29i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r2i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r30i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r3i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r4i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r5i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r6i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r7i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r8i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MPI-M.MPI-ESM1-2-LR.historical.r9i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.SImon.sifb.gn.v20210311',
+ 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r2i1p1f1.SImon.sifb.gn.v20210311',
+ 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r3i1p1f1.SImon.sifb.gn.v20210311',
+ 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r4i1p1f1.SImon.sifb.gn.v20210311',
+ 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r5i1p1f1.SImon.sifb.gn.v20210311',
+ 'CMIP6.CMIP.NCC.NorESM2-LM.historical.r1i1p1f1.SImon.sifb.gn.v20190815',
+ 'CMIP6.CMIP.NCC.NorESM2-MM.historical.r1i1p1f1.SImon.sifb.gn.v20191108',
+ 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r1i1p1f2.SImon.sifb.gn.v20200309',
+ 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r2i1p1f2.SImon.sifb.gn.v20200309',
+ 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r3i1p1f2.SImon.sifb.gn.v20200319',
+ 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r4i1p1f2.SImon.sifb.gn.v20200309',
+ 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r8i1p1f2.SImon.sifb.gn.v20200310'
+]
+
+iids = iids_sub_issue_24 + iids_PMIP_vel # Let em rip! #+ iids_sub_tim  + iids_sub_issue_20 + iids_sub_issue_22
+
+prune_iids = False
+prune_submission = False # if set, only submits a subset of the iids in the final step
 
 # exclude dupes
 iids = list(set(iids))
@@ -2125,16 +2212,28 @@ del bq_interface_nonqc
 
 # Maybe I want a more finegrained check here at some point, but for now this will prevent logged iids from rerunning
 iids_to_skip = set(iids_in_table + iids_in_table_nonqc)
-iids_pruned = list(set(iids) - iids_to_skip)
-print(f"Pruned {len(iids) - len(iids_pruned)} iids from input list")
-print(f"Running a total of {len(iids_pruned)} iids")
+iids_filtered = list(set(iids) - iids_to_skip)
+print(f"Pruned {len(iids) - len(iids_filtered)} iids from input list")
+print(f"Running a total of {len(iids_filtered)} iids")
+
+if prune_iids:
+    iids = iids_filtered[0:10]
 
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
-url_dict = asyncio.run(get_urls_from_esgf(iids_pruned))
+url_dict = asyncio.run(get_urls_from_esgf(iids_filtered))
+
+if prune_submission:
+    url_dict = {iid: url_dict[iid] for iid in list(url_dict.keys())[0:10]}
+
+# Print the actual urls
+print(url_dict)
 
 ## Create the recipes
 target_chunks_aspect_ratio = {'time': 1}
 recipes = {}
+
+min_ram = "4GB"
+max_ram = "64GB"
 
 for iid, urls in url_dict.items():
     pattern = pattern_from_file_sequence(
@@ -2142,10 +2241,11 @@ for iid, urls in url_dict.items():
         concat_dim='time'
         )
     recipes[iid] = (
-        f"Creating {iid}" >> beam.Create(pattern.items())
-        | OpenURLWithFSSpec()
-        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}) # do not specify file type to accomodate both ncdf3 and ncdf4
-        | Preprocessor()
+        f"Creating {iid}" >> beam.Create(pattern.items()).with_resource_hints(min_ram=min_ram)
+        | OpenURLWithFSSpec().with_resource_hints(min_ram=min_ram)
+         # do not specify file type to accomodate both ncdf3 and ncdf4
+        | Preprocessor().with_resource_hints(min_ram=min_ram)
+        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}).with_resource_hints(min_ram=min_ram)
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
@@ -2153,7 +2253,7 @@ for iid, urls in url_dict.items():
             target_chunks_aspect_ratio = target_chunks_aspect_ratio,
             size_tolerance=0.5,
             allow_fallback_algo=True,
-            )
+            ).with_resource_hints(min_ram=min_ram)
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
         | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
