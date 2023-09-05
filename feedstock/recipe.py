@@ -2232,20 +2232,17 @@ print(url_dict)
 target_chunks_aspect_ratio = {'time': 1}
 recipes = {}
 
-min_ram = "4GB"
-max_ram = "64GB"
-
 for iid, urls in url_dict.items():
     pattern = pattern_from_file_sequence(
         urls,
         concat_dim='time'
         )
     recipes[iid] = (
-        f"Creating {iid}" >> beam.Create(pattern.items()).with_resource_hints(min_ram=min_ram)
-        | OpenURLWithFSSpec().with_resource_hints(min_ram=min_ram)
+        f"Creating {iid}" >> beam.Create(pattern.items())
+        | OpenURLWithFSSpec()
          # do not specify file type to accomodate both ncdf3 and ncdf4
-        | Preprocessor().with_resource_hints(min_ram=min_ram)
-        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}).with_resource_hints(min_ram=min_ram)
+        | Preprocessor()
+        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True})
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
