@@ -129,6 +129,21 @@ class BQInterface:
         # this is a full row iterator, for now just return the iids
         return list(set([r['instance_id'] for r in results]))
 
+    def get_latest(self) -> List[bigquery.table.Row]:
+        """Get the latest row for all iids in the table"""
+        # adopted from https://stackoverflow.com/a/1313293
+        query = f"""
+        WITH ranked_iids AS (
+        SELECT i.*, ROW_NUMBER() OVER (PARTITION BY instance_id ORDER BY timestamp DESC) AS rn
+        FROM {self.table_id} AS i
+        )
+        SELECT * FROM ranked_iids WHERE rn = 1;
+        """
+        results = self._get_query_job(query)
+        return results.to_dataframe()
+    
+
+
     # outline
     # This class should be able to:
     # 0. Create a bq client if none is provided

@@ -129,10 +129,6 @@ dmypy.json
 .pyre/
 .DS_Store
 feedstock/local_storage
-old/config_dataflow_debug.json
-old/config_dataflow.json
-old/dev_submission_script.ipynb
-old/dev_url_generator_script.ipynb
-old/fetch_logs.py
-old/local_manual_debug.ipynb
-old/reproducer_lost_time_attrs.ipynb
+
+*.csv
+old/

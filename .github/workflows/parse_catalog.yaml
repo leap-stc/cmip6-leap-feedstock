@@ -1,0 +1,65 @@
+name: Parse Catalog
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  parse-catalog:
+    name: parse-catalog-from-bq
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Authenticate to Google Cloud"
+        id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        #FIXME: PGF-esgf needs install from pr for now.
+        run: python -m pip install pandas pangeo-forge-esgf google-cloud-bigquery db-dtypes git+https://github.com/jbusecke/pangeo-forge-esgf.git@beam-refactor
+      - name: "Parse catalog"
+        shell: bash
+        run: |
+          python parse-catalog-from-bq.py
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
+      - name: Save csv file as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: csv-files
+          path: "*.csv"
+  write-to-gcs:
+    name: write-csv-to-gcs
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    needs: [parse-catalog]
+    steps:
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: csv-files
+      - name: Authenticate to Google Cloud
+        id: "auth"
+        uses: google-github-actions/auth@v1
+        with:
+          # credentials_json: "${{ secrets.GCP_PUBLIC_CMIP6_SERVICE_ACCOUNT }}"
+          credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
+      - name: Set up Cloud SDK and upload csv files
+        uses: google-github-actions/setup-gcloud@v1
+      - name: Upload csv files to GCS
+        run: |
+          gcloud storage cp *.csv gs://leap-persistent-ro/data-library/catalogs/cmip6-test/
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
+      - name: Set csv file object to public
+        run: |
+          gcloud storage objects update gs://leap-persistent-ro/data-library/catalogs/cmip6-test/leap-pangeo-cmip6-noqc-test.csv gs://leap-persistent-ro/data-library/catalogs/cmip6-test/leap-pangeo-cmip6-test.csv --add-acl-grant=entity=AllUsers,role=READER
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
