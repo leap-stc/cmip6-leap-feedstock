@@ -2119,7 +2119,7 @@ iids_PMIP_vel = [
 ]
 # new feedstock requests.
 iids_sub_issue_41 = [
-'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r1i1p1f1.SImon.sifb.gn.v20200817',
+ 'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r1i1p1f1.SImon.sifb.gn.v20200817',
  'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r2i1p1f1.SImon.sifb.gn.v20200817',
  'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r3i1p1f1.SImon.sifb.gn.v20200817',
  'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r4i1p1f1.SImon.sifb.gn.v20210607',
@@ -2477,9 +2477,9 @@ iids_sub_issue_41 = [
  'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r8i1p1f2.SImon.siitdthick.gn.v20200721',
 ]
 
-iids = iids_sub_issue_41 + iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel 
+iids = iids_sub_issue_41 + iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel
 
-prune_iids = True
+prune_iids = False
 prune_submission = False # if set, only submits a subset of the iids in the final step
 
 # exclude dupes
@@ -2515,9 +2515,9 @@ if prune_iids:
 url_dict = asyncio.run(
     get_urls_from_esgf(
         iids_filtered,        
-        limit_per_host=10,
-        max_concurrency=10,
-        max_concurrency_response = 10,
+        limit_per_host=20,
+        max_concurrency=20,
+        max_concurrency_response = 20,
     )
 )
 
