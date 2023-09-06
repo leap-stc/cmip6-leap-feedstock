@@ -2509,7 +2509,14 @@ if prune_iids:
     iids = iids_filtered[0:10]
 
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
-url_dict = asyncio.run(get_urls_from_esgf(iids_filtered))
+url_dict = asyncio.run(
+    get_urls_from_esgf(
+        iids_filtered,        
+        limit_per_host=10,
+        max_concurrency=40,
+        max_concurrency_response = 100,
+    )
+)
 
 if prune_submission:
     url_dict = {iid: url_dict[iid] for iid in list(url_dict.keys())[0:10]}
