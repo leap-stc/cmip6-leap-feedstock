@@ -2,7 +2,7 @@ name: Kill all the zombies 🧟‍♂️
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */3 * * *'
   workflow_dispatch:
 
 jobs:
