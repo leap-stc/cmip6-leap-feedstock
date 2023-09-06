@@ -5,7 +5,7 @@ import apache_beam as beam
 from dataclasses import dataclass
 from datetime import datetime
 from typing import List
-from pangeo_forge_esgf import get_urls_from_esgf
+from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
     OpenURLWithFSSpec, OpenWithXarray, StoreToZarr, Indexed, T
@@ -13,6 +13,9 @@ from pangeo_forge_recipes.transforms import (
 import asyncio
 import xarray as xr
 import zarr
+
+# setup_logging('DEBUG')
+setup_logging('INFO')
 
 
 # from bigquery_interface import BQInterface, IIDEntry
@@ -2476,7 +2479,7 @@ iids_sub_issue_41 = [
 
 iids = iids_sub_issue_41 + iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel 
 
-prune_iids = False
+prune_iids = True
 prune_submission = False # if set, only submits a subset of the iids in the final step
 
 # exclude dupes
@@ -2506,7 +2509,7 @@ print(f"Pruned {len(iids) - len(iids_filtered)} iids from input list")
 print(f"Running a total of {len(iids_filtered)} iids")
 
 if prune_iids:
-    iids = iids_filtered[0:10]
+    iids_filtered = iids_filtered[0:10]
 
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
 url_dict = asyncio.run(
