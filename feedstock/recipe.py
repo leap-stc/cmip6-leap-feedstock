@@ -2474,7 +2474,7 @@ iids_sub_issue_41 = [
  'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r8i1p1f2.SImon.siitdthick.gn.v20200721',
 ]
 
-iids = iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel + iids_sub_issue_41
+iids = iids_PMIP_vel + iids_sub_issue_41#iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel 
 
 prune_iids = False
 prune_submission = False # if set, only submits a subset of the iids in the final step
