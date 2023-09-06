@@ -5,7 +5,7 @@ import apache_beam as beam
 from dataclasses import dataclass
 from datetime import datetime
 from typing import List
-from pangeo_forge_esgf import get_urls_from_esgf
+from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
     OpenURLWithFSSpec, OpenWithXarray, StoreToZarr, Indexed, T
@@ -13,6 +13,9 @@ from pangeo_forge_recipes.transforms import (
 import asyncio
 import xarray as xr
 import zarr
+
+# setup_logging('DEBUG')
+setup_logging('INFO')
 
 
 # from bigquery_interface import BQInterface, IIDEntry
@@ -2114,7 +2117,8 @@ iids_PMIP_vel = [
     'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911',
     'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710'
 ]
-iids_sub_issue_24 = [
+# new feedstock requests.
+iids_sub_issue_41 = [
  'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r1i1p1f1.SImon.sifb.gn.v20200817',
  'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r2i1p1f1.SImon.sifb.gn.v20200817',
  'CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r3i1p1f1.SImon.sifb.gn.v20200817',
@@ -2182,10 +2186,298 @@ iids_sub_issue_24 = [
  'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r2i1p1f2.SImon.sifb.gn.v20200309',
  'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r3i1p1f2.SImon.sifb.gn.v20200319',
  'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r4i1p1f2.SImon.sifb.gn.v20200309',
- 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r8i1p1f2.SImon.sifb.gn.v20200310'
+ 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r8i1p1f2.SImon.sifb.gn.v20200310',
+'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp126.r1i1p1f1.SImon.sifb.gn.v20210317',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp126.r2i1p1f1.SImon.sifb.gn.v20200817',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp126.r3i1p1f1.SImon.sifb.gn.v20200817',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp126.r4i1p1f1.SImon.sifb.gn.v20210712',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp126.r5i1p1f1.SImon.sifb.gn.v20210802',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2-WACCM.ssp126.r1i1p1f1.SImon.sifb.gn.v20210211',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2.ssp126.r10i1p1f1.SImon.sifb.gn.v20200528',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2.ssp126.r11i1p1f1.SImon.sifb.gn.v20200528',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2.ssp126.r4i1p1f1.SImon.sifb.gn.v20200528',
+ 'CMIP6.ScenarioMIP.THU.CIESM.ssp126.r1i1p1f1.SImon.sifb.gn.v20200420',
+ 'CMIP6.ScenarioMIP.CMCC.CMCC-CM2-SR5.ssp126.r1i1p1f1.SImon.sifb.gn.v20200717',
+ 'CMIP6.ScenarioMIP.CMCC.CMCC-ESM2.ssp126.r1i1p1f1.SImon.sifb.gn.v20210126',
+ 'CMIP6.ScenarioMIP.CNRM-CERFACS.CNRM-CM6-1-HR.ssp126.r1i1p1f2.SImon.sifb.gn.v20200127',
+ 'CMIP6.ScenarioMIP.CNRM-CERFACS.CNRM-CM6-1.ssp126.r1i1p1f2.SImon.sifb.gn.v20190219',
+ 'CMIP6.ScenarioMIP.MOHC.HadGEM3-GC31-LL.ssp126.r1i1p1f3.SImon.sifb.gn.v20200310',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r14i1p1f1.SImon.sifb.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r1i1p1f1.SImon.sifb.gn.v20190903',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r2i1p1f1.SImon.sifb.gn.v20190410',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r3i1p1f1.SImon.sifb.gn.v20190410',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r4i1p1f1.SImon.sifb.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r6i1p1f1.SImon.sifb.gn.v20191121',
+ 'CMIP6.ScenarioMIP.NIMS-KMA.KACE-1-0-G.ssp126.r1i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.ScenarioMIP.NIMS-KMA.KACE-1-0-G.ssp126.r2i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.ScenarioMIP.NIMS-KMA.KACE-1-0-G.ssp126.r3i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp126.r1i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.DWD.MPI-ESM1-2-HR.ssp126.r2i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r10i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r11i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r12i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r13i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r14i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r15i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r16i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r17i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r18i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r19i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r1i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r20i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r21i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r22i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r23i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r24i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r25i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r26i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r27i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r28i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r29i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r2i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r30i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r3i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r4i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r5i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r6i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r7i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r8i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp126.r9i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp126.r1i1p1f1.SImon.sifb.gn.v20210329',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp126.r2i1p1f1.SImon.sifb.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp126.r3i1p1f1.SImon.sifb.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp126.r4i1p1f1.SImon.sifb.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp126.r5i1p1f1.SImon.sifb.gn.v20210910',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-LM.ssp126.r1i1p1f1.SImon.sifb.gn.v20191108',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-MM.ssp126.r1i1p1f1.SImon.sifb.gn.v20191108',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp126.r1i1p1f2.SImon.sifb.gn.v20200729',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp126.r2i1p1f2.SImon.sifb.gn.v20200310',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp126.r3i1p1f2.SImon.sifb.gn.v20200310',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp126.r4i1p1f2.SImon.sifb.gn.v20211202',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp126.r8i1p1f2.SImon.sifb.gn.v20200415',
+'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp245.r1i1p1f1.SImon.sifb.gn.v20200817',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp245.r2i1p1f1.SImon.sifb.gn.v20200817',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp245.r3i1p1f1.SImon.sifb.gn.v20200817',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp245.r4i1p1f1.SImon.sifb.gn.v20210712',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp245.r5i1p1f1.SImon.sifb.gn.v20210802',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2-WACCM.ssp245.r1i1p1f1.SImon.sifb.gn.v20190815',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2.ssp245.r10i1p1f1.SImon.sifb.gn.v20200528',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2.ssp245.r11i1p1f1.SImon.sifb.gn.v20200528',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2.ssp245.r4i1p1f1.SImon.sifb.gn.v20200528',
+ 'CMIP6.ScenarioMIP.THU.CIESM.ssp245.r1i1p1f1.SImon.sifb.gn.v20200420',
+ 'CMIP6.ScenarioMIP.CMCC.CMCC-CM2-SR5.ssp245.r1i1p1f1.SImon.sifb.gn.v20200617',
+ 'CMIP6.ScenarioMIP.CMCC.CMCC-ESM2.ssp245.r1i1p1f1.SImon.sifb.gn.v20210129',
+ 'CMIP6.ScenarioMIP.CNRM-CERFACS.CNRM-CM6-1-HR.ssp245.r1i1p1f2.SImon.sifb.gn.v20191202',
+ 'CMIP6.ScenarioMIP.CNRM-CERFACS.CNRM-CM6-1.ssp245.r1i1p1f2.SImon.sifb.gn.v20190219',
+ 'CMIP6.ScenarioMIP.MOHC.HadGEM3-GC31-LL.ssp245.r1i1p1f3.SImon.sifb.gn.v20200330',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r14i1p1f1.SImon.sifb.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r1i1p1f1.SImon.sifb.gn.v20190119',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r2i1p1f1.SImon.sifb.gn.v20190516',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r3i1p1f1.SImon.sifb.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r4i1p1f1.SImon.sifb.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r6i1p1f1.SImon.sifb.gn.v20191121',
+ 'CMIP6.ScenarioMIP.NIMS-KMA.KACE-1-0-G.ssp245.r1i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.ScenarioMIP.NIMS-KMA.KACE-1-0-G.ssp245.r2i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.ScenarioMIP.NIMS-KMA.KACE-1-0-G.ssp245.r3i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp245.r1i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp245.r2i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r10i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r11i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r12i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r13i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r14i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r15i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r16i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r17i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r18i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r19i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r1i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r20i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r21i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r22i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r23i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r24i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r25i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r26i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r27i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r28i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r29i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r2i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r30i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r3i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r4i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r5i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r6i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r7i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r8i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp245.r9i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.SImon.sifb.gn.v20210329',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r2i1p1f1.SImon.sifb.gn.v20210830',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r3i1p1f1.SImon.sifb.gn.v20210830',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r4i1p1f1.SImon.sifb.gn.v20210830',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r5i1p1f1.SImon.sifb.gn.v20210830',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-LM.ssp245.r1i1p1f1.SImon.sifb.gn.v20191108',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-MM.ssp245.r1i1p1f1.SImon.sifb.gn.v20191108',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp245.r1i1p1f2.SImon.sifb.gn.v20200415',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp245.r2i1p1f2.SImon.sifb.gn.v20200415',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp245.r3i1p1f2.SImon.sifb.gn.v20190507',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp245.r4i1p1f2.SImon.sifb.gn.v20190507',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp245.r8i1p1f2.SImon.sifb.gn.v20190510',
+'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp585.r1i1p1f1.SImon.sifb.gn.v20210317',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp585.r2i1p1f1.SImon.sifb.gn.v20200817',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp585.r3i1p1f1.SImon.sifb.gn.v20200817',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp585.r4i1p1f1.SImon.sifb.gn.v20210712',
+ 'CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp585.r5i1p1f1.SImon.sifb.gn.v20210802',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2-WACCM.ssp585.r1i1p1f1.SImon.sifb.gn.v20200702',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2.ssp585.r10i1p1f1.SImon.sifb.gn.v20200528',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2.ssp585.r11i1p1f1.SImon.sifb.gn.v20200528',
+ 'CMIP6.ScenarioMIP.NCAR.CESM2.ssp585.r4i1p1f1.SImon.sifb.gn.v20200528',
+ 'CMIP6.ScenarioMIP.THU.CIESM.ssp585.r1i1p1f1.SImon.sifb.gn.v20200420',
+ 'CMIP6.ScenarioMIP.CMCC.CMCC-CM2-SR5.ssp585.r1i1p1f1.SImon.sifb.gn.v20200622',
+ 'CMIP6.ScenarioMIP.CMCC.CMCC-ESM2.ssp585.r1i1p1f1.SImon.sifb.gn.v20210126',
+ 'CMIP6.ScenarioMIP.CNRM-CERFACS.CNRM-CM6-1-HR.ssp585.r1i1p1f2.SImon.sifb.gn.v20191202',
+ 'CMIP6.ScenarioMIP.CNRM-CERFACS.CNRM-CM6-1.ssp585.r1i1p1f2.SImon.sifb.gn.v20190219',
+ 'CMIP6.ScenarioMIP.MOHC.HadGEM3-GC31-LL.ssp585.r1i1p1f3.SImon.sifb.gn.v20200310',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r14i1p1f1.SImon.sifb.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r1i1p1f1.SImon.sifb.gn.v20190903',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r2i1p1f1.SImon.sifb.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r3i1p1f1.SImon.sifb.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r4i1p1f1.SImon.sifb.gn.v20191122',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r6i1p1f1.SImon.sifb.gn.v20191121',
+ 'CMIP6.ScenarioMIP.NIMS-KMA.KACE-1-0-G.ssp585.r1i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.ScenarioMIP.NIMS-KMA.KACE-1-0-G.ssp585.r2i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.ScenarioMIP.NIMS-KMA.KACE-1-0-G.ssp585.r3i1p1f1.SImon.sifb.gr.v20200130',
+ 'CMIP6.ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp585.r1i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.DWD.MPI-ESM1-2-HR.ssp585.r2i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r10i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r11i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r12i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r13i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r14i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r15i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r16i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r17i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r18i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r19i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r1i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r20i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r21i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r22i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r23i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r24i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r25i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r26i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r27i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r28i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r29i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r2i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r30i1p1f1.SImon.sifb.gn.v20210901',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r3i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r4i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r5i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r6i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r7i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r8i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MPI-M.MPI-ESM1-2-LR.ssp585.r9i1p1f1.SImon.sifb.gn.v20190710',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r1i1p1f1.SImon.sifb.gn.v20210329',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r2i1p1f1.SImon.sifb.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r3i1p1f1.SImon.sifb.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r4i1p1f1.SImon.sifb.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r5i1p1f1.SImon.sifb.gn.v20210910',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-LM.ssp585.r1i1p1f1.SImon.sifb.gn.v20191108',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-MM.ssp585.r1i1p1f1.SImon.sifb.gn.v20191108',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r1i1p1f2.SImon.sifb.gn.v20200415',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r2i1p1f2.SImon.sifb.gn.v20200420',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r3i1p1f2.SImon.sifb.gn.v20190507',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r4i1p1f2.SImon.sifb.gn.v20211201',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r8i1p1f2.SImon.sifb.gn.v20190510',
+'CMIP6.CMIP.NCAR.CESM2.historical.r11i1p1f1.SImon.siitdthick.gn.v20190514',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r14i1p1f1.SImon.siitdthick.gn.v20180803',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r1i1p1f1.SImon.siitdthick.gn.v20180803',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r2i1p1f1.SImon.siitdthick.gn.v20180803',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r3i1p1f1.SImon.siitdthick.gn.v20180803',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r4i1p1f1.SImon.siitdthick.gn.v20180803',
+ 'CMIP6.CMIP.IPSL.IPSL-CM6A-LR.historical.r6i1p1f1.SImon.siitdthick.gn.v20180803',
+ 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.SImon.siitdthick.gn.v20210311',
+ 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r2i1p1f1.SImon.siitdthick.gn.v20210311',
+ 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r3i1p1f1.SImon.siitdthick.gn.v20210311',
+ 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r4i1p1f1.SImon.siitdthick.gn.v20210311',
+ 'CMIP6.CMIP.MRI.MRI-ESM2-0.historical.r5i1p1f1.SImon.siitdthick.gn.v20210311',
+ 'CMIP6.CMIP.NUIST.NESM3.historical.r1i1p1f1.SImon.siitdthick.gn.v20190713',
+ 'CMIP6.CMIP.NUIST.NESM3.historical.r2i1p1f1.SImon.siitdthick.gn.v20190713',
+ 'CMIP6.CMIP.NCC.NorESM2-LM.historical.r1i1p1f1.SImon.siitdthick.gn.v20191108',
+ 'CMIP6.CMIP.NCC.NorESM2-MM.historical.r1i1p1f1.SImon.siitdthick.gn.v20191108',
+ 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r1i1p1f2.SImon.siitdthick.gn.v20200309',
+ 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r2i1p1f2.SImon.siitdthick.gn.v20200309',
+ 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r3i1p1f2.SImon.siitdthick.gn.v20200319',
+ 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r4i1p1f2.SImon.siitdthick.gn.v20200309',
+ 'CMIP6.CMIP.MOHC.UKESM1-0-LL.historical.r8i1p1f2.SImon.siitdthick.gn.v20200310',
+'CMIP6.ScenarioMIP.NCAR.CESM2.ssp126.r11i1p1f1.SImon.siitdthick.gn.v20200528',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r14i1p1f1.SImon.siitdthick.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r1i1p1f1.SImon.siitdthick.gn.v20190903',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r2i1p1f1.SImon.siitdthick.gn.v20190410',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r3i1p1f1.SImon.siitdthick.gn.v20190410',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r4i1p1f1.SImon.siitdthick.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp126.r6i1p1f1.SImon.siitdthick.gn.v20191121',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp126.r1i1p1f1.SImon.siitdthick.gn.v20210329',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp126.r2i1p1f1.SImon.siitdthick.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp126.r3i1p1f1.SImon.siitdthick.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp126.r4i1p1f1.SImon.siitdthick.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp126.r5i1p1f1.SImon.siitdthick.gn.v20210910',
+ 'CMIP6.ScenarioMIP.NUIST.NESM3.ssp126.r1i1p1f1.SImon.siitdthick.gn.v20190730',
+ 'CMIP6.ScenarioMIP.NUIST.NESM3.ssp126.r2i1p1f1.SImon.siitdthick.gn.v20190805',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-LM.ssp126.r1i1p1f1.SImon.siitdthick.gn.v20191108',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-MM.ssp126.r1i1p1f1.SImon.siitdthick.gn.v20191108',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp126.r1i1p1f2.SImon.siitdthick.gn.v20200602',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp126.r2i1p1f2.SImon.siitdthick.gn.v20200310',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp126.r3i1p1f2.SImon.siitdthick.gn.v20200310',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp126.r4i1p1f2.SImon.siitdthick.gn.v20211202',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp126.r8i1p1f2.SImon.siitdthick.gn.v20200415',
+'CMIP6.ScenarioMIP.NCAR.CESM2.ssp245.r11i1p1f1.SImon.siitdthick.gn.v20200528',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r14i1p1f1.SImon.siitdthick.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r1i1p1f1.SImon.siitdthick.gn.v20190119',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r2i1p1f1.SImon.siitdthick.gn.v20190516',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r3i1p1f1.SImon.siitdthick.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r4i1p1f1.SImon.siitdthick.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp245.r6i1p1f1.SImon.siitdthick.gn.v20191121',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.SImon.siitdthick.gn.v20210329',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r2i1p1f1.SImon.siitdthick.gn.v20210830',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r3i1p1f1.SImon.siitdthick.gn.v20210830',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r4i1p1f1.SImon.siitdthick.gn.v20210830',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r5i1p1f1.SImon.siitdthick.gn.v20210830',
+ 'CMIP6.ScenarioMIP.NUIST.NESM3.ssp245.r1i1p1f1.SImon.siitdthick.gn.v20190804',
+ 'CMIP6.ScenarioMIP.NUIST.NESM3.ssp245.r2i1p1f1.SImon.siitdthick.gn.v20190805',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-LM.ssp245.r1i1p1f1.SImon.siitdthick.gn.v20191108',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-MM.ssp245.r1i1p1f1.SImon.siitdthick.gn.v20191108',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp245.r1i1p1f2.SImon.siitdthick.gn.v20200415',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp245.r2i1p1f2.SImon.siitdthick.gn.v20200415',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp245.r3i1p1f2.SImon.siitdthick.gn.v20200721',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp245.r4i1p1f2.SImon.siitdthick.gn.v20200721',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp245.r8i1p1f2.SImon.siitdthick.gn.v20200721',
+'CMIP6.ScenarioMIP.NCAR.CESM2.ssp585.r11i1p1f1.SImon.siitdthick.gn.v20200528',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r14i1p1f1.SImon.siitdthick.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r1i1p1f1.SImon.siitdthick.gn.v20190903',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r2i1p1f1.SImon.siitdthick.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r3i1p1f1.SImon.siitdthick.gn.v20191121',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r4i1p1f1.SImon.siitdthick.gn.v20191122',
+ 'CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp585.r6i1p1f1.SImon.siitdthick.gn.v20191121',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r1i1p1f1.SImon.siitdthick.gn.v20210329',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r2i1p1f1.SImon.siitdthick.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r3i1p1f1.SImon.siitdthick.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r4i1p1f1.SImon.siitdthick.gn.v20210910',
+ 'CMIP6.ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r5i1p1f1.SImon.siitdthick.gn.v20210910',
+ 'CMIP6.ScenarioMIP.NUIST.NESM3.ssp585.r1i1p1f1.SImon.siitdthick.gn.v20190803',
+ 'CMIP6.ScenarioMIP.NUIST.NESM3.ssp585.r2i1p1f1.SImon.siitdthick.gn.v20190805',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-LM.ssp585.r1i1p1f1.SImon.siitdthick.gn.v20191108',
+ 'CMIP6.ScenarioMIP.NCC.NorESM2-MM.ssp585.r1i1p1f1.SImon.siitdthick.gn.v20191108',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r1i1p1f2.SImon.siitdthick.gn.v20200415',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r2i1p1f2.SImon.siitdthick.gn.v20200420',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r3i1p1f2.SImon.siitdthick.gn.v20200721',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r4i1p1f2.SImon.siitdthick.gn.v20211201',
+ 'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r8i1p1f2.SImon.siitdthick.gn.v20200721',
 ]
 
-iids = iids_sub_issue_24 + iids_PMIP_vel # Let em rip! #+ iids_sub_tim  + iids_sub_issue_20 + iids_sub_issue_22
+iids = iids_sub_issue_41 + iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel
 
 prune_iids = False
 prune_submission = False # if set, only submits a subset of the iids in the final step
@@ -2217,10 +2509,17 @@ print(f"Pruned {len(iids) - len(iids_filtered)} iids from input list")
 print(f"Running a total of {len(iids_filtered)} iids")
 
 if prune_iids:
-    iids = iids_filtered[0:10]
+    iids_filtered = iids_filtered[0:10]
 
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
-url_dict = asyncio.run(get_urls_from_esgf(iids_filtered))
+url_dict = asyncio.run(
+    get_urls_from_esgf(
+        iids_filtered,        
+        limit_per_host=20,
+        max_concurrency=20,
+        max_concurrency_response = 20,
+    )
+)
 
 if prune_submission:
     url_dict = {iid: url_dict[iid] for iid in list(url_dict.keys())[0:10]}
@@ -2232,20 +2531,17 @@ print(url_dict)
 target_chunks_aspect_ratio = {'time': 1}
 recipes = {}
 
-min_ram = "4GB"
-max_ram = "64GB"
-
 for iid, urls in url_dict.items():
     pattern = pattern_from_file_sequence(
         urls,
         concat_dim='time'
         )
     recipes[iid] = (
-        f"Creating {iid}" >> beam.Create(pattern.items()).with_resource_hints(min_ram=min_ram)
-        | OpenURLWithFSSpec().with_resource_hints(min_ram=min_ram)
+        f"Creating {iid}" >> beam.Create(pattern.items())
+        | OpenURLWithFSSpec()
          # do not specify file type to accomodate both ncdf3 and ncdf4
-        | Preprocessor().with_resource_hints(min_ram=min_ram)
-        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True}).with_resource_hints(min_ram=min_ram)
+        | OpenWithXarray(xarray_open_kwargs={"use_cftime":True})
+        | Preprocessor()
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
@@ -2253,7 +2549,7 @@ for iid, urls in url_dict.items():
             target_chunks_aspect_ratio = target_chunks_aspect_ratio,
             size_tolerance=0.5,
             allow_fallback_algo=True,
-            ).with_resource_hints(min_ram=min_ram)
+            )
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
         | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
