@@ -273,6 +273,13 @@ class LogToBigQuery(beam.PTransform):
         return (pcoll
             | beam.Map(self._log_to_bigquery)
         )
+    
+def read_from_file(filename: str) -> List[str]:
+    iid_list = []
+    with open(filename) as f:
+        for line in f:
+            iid_list.append(line[0:-1])
+    return iid_list
 
 # starting an example with a small part of https://github.com/pangeo-forge/cmip6-feedstock/issues/20
 iids_sub_issue_20 = [
@@ -2476,8 +2483,10 @@ iids_sub_issue_41 = [
  'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r4i1p1f2.SImon.siitdthick.gn.v20211201',
  'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r8i1p1f2.SImon.siitdthick.gn.v20200721',
 ]
+iids_pco2_testbed = read_from_file('pco2_testbed_request.txt')
 
-iids = iids_sub_issue_41 + iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel
+# iids = iids_sub_issue_41 + iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel + 
+iids = iids_pco2_testbed
 
 prune_iids = False
 prune_submission = False # if set, only submits a subset of the iids in the final step
