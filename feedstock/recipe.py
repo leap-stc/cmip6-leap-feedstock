@@ -2474,7 +2474,7 @@ iids_sub_issue_41 = [
  'CMIP6.ScenarioMIP.MOHC.UKESM1-0-LL.ssp585.r8i1p1f2.SImon.siitdthick.gn.v20200721',
 ]
 
-iids = iids_PMIP_vel + iids_sub_issue_41#iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel 
+iids = iids_sub_issue_41 + iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel 
 
 prune_iids = False
 prune_submission = False # if set, only submits a subset of the iids in the final step
@@ -2512,9 +2512,9 @@ if prune_iids:
 url_dict = asyncio.run(
     get_urls_from_esgf(
         iids_filtered,        
-        limit_per_host=100,
-        max_concurrency=100,
-        max_concurrency_response = 100,
+        limit_per_host=10,
+        max_concurrency=10,
+        max_concurrency_response = 10,
     )
 )
 
