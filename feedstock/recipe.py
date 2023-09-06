@@ -2512,8 +2512,8 @@ if prune_iids:
 url_dict = asyncio.run(
     get_urls_from_esgf(
         iids_filtered,        
-        limit_per_host=10,
-        max_concurrency=40,
+        limit_per_host=100,
+        max_concurrency=100,
         max_concurrency_response = 100,
     )
 )
