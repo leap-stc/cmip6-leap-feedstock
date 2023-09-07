@@ -2479,9 +2479,6 @@ iids_sub_issue_41 = [
 
 iids = iids_sub_issue_41 + iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel
 
-# just for testing the PR add an iid that is definitely in the legacy table
-iids = ['CMIP6.HighResMIP.CMCC.CMCC-CM2-HR4.highresSST-present.r1i1p1f1.Amon.ps.gn.v20170706']
-
 prune_iids = False
 prune_submission = False # if set, only submits a subset of the iids in the final step
 
