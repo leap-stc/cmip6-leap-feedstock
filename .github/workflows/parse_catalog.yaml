@@ -3,7 +3,7 @@ name: Parse Catalog
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */12 * * *'
+    - cron: "0 */12 * * *"
 
 jobs:
   parse-catalog:
@@ -27,7 +27,7 @@ jobs:
       - name: "Parse catalog"
         shell: bash
         run: |
-          python parse-catalog-from-bq.py
+          python sync_catalogs.py
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
       - name: Save csv file as artifacts
