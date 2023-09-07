@@ -2479,6 +2479,9 @@ iids_sub_issue_41 = [
 
 iids = iids_sub_issue_41 + iids_sub_issue_20 + iids_sub_tim + iids_sub_issue_22 + iids_PMIP_vel
 
+# just for testing the PR add an iid that is definitely in the legacy table
+iids = ['CMIP6.HighResMIP.CMCC.CMCC-CM2-HR4.highresSST-present.r1i1p1f1.Amon.ps.gn.v20170706']
+
 prune_iids = False
 prune_submission = False # if set, only submits a subset of the iids in the final step
 
@@ -2489,23 +2492,27 @@ iids = list(set(iids))
 print("Pruning iids that already exist")
 table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
 table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
+table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
 # TODO: To create a non-QC catalog I need to find the difference between the two tables iids
 
 bq_interface = BQInterface(table_id=table_id)
 bq_interface_nonqc = BQInterface(table_id=table_id_nonqc)
+bq_interface_legacy = BQInterface(table_id=table_id_legacy)
 
 # get lists of the iids already logged
 iids_in_table = bq_interface.iid_list_exists(iids)
 iids_in_table_nonqc = bq_interface_nonqc.iid_list_exists(iids)
+iids_in_table_legacy = bq_interface_legacy.iid_list_exists(iids)
 
 # beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
 del bq_interface 
 del bq_interface_nonqc
+del bq_interface_legacy
 
 # Maybe I want a more finegrained check here at some point, but for now this will prevent logged iids from rerunning
-iids_to_skip = set(iids_in_table + iids_in_table_nonqc)
+iids_to_skip = set(iids_in_table + iids_in_table_nonqc + iids_in_table_legacy)
 iids_filtered = list(set(iids) - iids_to_skip)
-print(f"Pruned {len(iids) - len(iids_filtered)} iids from input list")
+print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list")
 print(f"Running a total of {len(iids_filtered)} iids")
 
 if prune_iids:
