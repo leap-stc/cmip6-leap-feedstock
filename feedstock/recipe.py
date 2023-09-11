@@ -311,6 +311,17 @@ iids_raw = [
     'CMIP6.*.*.*.ssp126.*.SImon.siitdthick.*.*',
     'CMIP6.*.*.*.ssp245.*.SImon.siitdthick.*.*',
     'CMIP6.*.*.*.ssp585.*.SImon.siitdthick.*.*',
+    # for CMIP6 pco2 testbed
+    "CMIP6.*.*.*.historical.*.Omon.spco2.*.*",
+    "CMIP6.*.*.*.historical.*.Omon.tos.*.*",
+    "CMIP6.*.*.*.historical.*.Omon.sos.*.*",
+    "CMIP6.*.*.*.historical.*.Omon.chl.*.*",
+    "CMIP6.*.*.*.historical.*.Omon.mlotst.*.*",
+    "CMIP6.*.*.*.ssp245.*.Omon.spco2.*.*",
+    "CMIP6.*.*.*.ssp245.*.Omon.tos.*.*",
+    "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*",
+    "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*",
+    "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*",
 ]
 
 def parse_wildcards(iids:List[str]) -> List[str]:
