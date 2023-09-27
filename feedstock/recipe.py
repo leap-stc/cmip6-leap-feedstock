@@ -275,42 +275,11 @@ class LogToBigQuery(beam.PTransform):
             | beam.Map(self._log_to_bigquery)
         )
 
-iids_raw = [
-    # from https://github.com/Timh37/CMIP6cex/issues/2
-    'CMIP6.*.*.*.historical.*.day.psl.*.*',
-    'CMIP6.*.*.*.historical.*.day.sfcWind.*.*',
-    'CMIP6.*.*.*.historical.*.day.pr.*.*',
-    'CMIP6.*.*.*.ssp245.*.day.psl.*.*',
-    'CMIP6.*.*.*.ssp245.*.day.sfcWind.*.*',
-    'CMIP6.*.*.*.ssp245.*.day.pr.*.*',
-    'CMIP6.*.*.*.ssp585.*.day.psl.*.*',
-    'CMIP6.*.*.*.ssp585.*.day.sfcWind.*.*',
-    'CMIP6.*.*.*.ssp585.*.day.pr.*.*',
-    # from https://github.com/pangeo-forge/cmip6-feedstock/issues/22
-    'CMIP6.*.*.*.historical.*.Omon.zmeso.*.*'
-    'CMIP6.*.*.*.ssp126.*.Omon.zmeso.*.*',
-    'CMIP6.*.*.*.ssp245.*.Omon.zmeso.*.*',
-    'CMIP6.*.*.*.ssp585.*.Omon.zmeso.*.*',
-    # PMIP velocities
-    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gn.v20191002',
-    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.uo.gn.v20200212',
-    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200212',
-    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gr1.v20200911',
-    'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200909',
-    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.vo.gn.v20200212',
-    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gn.v20191002',
-    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.vo.gn.v20200212',
-    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911',
-    'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710',
-    # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/41
-    'CMIP6.*.*.*.historical.*.SImon.sifb.*.*',
-    'CMIP6.*.*.*.ssp126.*.SImon.sifb.*.*',
-    'CMIP6.*.*.*.ssp245.*.SImon.sifb.*.*',
-    'CMIP6.*.*.*.ssp585.*.SImon.sifb.*.*',
-    'CMIP6.*.*.*.historical.*.SImon.siitdthick.*.*',
-    'CMIP6.*.*.*.ssp126.*.SImon.siitdthick.*.*',
-    'CMIP6.*.*.*.ssp245.*.SImon.siitdthick.*.*',
-    'CMIP6.*.*.*.ssp585.*.SImon.siitdthick.*.*',
+iids_raw = ['CMIP6.ScenarioMIP.CSIRO-ARCCSS.ACCESS-CM2.ssp585.r1i1p1f1.day.pr.gn.v20210317',
+ 'CMIP6.ScenarioMIP.CSIRO.ACCESS-ESM1-5.ssp585.r4i1p1f1.day.sfcWind.gn.v20210318',
+ 'CMIP6.ScenarioMIP.CSIRO.ACCESS-ESM1-5.ssp585.r6i1p1f1.day.sfcWind.gn.v20210318',
+ 'CMIP6.ScenarioMIP.CSIRO.ACCESS-ESM1-5.ssp585.r4i1p1f1.day.pr.gn.v20210318',
+ 'CMIP6.ScenarioMIP.CSIRO.ACCESS-ESM1-5.ssp585.r10i1p1f1.day.pr.gn.v20210318'
 ]
 
 def parse_wildcards(iids:List[str]) -> List[str]:
