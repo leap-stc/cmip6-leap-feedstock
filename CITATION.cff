@@ -4,6 +4,8 @@ authors:
 - family-names: "Busecke"
   given-names: "Julius J. M."
   orcid: "https://orcid.org/0000-0001-8571-865X"
+- family-names: "Stern"
+  given-names: "Charles I."
 title: "cmip6-leap-feedstock"
 url: "https://github.com/leap-stc/cmip6-leap-feedstock"
 # version and doi are completed by Zenodo automatically, do not provide here.
