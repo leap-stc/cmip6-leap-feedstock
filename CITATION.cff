@@ -6,6 +6,7 @@ authors:
   orcid: "https://orcid.org/0000-0001-8571-865X"
 - family-names: "Stern"
   given-names: "Charles I."
+  orcid: "https://orcid.org/0000-0002-4078-0852"
 title: "cmip6-leap-feedstock"
 url: "https://github.com/leap-stc/cmip6-leap-feedstock"
 # version and doi are completed by Zenodo automatically, do not provide here.
