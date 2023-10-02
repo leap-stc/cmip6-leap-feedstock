@@ -1,6 +1,5 @@
 # CMIP6-LEAP-feedstock
-
-This repository is similar to [data-management](https://github.com/leap-stc/data-management) but due to the sheer size of the CMIP archive, we chose to keep this feedstock separate to enable custom solutions and fast development not necessary for other data ingestion recipes.
+This repository contains the [pangeo-forge](https://pangeo-forge.org) feedstock for the continued management of the [Pangeo Analysis-Ready Cloud-Optimized CMIP6 data](https://pangeo-data.github.io/pangeo-cmip6-cloud/). The repo is similar to [data-management](https://github.com/leap-stc/data-management) but due to the sheer size of the CMIP archive, we chose to keep this feedstock separate to enable custom solutions and fast development not necessary for other data ingestion recipes.
 
 ## How can I request new data?
 To request new data, please create a list of instance_ids as strings which is copy-pasteable to python like this:
