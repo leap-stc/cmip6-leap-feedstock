@@ -8,7 +8,7 @@ on:
     branches: ["main"]
     types: [opened, reopened, synchronize, labeled]
   schedule:
-    - cron: "0 */11 * * *" # run every 11 hours to move through time zones over time
+    - cron: "0 * * * SUN" # run every sunday
 
 jobs:
   deploy-recipes:
