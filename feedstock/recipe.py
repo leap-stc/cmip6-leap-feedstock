@@ -322,6 +322,8 @@ iids_raw = [
     "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*",
     "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*",
     "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*",
+    # Just for fun with Tom
+    "CMIP6.*.*.*.historical.*.Omon.o2.*.*",
 ]
 
 def parse_wildcards(iids:List[str]) -> List[str]:
