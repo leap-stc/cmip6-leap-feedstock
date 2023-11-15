@@ -4,7 +4,7 @@
 import apache_beam as beam
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
 from pangeo_forge_esgf.parsing import parse_instance_ids
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
@@ -14,6 +14,7 @@ from pangeo_forge_recipes.transforms import (
 import asyncio
 import xarray as xr
 import zarr
+import warnings
 
 # setup_logging('DEBUG')
 setup_logging('INFO')
@@ -276,52 +277,54 @@ class LogToBigQuery(beam.PTransform):
         )
 
 iids_raw = [
-    # from https://github.com/Timh37/CMIP6cex/issues/2
-    'CMIP6.*.*.*.historical.*.day.psl.*.*',
-    'CMIP6.*.*.*.historical.*.day.sfcWind.*.*',
-    'CMIP6.*.*.*.historical.*.day.pr.*.*',
-    'CMIP6.*.*.*.ssp245.*.day.psl.*.*',
-    'CMIP6.*.*.*.ssp245.*.day.sfcWind.*.*',
-    'CMIP6.*.*.*.ssp245.*.day.pr.*.*',
-    'CMIP6.*.*.*.ssp585.*.day.psl.*.*',
-    'CMIP6.*.*.*.ssp585.*.day.sfcWind.*.*',
-    'CMIP6.*.*.*.ssp585.*.day.pr.*.*',
-    # from https://github.com/pangeo-forge/cmip6-feedstock/issues/22
-    'CMIP6.*.*.*.historical.*.Omon.zmeso.*.*'
-    'CMIP6.*.*.*.ssp126.*.Omon.zmeso.*.*',
-    'CMIP6.*.*.*.ssp245.*.Omon.zmeso.*.*',
-    'CMIP6.*.*.*.ssp585.*.Omon.zmeso.*.*',
-    # PMIP velocities
-    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gn.v20191002',
-    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.uo.gn.v20200212',
-    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200212',
-    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gr1.v20200911',
-    'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200909',
-    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.vo.gn.v20200212',
-    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gn.v20191002',
-    'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.vo.gn.v20200212',
-    'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911',
-    'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710',
-    # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/41
-    'CMIP6.*.*.*.historical.*.SImon.sifb.*.*',
-    'CMIP6.*.*.*.ssp126.*.SImon.sifb.*.*',
-    'CMIP6.*.*.*.ssp245.*.SImon.sifb.*.*',
-    'CMIP6.*.*.*.ssp585.*.SImon.sifb.*.*',
-    'CMIP6.*.*.*.historical.*.SImon.siitdthick.*.*',
-    'CMIP6.*.*.*.ssp126.*.SImon.siitdthick.*.*',
-    'CMIP6.*.*.*.ssp245.*.SImon.siitdthick.*.*',
-    'CMIP6.*.*.*.ssp585.*.SImon.siitdthick.*.*',
-    # for CMIP6 pco2 testbed
-    "CMIP6.*.*.*.historical.*.Omon.spco2.*.*",
-    "CMIP6.*.*.*.historical.*.Omon.tos.*.*",
-    "CMIP6.*.*.*.historical.*.Omon.sos.*.*",
-    "CMIP6.*.*.*.historical.*.Omon.chl.*.*",
-    "CMIP6.*.*.*.historical.*.Omon.mlotst.*.*",
-    "CMIP6.*.*.*.ssp245.*.Omon.spco2.*.*",
-    "CMIP6.*.*.*.ssp245.*.Omon.tos.*.*",
-    "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*",
-    "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*",
-    "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*",
+    # to test the latest PR
+    "CMIP6.*.*.*.ssp585.*.Omon.o2.*.*",
+    # # from https://github.com/Timh37/CMIP6cex/issues/2
+    # 'CMIP6.*.*.*.historical.*.day.psl.*.*',
+    # 'CMIP6.*.*.*.historical.*.day.sfcWind.*.*',
+    # 'CMIP6.*.*.*.historical.*.day.pr.*.*',
+    # 'CMIP6.*.*.*.ssp245.*.day.psl.*.*',
+    # 'CMIP6.*.*.*.ssp245.*.day.sfcWind.*.*',
+    # 'CMIP6.*.*.*.ssp245.*.day.pr.*.*',
+    # 'CMIP6.*.*.*.ssp585.*.day.psl.*.*',
+    # 'CMIP6.*.*.*.ssp585.*.day.sfcWind.*.*',
+    # 'CMIP6.*.*.*.ssp585.*.day.pr.*.*',
+    # # from https://github.com/pangeo-forge/cmip6-feedstock/issues/22
+    # 'CMIP6.*.*.*.historical.*.Omon.zmeso.*.*'
+    # 'CMIP6.*.*.*.ssp126.*.Omon.zmeso.*.*',
+    # 'CMIP6.*.*.*.ssp245.*.Omon.zmeso.*.*',
+    # 'CMIP6.*.*.*.ssp585.*.Omon.zmeso.*.*',
+    # # PMIP velocities
+    # 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gn.v20191002',
+    # 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.uo.gn.v20200212',
+    # 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200212',
+    # 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gr1.v20200911',
+    # 'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200909',
+    # 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.vo.gn.v20200212',
+    # 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gn.v20191002',
+    # 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.vo.gn.v20200212',
+    # 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911',
+    # 'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710',
+    # # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/41
+    # 'CMIP6.*.*.*.historical.*.SImon.sifb.*.*',
+    # 'CMIP6.*.*.*.ssp126.*.SImon.sifb.*.*',
+    # 'CMIP6.*.*.*.ssp245.*.SImon.sifb.*.*',
+    # 'CMIP6.*.*.*.ssp585.*.SImon.sifb.*.*',
+    # 'CMIP6.*.*.*.historical.*.SImon.siitdthick.*.*',
+    # 'CMIP6.*.*.*.ssp126.*.SImon.siitdthick.*.*',
+    # 'CMIP6.*.*.*.ssp245.*.SImon.siitdthick.*.*',
+    # 'CMIP6.*.*.*.ssp585.*.SImon.siitdthick.*.*',
+    # # for CMIP6 pco2 testbed
+    # "CMIP6.*.*.*.historical.*.Omon.spco2.*.*",
+    # "CMIP6.*.*.*.historical.*.Omon.tos.*.*",
+    # "CMIP6.*.*.*.historical.*.Omon.sos.*.*",
+    # "CMIP6.*.*.*.historical.*.Omon.chl.*.*",
+    # "CMIP6.*.*.*.historical.*.Omon.mlotst.*.*",
+    # "CMIP6.*.*.*.ssp245.*.Omon.spco2.*.*",
+    # "CMIP6.*.*.*.ssp245.*.Omon.tos.*.*",
+    # "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*",
+    # "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*",
+    # "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*",
 ]
 
 def parse_wildcards(iids:List[str]) -> List[str]:
@@ -394,8 +397,52 @@ if prune_submission:
 # Print the actual urls
 print(url_dict)
 
+## Dynamic Chunking Wrapper
+from dynamic_chunks.algorithms import even_divisor_algo, iterative_ratio_increase_algo, NoMatchingChunks
+
+
+def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
+    
+    target_chunk_size='150MB'
+    target_chunks_aspect_ratio = {'time': 1}
+    size_tolerance=0.5
+
+    try:
+        target_chunks = even_divisor_algo(
+            ds,
+            target_chunk_size,
+            target_chunks_aspect_ratio,
+            size_tolerance,
+        )
+
+    except NoMatchingChunks:
+        warnings.warn(
+            "Primary algorithm using even divisors along each dimension failed "
+            f"with {e}. Trying secondary algorithm."
+        )
+        try:
+            target_chunks = iterative_ratio_increase_algo(
+                ds,
+                target_chunk_size,
+                target_chunks_aspect_ratio,
+                size_tolerance,
+            )
+        except NoMatchingChunks:
+            raise ValueError(
+                (
+                    "Could not find any chunk combinations satisfying "
+                    "the size constraint with either algorithm."
+                )
+            )
+        # If something fails 
+        except Exception as e:
+            raise e
+    except Exception as e:
+        raise e
+    
+    return target_chunks 
+
 ## Create the recipes
-target_chunks_aspect_ratio = {'time': 1}
 recipes = {}
 
 for iid, urls in url_dict.items():
@@ -412,10 +459,7 @@ for iid, urls in url_dict.items():
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
-            target_chunk_size='150MB',
-            target_chunks_aspect_ratio = target_chunks_aspect_ratio,
-            size_tolerance=0.5,
-            allow_fallback_algo=True,
+            dynamic_chunking_fn=dynamic_chunking_func,
             )
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
