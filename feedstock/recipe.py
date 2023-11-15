@@ -4,7 +4,7 @@
 import apache_beam as beam
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
 from pangeo_forge_esgf.parsing import parse_instance_ids
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
@@ -398,7 +398,7 @@ print(url_dict)
 ## Dynamic Chunking Wrapper
 from dynamic_chunks.algorithms import even_divisor_algo, iterative_ratio_increase_algo
 
-def dynamic_chunking_func(ds: xr.Dataset) -> dict[str, int]:
+def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
     
     target_chunk_size='150MB'
     target_chunks_aspect_ratio = {'time': 1}
