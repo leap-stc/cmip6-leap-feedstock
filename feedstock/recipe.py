@@ -278,7 +278,7 @@ class LogToBigQuery(beam.PTransform):
 
 iids_raw = [
     # to test the latest PR
-    "CMIP6.*.*.*.ssp245.*.Omon.o2.*.*",
+    "CMIP6.*.*.*.ssp585.*.Omon.o2.*.*",
     # # from https://github.com/Timh37/CMIP6cex/issues/2
     # 'CMIP6.*.*.*.historical.*.day.psl.*.*',
     # 'CMIP6.*.*.*.historical.*.day.sfcWind.*.*',
