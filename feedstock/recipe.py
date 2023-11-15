@@ -394,8 +394,41 @@ if prune_submission:
 # Print the actual urls
 print(url_dict)
 
+## Dynamic Chunking Wrapper
+def dynamic_chunking_func(ds: xr.Dataset) -> dict[str, int]:
+    target_chunk_size='150MB'
+    target_chunks_aspect_ratio = {'time': 1}
+    size_tolerance=0.5
+    
+    try:
+        target_chunks = even_divisor_algo(
+            ds,
+            target_chunk_size,
+            target_chunks_aspect_ratio,
+            size_tolerance,
+        )
+    except ValueError as e:
+        warnings.warn(
+            "Primary algorithm using even divisors along each dimension failed "
+            f"with {e}. Trying secondary algorithm."
+        )
+        target_chunks = iterative_ratio_increase_algo(
+            ds,
+            target_chunk_size,
+            target_chunks_aspect_ratio,
+            size_tolerance,
+        )
+        else:
+            raise ValueError(
+                (
+                    "Could not find any chunk combinations satisfying "
+                    "the size constraint. Consider increasing size_tolerance"
+                    " or enabling allow_fallback_algo."
+                )
+            )
+    return target_chunks 
+
 ## Create the recipes
-target_chunks_aspect_ratio = {'time': 1}
 recipes = {}
 
 for iid, urls in url_dict.items():
@@ -412,10 +445,7 @@ for iid, urls in url_dict.items():
         | StoreToZarr(
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
-            target_chunk_size='150MB',
-            target_chunks_aspect_ratio = target_chunks_aspect_ratio,
-            size_tolerance=0.5,
-            allow_fallback_algo=True,
+            dynamic_chunking_fn=dynamic_chunking_func,
             )
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
