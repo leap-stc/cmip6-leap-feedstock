@@ -398,14 +398,15 @@ if prune_submission:
 print(url_dict)
 
 ## Dynamic Chunking Wrapper
-from dynamic_chunks.algorithms import even_divisor_algo, iterative_ratio_increase_algo
+from dynamic_chunks.algorithms import even_divisor_algo, iterative_ratio_increase_algo, NoMatchingChunks
+
 
 def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
     
     target_chunk_size='150MB'
     target_chunks_aspect_ratio = {'time': 1}
     size_tolerance=0.5
-    
+
     try:
         target_chunks = even_divisor_algo(
             ds,
@@ -413,25 +414,32 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
             target_chunks_aspect_ratio,
             size_tolerance,
         )
-    except ValueError as e:
+
+    except NoMatchingChunks:
         warnings.warn(
             "Primary algorithm using even divisors along each dimension failed "
             f"with {e}. Trying secondary algorithm."
         )
-        target_chunks = iterative_ratio_increase_algo(
-            ds,
-            target_chunk_size,
-            target_chunks_aspect_ratio,
-            size_tolerance,
-        )
-    else:
-        raise ValueError(
-            (
-                "Could not find any chunk combinations satisfying "
-                "the size constraint. Consider increasing size_tolerance"
-                " or enabling allow_fallback_algo."
+        try:
+            target_chunks = iterative_ratio_increase_algo(
+                ds,
+                target_chunk_size,
+                target_chunks_aspect_ratio,
+                size_tolerance,
             )
-        )
+        except NoMatchingChunks:
+            raise ValueError(
+                (
+                    "Could not find any chunk combinations satisfying "
+                    "the size constraint with either algorithm."
+                )
+            )
+        # If something fails 
+        except Exception as e:
+            raise e
+    except Exception as e:
+        raise e
+    
     return target_chunks 
 
 ## Create the recipes
