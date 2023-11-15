@@ -14,6 +14,7 @@ from pangeo_forge_recipes.transforms import (
 import asyncio
 import xarray as xr
 import zarr
+import warnings
 
 # setup_logging('DEBUG')
 setup_logging('INFO')
@@ -421,14 +422,14 @@ def dynamic_chunking_func(ds: xr.Dataset) -> dict[str, int]:
             target_chunks_aspect_ratio,
             size_tolerance,
         )
-        else:
-            raise ValueError(
-                (
-                    "Could not find any chunk combinations satisfying "
-                    "the size constraint. Consider increasing size_tolerance"
-                    " or enabling allow_fallback_algo."
-                )
+    else:
+        raise ValueError(
+            (
+                "Could not find any chunk combinations satisfying "
+                "the size constraint. Consider increasing size_tolerance"
+                " or enabling allow_fallback_algo."
             )
+        )
     return target_chunks 
 
 ## Create the recipes
