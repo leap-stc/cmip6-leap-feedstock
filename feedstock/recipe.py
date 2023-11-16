@@ -154,11 +154,11 @@ class BQInterface:
         # this is a full row iterator, for now just return the iids
         return list(set([r['instance_id'] for r in results]))
 
-# wrapper functions (not sure if this works instead of the repeated copy and paste in the transform below)
-def log_to_bq(iid: str, store: zarr.storage.FSStore, table_id: str):
-    bq_interface = BQInterface(table_id=table_id)
-    iid_entry = IIDEntry(iid=iid, store=store.path)
-    bq_interface.insert(iid_entry)
+# # wrapper functions (not sure if this works instead of the repeated copy and paste in the transform below)
+# def log_to_bq(iid: str, store: zarr.storage.FSStore, table_id: str):
+#     bq_interface = BQInterface(table_id=table_id)
+#     iid_entry = IIDEntry(iid=iid, store=store.path)
+#     bq_interface.insert(iid_entry)
     
 # Custom Beam Transforms
 
@@ -268,7 +268,9 @@ class LogToBigQuery(beam.PTransform):
     table_id: str
 
     def _log_to_bigquery(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
-        log_to_bq(self.iid, store, self.table_id)
+        bq_interface = BQInterface(table_id=self.table_id)
+        iid_entry = IIDEntry(iid=self.iid, store=store.path)
+        bq_interface.insert(iid_entry)
         return store
 
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
