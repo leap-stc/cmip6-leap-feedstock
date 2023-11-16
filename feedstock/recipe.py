@@ -398,10 +398,9 @@ if prune_submission:
 print(url_dict)
 
 ## Dynamic Chunking Wrapper
-from dynamic_chunks.algorithms import even_divisor_algo, iterative_ratio_increase_algo, NoMatchingChunks
-
-
 def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
+    # trying to import inside the function
+    from dynamic_chunks.algorithms import even_divisor_algo, iterative_ratio_increase_algo, NoMatchingChunks
     
     target_chunk_size='150MB'
     target_chunks_aspect_ratio = {'time': 1}
