@@ -3,7 +3,7 @@
 
 import apache_beam as beam
 from dataclasses import dataclass
-from typing import List
+from typing import List, Dict
 from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
 from pangeo_forge_big_query.utils import BQInterface, LogToBigQuery
 from pangeo_forge_esgf.parsing import parse_instance_ids
