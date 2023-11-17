@@ -174,9 +174,6 @@ print(f"{iids_raw = }")
 iids = parse_wildcards(iids_raw)
 print(f"{iids = }")
 
-if is_pr:
-    raise RuntimeError('Stop here')
-
 # exclude dupes
 iids = list(set(iids))
 
