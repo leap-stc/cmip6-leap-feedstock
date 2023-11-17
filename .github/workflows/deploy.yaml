@@ -31,7 +31,7 @@ jobs:
           select_recipe_by_label: "" #to circumvent https://github.com/leap-stc/cmip6-leap-feedstock/issues/6#issuecomment-1668577971
           pangeo_forge_runner_config: "./configs/config-pgf-runner-leap-dataflow-pr.json"
         env:
-          IS_PR: true
+          IS_TEST: true
           GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
       - name: "Deploy recipes Production"
         if: ${{ github.event_name != 'pull_request' }}
@@ -40,5 +40,5 @@ jobs:
           select_recipe_by_label: "" #to circumvent https://github.com/leap-stc/cmip6-leap-feedstock/issues/6#issuecomment-1668577971
           pangeo_forge_runner_config: "./configs/config-pgf-runner-leap-dataflow.json"
         env:
-          IS_PR: false
+          IS_TEST: false
           GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"

@@ -124,9 +124,9 @@ class TestDataset(beam.PTransform):
 
 ## Create recipes
 table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
-is_pr = os.environ['IS_PR']
+is_test = os.environ['IS_TEST']
 
-if is_pr:
+if is_test:
     iid_file = "feedstock/iids_pr.yaml"
     prune_iids = False
     prune_submission = True # if set, only submits a subset of the iids in the final step
