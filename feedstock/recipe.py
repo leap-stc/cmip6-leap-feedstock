@@ -143,6 +143,7 @@ if is_pr:
     for table in [table_id, table_id_nonqc, table_id_legacy]:
         client.delete_table(table, not_found_ok=True)  # Make an API request.
         print("Deleted table '{}'.".format(table))
+    del client
 
 else:
     iid_file = 'feedstock/iids.yaml'
