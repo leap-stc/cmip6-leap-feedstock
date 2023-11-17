@@ -132,6 +132,7 @@ if is_pr:
     prune_submission = True # if set, only submits a subset of the iids in the final step
     table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_pr'
     table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_pr_nonqc'
+    table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy_pr"
     #TODO: Clear out both tables before running?
     print(f"{table_id = } {table_id_nonqc = } {prune_submission = } {iid_file = }")
 
@@ -139,7 +140,7 @@ if is_pr:
     ## TODO: this could be integtrated in the BQInterface class
     from google.cloud import bigquery
     client = bigquery.Client()
-    for table in [table_id, table_id_nonqc]:
+    for table in [table_id, table_id_nonqc, table_id_legacy]:
         client.delete_table(table, not_found_ok=True)  # Make an API request.
         print("Deleted table '{}'.".format(table))
 
@@ -151,6 +152,7 @@ else:
     table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
     table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
     # TODO: To create a non-QC catalog I need to find the difference between the two tables iids
+    table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
 
 # load iids from file
 with open(iid_file) as f:
