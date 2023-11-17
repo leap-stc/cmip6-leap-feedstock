@@ -19,7 +19,6 @@ import warnings
 # setup_logging('DEBUG')
 setup_logging('INFO')
 
-    
 # Custom Beam Transforms
 
 @dataclass
@@ -119,6 +118,48 @@ class TestDataset(beam.PTransform):
             | "Testing - Time Dimension" >> beam.Map(self._test_time)
         )
     
+
+class MoveStore(beam.PTransform):
+    """
+    Move Store to new location (after successful writing)
+    """
+    @staticmethod
+    def _mabye_add_gs(path:str):
+        """Make sure that the path starts with gs://"""
+        if not path.startswith('gs://'):
+            path = 'gs://' + path
+        return path
+    
+    def _move_gcs_store(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
+        # Define new store but keep the naming injected by runner here
+        # Currently we store things in a store like this
+        # leap-persistent-ro/data-library/cmip6-testing/a618127503-5789929799-3/CMIP6.CMIP.NOAA-GFDL.GFDL-CM4.historical.r1i1p1f1.Amon.tas.gr1.v20180701.zarr
+        # We want to move it to another folder 
+
+        old_path = self._mabye_add_gs(store.path)
+        # replace target_bucket
+        source_bucket = 'gs://leap-persistent-ro'
+        destination_bucket = "gs://leap-persistent-ro"
+        new_path = old_path.replace(source_bucket, destination_bucket)
+        # make sure that some part of the path is replaced with a unique other path (this might have to be modified later)
+        new_path = new_path.replace('/cmip6-testing/', '/cmip6-testing-clean/')
+
+        # copy the files using gsutil
+        import subprocess
+        print(f"Copying {old_path} to {new_path}")
+        subprocess.run(["gsutil", "-m", "cp", "-r", old_path, new_path], check=1)
+
+        # return a new store with the new path
+        new_store = zarr.storage.FSStore(new_path)
+
+        print(f"New Store path: {new_store.path =}")
+        return new_store
+    
+    
+    def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
+        return (pcoll
+            | "Moving Zarr Store" >> beam.Map(self._move_gcs_store)
+        )
 
 
 iids_raw = [
@@ -305,6 +346,7 @@ for iid, urls in url_dict.items():
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
             )
+        | MoveStore()
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
         | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
