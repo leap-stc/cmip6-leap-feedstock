@@ -160,7 +160,7 @@ class MoveStore(beam.PTransform):
         return (pcoll
             | "Moving Zarr Store" >> beam.Map(self._move_gcs_store)
         )
-
+    
 
 iids_raw = [
     # to test the latest PR
@@ -227,7 +227,7 @@ def parse_wildcards(iids:List[str]) -> List[str]:
 
 
 prune_iids = False
-prune_submission = False # if set, only submits a subset of the iids in the final step
+prune_submission = True # if set, only submits a subset of the iids in the final step
 
 # parse out wildcard iids using pangeo-forge-esgf
 iids = parse_wildcards(iids_raw)
