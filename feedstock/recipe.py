@@ -140,13 +140,14 @@ if is_pr:
     from google.cloud import bigquery
     client = bigquery.Client()
     for table in [table_id, table_id_nonqc]:
-        client.delete_table(table_id, not_found_ok=True)  # Make an API request.
-        print("Deleted table '{}'.".format(table_id))
+        client.delete_table(table, not_found_ok=True)  # Make an API request.
+        print("Deleted table '{}'.".format(table))
 
 else:
     iid_file = 'feedstock/iids.yaml'
     prune_iids = False
     prune_submission = False # if set, only submits a subset of the iids in the final step
+    #TODO: rename these more cleanly when we move to the official bucket
     table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
     table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
     # TODO: To create a non-QC catalog I need to find the difference between the two tables iids
@@ -169,8 +170,9 @@ def parse_wildcards(iids:List[str]) -> List[str]:
     return iids_parsed
 
 # parse out wildcard iids using pangeo-forge-esgf
+print(f{iids_raw = })
 iids = parse_wildcards(iids_raw)
-print(iids)
+print(f{iids = })
 
 if is_pr:
     raise RuntimeError('Stop here')
