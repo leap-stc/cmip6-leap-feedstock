@@ -185,12 +185,30 @@ def parse_wildcards(iids:List[str]) -> List[str]:
     return iids_parsed
 
 
-prune_iids = False
-prune_submission = False # if set, only submits a subset of the iids in the final step
+## Create recipes
+table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
+
+import os
+is_pr = os.environ['IS_PR']
+
+if is_pr:
+    prune_iids = False
+    prune_submission = True # if set, only submits a subset of the iids in the final step
+    table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_pr'
+    table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_pr_nonqc'
+    #TODO: Clear out both tables before running?
+    print(f"{table_id = } {table_id_nonqc = } {prune_submission = }")
+    raise RuntimeError('Stop here')
+
+else:
+    prune_iids = False
+    prune_submission = False # if set, only submits a subset of the iids in the final step
+    table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
+    table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
+    # TODO: To create a non-QC catalog I need to find the difference between the two tables iids
 
 # parse out wildcard iids using pangeo-forge-esgf
 iids = parse_wildcards(iids_raw)
-
 print(iids)
 
 # exclude dupes
@@ -198,10 +216,6 @@ iids = list(set(iids))
 
 # Prune the url dict to only include items that have not been logged to BQ yet
 print("Pruning iids that already exist")
-table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
-table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
-table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
-# TODO: To create a non-QC catalog I need to find the difference between the two tables iids
 
 bq_interface = BQInterface(table_id=table_id)
 bq_interface_nonqc = BQInterface(table_id=table_id_nonqc)
