@@ -170,9 +170,9 @@ def parse_wildcards(iids:List[str]) -> List[str]:
     return iids_parsed
 
 # parse out wildcard iids using pangeo-forge-esgf
-print(f{iids_raw = })
+print(f"{iids_raw = }")
 iids = parse_wildcards(iids_raw)
-print(f{iids = })
+print(f"{iids = }")
 
 if is_pr:
     raise RuntimeError('Stop here')
