@@ -128,7 +128,7 @@ is_test = os.environ['IS_TEST']
 
 if is_test:
     iid_file = "feedstock/iids_pr.yaml"
-    prune_iids = False
+    prune_iids = True
     prune_submission = True # if set, only submits a subset of the iids in the final step
     table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_pr'
     table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_pr_nonqc'
@@ -204,7 +204,7 @@ print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list
 print(f"Running a total of {len(iids_filtered)} iids")
 
 if prune_iids:
-    iids_filtered = iids_filtered[0:10]
+    iids_filtered = iids_filtered[0:20]
 
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
 url_dict = asyncio.run(
