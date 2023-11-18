@@ -166,7 +166,6 @@ class CopyStore(beam.PTransform):
         stderr = submit_proc.stderr.decode()
         for line in stdout.splitlines():
             logger.info(line)
-        logger.war
         if submit_proc.returncode != 0:
             for line in stderr.splitlines():
                 logger.error(line)
