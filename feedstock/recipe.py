@@ -161,7 +161,7 @@ class CopyStore(beam.PTransform):
         import subprocess
         # cmd = ["gcloud", "config", "set", "project", "leap-pangeo", "&&", "gsutil", "-m", "cp", "-r", "-n", old_path, new_path]
         cmd = ["gsutil", "-m", "cp", "-r", old_path, new_path]
-        cmd = "_".join(cmd)
+        cmd = " ".join(cmd)
          # when shell is true the command can just be a str? That is confusing as hell
         print(f"Copying {old_path} to {new_path}")
         print(f"Calling subprocess with {cmd = }")
