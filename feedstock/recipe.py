@@ -118,10 +118,13 @@ class TestDataset(beam.PTransform):
             | "Testing - Time Dimension" >> beam.Map(self._test_time)
         )
 
-class MoveStore(beam.PTransform):
+@dataclass
+class CopyStore(beam.PTransform):
     """
-    Move Store to new location (after successful writing)
+    copy Store to new location (after successful writing)
     """
+    target_bucket: str
+
     @staticmethod
     def _mabye_add_gs(path:str):
         """Make sure that the path starts with gs://"""
@@ -129,16 +132,23 @@ class MoveStore(beam.PTransform):
             path = 'gs://' + path
         return path
     
-    def _move_gcs_store(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
+    @staticmethod
+    def _get_bucket(url:str) -> str:
+        """Get the bucket name from the store path"""
+        import re
+        bucket = re.search('gs://([^/]*)', url).group(1)
+        return bucket
+    
+    def _copy_gcs_store(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
         # Define new store but keep the naming injected by runner here
         # Currently we store things in a store like this
         # leap-persistent-ro/data-library/cmip6-testing/a618127503-5789929799-3/CMIP6.CMIP.NOAA-GFDL.GFDL-CM4.historical.r1i1p1f1.Amon.tas.gr1.v20180701.zarr
-        # We want to move it to another folder 
+        # We want to copy it to another folder 
 
         old_path = self._mabye_add_gs(store.path)
         # replace target_bucket
-        source_bucket = 'gs://leap-persistent-ro'
-        destination_bucket = "gs://leap-persistent-ro"
+        source_bucket = self._get_bucket(old_path)
+        destination_bucket = self.target_bucket
         new_path = old_path.replace(source_bucket, destination_bucket)
         # make sure that some part of the path is replaced with a unique other path (this might have to be modified later)
         new_path = new_path.replace('/cmip6-testing/', '/cmip6-testing-clean/')
@@ -157,7 +167,7 @@ class MoveStore(beam.PTransform):
     
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
         return (pcoll
-            | "Moving Zarr Store" >> beam.Map(self._move_gcs_store)
+            | "Copying Zarr Store" >> beam.Map(self._copy_gcs_store)
         )
     
 
@@ -166,6 +176,7 @@ is_test = os.environ['IS_TEST']
 
 if is_test:
     setup_logging('DEBUG')
+    copy_target_bucket = "gs://leap-persistent-scratch"
     iid_file = "feedstock/iids_pr.yaml"
     prune_iids = True
     prune_submission = True # if set, only submits a subset of the iids in the final step
@@ -186,6 +197,7 @@ if is_test:
 
 else:
     setup_logging('INFO')
+    copy_target_bucket = "gs://leap-persistent-ro"
     iid_file = 'feedstock/iids.yaml'
     prune_iids = False
     prune_submission = False # if set, only submits a subset of the iids in the final step
@@ -327,7 +339,7 @@ for iid, urls in url_dict.items():
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
             )
-        | MoveStore()
+        | CopyStore(target_bucket=copy_target_bucket)
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
         | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
