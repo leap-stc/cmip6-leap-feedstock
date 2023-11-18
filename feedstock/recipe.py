@@ -158,7 +158,8 @@ class CopyStore(beam.PTransform):
 
         # copy the files using gsutil
         import subprocess
-        cmd = ["gsutil", "-m", "cp", "-r", old_path, new_path]
+        cmd = ["gcloud", "config", "set", "project", "leap-pangeo", "&&", "gsutil", "-m", "cp", "-r", "-n", old_path, new_path]
+        # cmd = ["gsutil", "-m", "cp", "-r", old_path, new_path]
         print(f"Copying {old_path} to {new_path}")
         print(f"Calling subprocess with {cmd = }")
         submit_proc = subprocess.run(cmd, capture_output=True)
@@ -280,10 +281,12 @@ del bq_interface_legacy
 iids_to_skip = set(iids_in_table + iids_in_table_nonqc + iids_in_table_legacy)
 iids_filtered = list(set(iids) - iids_to_skip)
 print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list")
-print(f"Running a total of {len(iids_filtered)} iids")
+
 
 if prune_iids:
-    iids_filtered = iids_filtered[0:20]
+    iids_filtered = iids_filtered[0:10]
+
+print(f"Running a total of {len(iids_filtered)} iids")
 
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
 url_dict = asyncio.run(
@@ -299,7 +302,7 @@ if prune_submission:
     url_dict = {iid: url_dict[iid] for iid in list(url_dict.keys())[0:10]}
 
 # Print the actual urls
-print(url_dict)
+print(f"{url_dict = }")
 
 ## Dynamic Chunking Wrapper
 def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
