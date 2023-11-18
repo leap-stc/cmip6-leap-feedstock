@@ -158,8 +158,8 @@ class CopyStore(beam.PTransform):
 
         # copy the files using gsutil
         import subprocess
-        cmd = ["gcloud", "config", "set", "project", "leap-pangeo", "&&", "gsutil", "-m", "cp", "-r", "-n", old_path, new_path]
-        # cmd = ["gsutil", "-m", "cp", "-r", old_path, new_path]
+        # cmd = ["gcloud", "config", "set", "project", "leap-pangeo", "&&", "gsutil", "-m", "cp", "-r", "-n", old_path, new_path]
+        cmd = ["gsutil", "-m", "cp", "-r", old_path, new_path]
         print(f"Copying {old_path} to {new_path}")
         print(f"Calling subprocess with {cmd = }")
         # maybe passing the environment variables will help with the authentication
