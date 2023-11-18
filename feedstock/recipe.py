@@ -155,8 +155,21 @@ class CopyStore(beam.PTransform):
 
         # copy the files using gsutil
         import subprocess
+        cmd = ["gsutil", "-m", "cp", "-r", old_path, new_path]
         print(f"Copying {old_path} to {new_path}")
-        subprocess.run(["gsutil", "-m", "cp", "-r", old_path, new_path], check=1)
+        print(f"Calling subprocess with {cmd = }")
+        submit_proc = subprocess.run(cmd, capture_output=True)
+        stdout = submit_proc.stdout.decode()
+        stderr = submit_proc.stderr.decode()
+        for line in stdout.splitlines():
+            print(line)
+
+        if submit_proc.returncode != 0:
+            for line in stderr.splitlines():
+                print(line)
+            raise ValueError(f"{cmd = } failed. See logging for details.")
+        
+        assert submit_proc.returncode == 0
 
         # return a new store with the new path
         new_store = zarr.storage.FSStore(new_path)
