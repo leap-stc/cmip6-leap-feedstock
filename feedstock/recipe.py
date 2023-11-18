@@ -167,7 +167,7 @@ class CopyStore(beam.PTransform):
         stdout = submit_proc.stdout.decode()
         stderr = submit_proc.stderr.decode()
         for line in stdout.splitlines():
-            self.logger.info(line)
+            self.logger.info(f"FIND STDOUT: {line}")
         if submit_proc.returncode != 0:
             self.logger.error('gsutil failed to move files')
             for line in stderr.splitlines():
