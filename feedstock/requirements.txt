@@ -3,3 +3,4 @@ pangeo-forge-esgf==0.1.1
 pangeo-forge-recipes==0.10.4
 dynamic-chunks==0.0.2
 gsutil==5.27
+gcloud==0.18.3
