@@ -17,9 +17,6 @@ import xarray as xr
 import yaml
 import zarr
 import warnings
-import logging
-
-logger = logging.getLogger(__name__)
 
     
 # Custom Beam Transforms
@@ -128,6 +125,9 @@ class CopyStore(beam.PTransform):
     """
     target_bucket: str
 
+    import logging
+    logger = logging.getLogger(__name__)
+
     @staticmethod
     def _mabye_add_gs(path:str):
         """Make sure that the path starts with gs://"""
@@ -165,10 +165,10 @@ class CopyStore(beam.PTransform):
         stdout = submit_proc.stdout.decode()
         stderr = submit_proc.stderr.decode()
         for line in stdout.splitlines():
-            logger.info(line)
+            self.logger.info(line)
         if submit_proc.returncode != 0:
             for line in stderr.splitlines():
-                logger.error(line)
+                self.logger.error(line)
             raise ValueError(f"{cmd = } failed. See logging for details.")
         
         assert submit_proc.returncode == 0
