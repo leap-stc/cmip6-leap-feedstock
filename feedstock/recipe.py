@@ -18,9 +18,6 @@ import yaml
 import zarr
 import warnings
 
-# setup_logging('DEBUG')
-setup_logging('INFO')
-
     
 # Custom Beam Transforms
 
@@ -127,6 +124,7 @@ table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
 is_test = os.environ['IS_TEST']
 
 if is_test:
+    setup_logging('DEBUG')
     iid_file = "feedstock/iids_pr.yaml"
     prune_iids = True
     prune_submission = True # if set, only submits a subset of the iids in the final step
@@ -146,6 +144,7 @@ if is_test:
     del client
 
 else:
+    setup_logging('INFO')
     iid_file = 'feedstock/iids.yaml'
     prune_iids = False
     prune_submission = False # if set, only submits a subset of the iids in the final step
