@@ -143,6 +143,7 @@ class CopyStore(beam.PTransform):
         return bucket
     
     def _copy_gcs_store(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
+        import zarr
         # Define new store but keep the naming injected by runner here
         # Currently we store things in a store like this
         # leap-persistent-ro/data-library/cmip6-testing/a618127503-5789929799-3/CMIP6.CMIP.NOAA-GFDL.GFDL-CM4.historical.r1i1p1f1.Amon.tas.gr1.v20180701.zarr
