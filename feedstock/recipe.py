@@ -12,12 +12,11 @@ from pangeo_forge_recipes.transforms import (
     OpenURLWithFSSpec, OpenWithXarray, StoreToZarr, Indexed, T
 )
 import asyncio
+import os
 import xarray as xr
+import yaml
 import zarr
 import warnings
-
-# setup_logging('DEBUG')
-setup_logging('INFO')
 
     
 # Custom Beam Transforms
@@ -118,59 +117,47 @@ class TestDataset(beam.PTransform):
             | "Testing - Attributes" >> beam.Map(self._test_attributes)
             | "Testing - Time Dimension" >> beam.Map(self._test_time)
         )
-    
 
 
-iids_raw = [
-    # to test the latest PR
-    "CMIP6.*.*.*.ssp585.*.Omon.o2.*.*",
-    # # from https://github.com/Timh37/CMIP6cex/issues/2
-    # 'CMIP6.*.*.*.historical.*.day.psl.*.*',
-    # 'CMIP6.*.*.*.historical.*.day.sfcWind.*.*',
-    # 'CMIP6.*.*.*.historical.*.day.pr.*.*',
-    # 'CMIP6.*.*.*.ssp245.*.day.psl.*.*',
-    # 'CMIP6.*.*.*.ssp245.*.day.sfcWind.*.*',
-    # 'CMIP6.*.*.*.ssp245.*.day.pr.*.*',
-    # 'CMIP6.*.*.*.ssp585.*.day.psl.*.*',
-    # 'CMIP6.*.*.*.ssp585.*.day.sfcWind.*.*',
-    # 'CMIP6.*.*.*.ssp585.*.day.pr.*.*',
-    # # from https://github.com/pangeo-forge/cmip6-feedstock/issues/22
-    # 'CMIP6.*.*.*.historical.*.Omon.zmeso.*.*'
-    # 'CMIP6.*.*.*.ssp126.*.Omon.zmeso.*.*',
-    # 'CMIP6.*.*.*.ssp245.*.Omon.zmeso.*.*',
-    # 'CMIP6.*.*.*.ssp585.*.Omon.zmeso.*.*',
-    # # PMIP velocities
-    # 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gn.v20191002',
-    # 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.uo.gn.v20200212',
-    # 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200212',
-    # 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gr1.v20200911',
-    # 'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200909',
-    # 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.vo.gn.v20200212',
-    # 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gn.v20191002',
-    # 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.vo.gn.v20200212',
-    # 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911',
-    # 'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710',
-    # # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/41
-    # 'CMIP6.*.*.*.historical.*.SImon.sifb.*.*',
-    # 'CMIP6.*.*.*.ssp126.*.SImon.sifb.*.*',
-    # 'CMIP6.*.*.*.ssp245.*.SImon.sifb.*.*',
-    # 'CMIP6.*.*.*.ssp585.*.SImon.sifb.*.*',
-    # 'CMIP6.*.*.*.historical.*.SImon.siitdthick.*.*',
-    # 'CMIP6.*.*.*.ssp126.*.SImon.siitdthick.*.*',
-    # 'CMIP6.*.*.*.ssp245.*.SImon.siitdthick.*.*',
-    # 'CMIP6.*.*.*.ssp585.*.SImon.siitdthick.*.*',
-    # # for CMIP6 pco2 testbed
-    # "CMIP6.*.*.*.historical.*.Omon.spco2.*.*",
-    # "CMIP6.*.*.*.historical.*.Omon.tos.*.*",
-    # "CMIP6.*.*.*.historical.*.Omon.sos.*.*",
-    # "CMIP6.*.*.*.historical.*.Omon.chl.*.*",
-    # "CMIP6.*.*.*.historical.*.Omon.mlotst.*.*",
-    # "CMIP6.*.*.*.ssp245.*.Omon.spco2.*.*",
-    # "CMIP6.*.*.*.ssp245.*.Omon.tos.*.*",
-    # "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*",
-    # "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*",
-    # "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*",
-]
+## Create recipes
+table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
+is_test = os.environ['IS_TEST']
+
+if is_test:
+    setup_logging('DEBUG')
+    iid_file = "feedstock/iids_pr.yaml"
+    prune_iids = True
+    prune_submission = True # if set, only submits a subset of the iids in the final step
+    table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_pr'
+    table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_pr_nonqc'
+    table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy_pr"
+    #TODO: Clear out both tables before running?
+    print(f"{table_id = } {table_id_nonqc = } {prune_submission = } {iid_file = }")
+
+    ## make sure the tables are deleted before running so we can run the same iids over and over again
+    ## TODO: this could be integtrated in the BQInterface class
+    from google.cloud import bigquery
+    client = bigquery.Client()
+    for table in [table_id, table_id_nonqc, table_id_legacy]:
+        client.delete_table(table, not_found_ok=True)  # Make an API request.
+        print("Deleted table '{}'.".format(table))
+    del client
+
+else:
+    setup_logging('INFO')
+    iid_file = 'feedstock/iids.yaml'
+    prune_iids = False
+    prune_submission = False # if set, only submits a subset of the iids in the final step
+    #TODO: rename these more cleanly when we move to the official bucket
+    table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
+    table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
+    # TODO: To create a non-QC catalog I need to find the difference between the two tables iids
+    table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
+
+# load iids from file
+with open(iid_file) as f:
+    iids_raw = yaml.safe_load(f)
+    iids_raw = [iid for iid in iids_raw if iid]
 
 def parse_wildcards(iids:List[str]) -> List[str]:
     """iterate through each list element and 
@@ -184,24 +171,16 @@ def parse_wildcards(iids:List[str]) -> List[str]:
             iids_parsed.append(iid)
     return iids_parsed
 
-
-prune_iids = False
-prune_submission = False # if set, only submits a subset of the iids in the final step
-
 # parse out wildcard iids using pangeo-forge-esgf
+print(f"{iids_raw = }")
 iids = parse_wildcards(iids_raw)
-
-print(iids)
+print(f"{iids = }")
 
 # exclude dupes
 iids = list(set(iids))
 
 # Prune the url dict to only include items that have not been logged to BQ yet
 print("Pruning iids that already exist")
-table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
-table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
-table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
-# TODO: To create a non-QC catalog I need to find the difference between the two tables iids
 
 bq_interface = BQInterface(table_id=table_id)
 bq_interface_nonqc = BQInterface(table_id=table_id_nonqc)
@@ -224,7 +203,7 @@ print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list
 print(f"Running a total of {len(iids_filtered)} iids")
 
 if prune_iids:
-    iids_filtered = iids_filtered[0:10]
+    iids_filtered = iids_filtered[0:20]
 
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
 url_dict = asyncio.run(
