@@ -148,10 +148,10 @@ class CopyStore(beam.PTransform):
         old_path = self._mabye_add_gs(store.path)
         # replace target_bucket
         source_bucket = self._get_bucket(old_path)
-        destination_bucket = self.target_bucket
+        destination_bucket = self._get_bucket(self.target_bucket)
         new_path = old_path.replace(source_bucket, destination_bucket)
         # make sure that some part of the path is replaced with a unique other path (this might have to be modified later)
-        new_path = new_path.replace('/cmip6-testing/', '/cmip6-testing-clean/')
+        new_path = new_path.replace('/cmip6-', '/cmip6-clean-')
 
         # copy the files using gsutil
         import subprocess
@@ -176,7 +176,7 @@ is_test = os.environ['IS_TEST']
 
 if is_test:
     setup_logging('DEBUG')
-    copy_target_bucket = "gs://leap-persistent-scratch"
+    copy_target_bucket = "gs://leap-scratch"
     iid_file = "feedstock/iids_pr.yaml"
     prune_iids = True
     prune_submission = True # if set, only submits a subset of the iids in the final step
@@ -206,6 +206,15 @@ else:
     table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
     # TODO: To create a non-QC catalog I need to find the difference between the two tables iids
     table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
+
+print('Running with the following parameters:')
+print(f"{copy_target_bucket = }")
+print(f"{iid_file = }")
+print(f"{prune_iids = }")
+print(f"{prune_submission = }")
+print(f"{table_id = }")
+print(f"{table_id_nonqc = }")
+print(f"{table_id_legacy = }")
 
 # load iids from file
 with open(iid_file) as f:
