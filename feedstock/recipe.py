@@ -167,8 +167,9 @@ class CopyStore(beam.PTransform):
         for line in stdout.splitlines():
             self.logger.info(line)
         if submit_proc.returncode != 0:
+            self.logger.error('gsutil failed to move files')
             for line in stderr.splitlines():
-                self.logger.error(line)
+                self.logger.error(f"FIND THIS: {line}")
             raise ValueError(f"{cmd = } failed. See logging for details.")
         
         assert submit_proc.returncode == 0
@@ -320,7 +321,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
     except NoMatchingChunks:
         warnings.warn(
             "Primary algorithm using even divisors along each dimension failed "
-            f"with {e}. Trying secondary algorithm."
+            "with. Trying secondary algorithm."
         )
         try:
             target_chunks = iterative_ratio_increase_algo(
