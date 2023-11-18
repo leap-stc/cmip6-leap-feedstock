@@ -158,11 +158,11 @@ class CopyStore(beam.PTransform):
 
         # copy the files using gsutil
         import subprocess
-        cmd = ["gcloud", "config", "set", "project", "leap-pangeo", "&&", "gsutil", "-m", "cp", "-r", "-n", old_path, new_path]
-        # cmd = ["gsutil", "-m", "cp", "-r", old_path, new_path]
+        # cmd = ["gcloud", "config", "set", "project", "leap-pangeo", "&&", "gsutil", "-m", "cp", "-r", "-n", old_path, new_path]
+        cmd = ["gsutil", "-m", "cp", "-r", old_path, new_path]
         print(f"Copying {old_path} to {new_path}")
         print(f"Calling subprocess with {cmd = }")
-        submit_proc = subprocess.run(cmd, capture_output=True)
+        submit_proc = subprocess.run(cmd, capture_output=True, shell=True)
         stdout = submit_proc.stdout.decode()
         stderr = submit_proc.stderr.decode()
         for line in stdout.splitlines():
