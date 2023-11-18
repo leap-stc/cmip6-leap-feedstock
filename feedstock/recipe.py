@@ -285,7 +285,7 @@ print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list
 
 
 if prune_iids:
-    iids_filtered = iids_filtered[0:10]
+    iids_filtered = iids_filtered[0:30]
 
 print(f"Running a total of {len(iids_filtered)} iids")
 
