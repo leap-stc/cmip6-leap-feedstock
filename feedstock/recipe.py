@@ -163,6 +163,7 @@ class CopyStore(beam.PTransform):
         print(f"Copying {old_path} to {new_path}")
         print(f"Calling subprocess with {cmd = }")
         # maybe passing the environment variables will help with the authentication
+        import os
         env_copy = os.environ.copy()
         submit_proc = subprocess.run(cmd, capture_output=True, env=env_copy)
         stdout = submit_proc.stdout.decode()
