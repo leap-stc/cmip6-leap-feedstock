@@ -16,7 +16,6 @@ import os
 import xarray as xr
 import yaml
 import zarr
-import warnings
 
     
 # Custom Beam Transforms
@@ -309,6 +308,7 @@ print(f"{url_dict = }")
 
 ## Dynamic Chunking Wrapper
 def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
+    import warnings
     # trying to import inside the function
     from dynamic_chunks.algorithms import even_divisor_algo, iterative_ratio_increase_algo, NoMatchingChunks
     
