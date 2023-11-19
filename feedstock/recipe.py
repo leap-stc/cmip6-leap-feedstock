@@ -157,7 +157,7 @@ class CopyStore(beam.PTransform):
         new_path = new_path.replace('/cmip6-', '/cmip6-clean-')
 
         # copy the files using gsutil
-        import subprocess,
+        import subprocess
         import os
         # cmd = ["gcloud", "config", "set", "project", "leap-pangeo", "&&", "gsutil", "-m", "cp", "-r", "-n", old_path, new_path]
         cmd = ["gsutil", "-m", "cp", "-r", old_path, new_path]
