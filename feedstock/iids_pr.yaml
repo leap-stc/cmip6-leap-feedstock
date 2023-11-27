@@ -1,2 +1,3 @@
-    - 'CMIP6.*.*.*.historical.*.Omon.tos.*.*'
+    - "CMIP6.*.*.*.historical.*.Omon.tos.*.*"
+    - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.so.gn.v20200514"
     
