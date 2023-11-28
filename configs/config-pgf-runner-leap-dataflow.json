@@ -1,7 +1,7 @@
 {
     "Bake": {
         "bakery_class": "pangeo_forge_runner.bakery.dataflow.DataflowBakery",
-        "prune": true
+        "prune": false
     },
     "DataflowBakery": {
         "use_public_ips": true,
