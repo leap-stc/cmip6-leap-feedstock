@@ -121,7 +121,7 @@ class TestDataset(beam.PTransform):
 
 ## Create recipes
 table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
-is_test = os.environ['IS_TEST']
+is_test = os.environ['IS_TEST'] == 'true' # There must be a better way to do this, but for now this will do
 print(f"{is_test =}")
 
 
