@@ -122,6 +122,8 @@ class TestDataset(beam.PTransform):
 ## Create recipes
 table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
 is_test = os.environ['IS_TEST']
+print(f"{is_test =}")
+
 
 if is_test:
     setup_logging('DEBUG')
@@ -153,6 +155,7 @@ else:
     table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
     # TODO: To create a non-QC catalog I need to find the difference between the two tables iids
     table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
+    print(f"{table_id = } {table_id_nonqc = } {prune_submission = } {iid_file = }")
 
 # load iids from file
 with open(iid_file) as f:
