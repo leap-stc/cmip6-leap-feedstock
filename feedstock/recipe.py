@@ -232,7 +232,6 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
         'x':1, 'i':1, 'ni':1, 'xh':1, 'nlon':1, # TODO: Maybe import all the known spatial dimensions from xmip?
         'y':1, 'j':1, 'nj':1, 'yh':1, 'nlat':1,
     }
-    allow_extra_dims=True,
     size_tolerance=0.5,
 
     try:
@@ -241,6 +240,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
             target_chunk_size,
             target_chunks_aspect_ratio,
             size_tolerance,
+            allow_extra_dims=True,
         )
 
     except NoMatchingChunks:
@@ -254,6 +254,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
                 target_chunk_size,
                 target_chunks_aspect_ratio,
                 size_tolerance,
+                allow_extra_dims=True,
             )
         except NoMatchingChunks:
             raise ValueError(
