@@ -194,13 +194,28 @@ iids_in_table = bq_interface.iid_list_exists(iids)
 iids_in_table_nonqc = bq_interface_nonqc.iid_list_exists(iids)
 iids_in_table_legacy = bq_interface_legacy.iid_list_exists(iids)
 
+# manual overrides (these will be rewritten each time as long as they exist here)
+overwrite_iids = [
+    "CMIP6.CMIP.NCC.NorESM2-LM.historical.r3i1p1f1.SImon.siitdthick.gn.v20191108",	
+    "CMIP6.ScenarioMIP.NASA-GISS.GISS-E2-1-G-CC.ssp245.r102i1p1f1.Omon.mlotst.gn.v20220115",	
+    "CMIP6.CMIP.NCC.NorESM2-LM.historical.r1i1p1f1.SImon.siitdthick.gn.v20191108",	
+    "CMIP6.CMIP.NCC.NorESM2-MM.historical.r1i1p1f1.SImon.siitdthick.gn.v20191108",	
+    "CMIP6.ScenarioMIP.NASA-GISS.GISS-E2-1-G-CC.ssp245.r102i1p1f1.Omon.spco2.gn.v20220115",
+    "CMIP6.ScenarioMIP.NCAR.CESM2-FV2.ssp585.r1i2p2f1.SImon.siitdthick.gn.v20220915",
+    "CMIP6.CMIP.NCC.NorESM2-MM.historical.r1i1p1f1.SImon.sifb.gn.v20191108",
+    "CMIP6.ScenarioMIP.NASA-GISS.GISS-E2-1-G-CC.ssp245.r102i1p1f1.Omon.chl.gn.v20220115",
+    "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.thetao.gn.v20200514"
+    "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.thetao.gn.v20200514",
+    "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.so.gn.v20200514",
+]
+
 # beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
 del bq_interface 
 del bq_interface_nonqc
 del bq_interface_legacy
 
 # Maybe I want a more finegrained check here at some point, but for now this will prevent logged iids from rerunning
-iids_to_skip = set(iids_in_table + iids_in_table_nonqc + iids_in_table_legacy)
+iids_to_skip = set(iids_in_table + iids_in_table_nonqc + iids_in_table_legacy) - set(overwrite_iids)
 iids_filtered = list(set(iids) - iids_to_skip)
 print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list")
 print(f"Running a total of {len(iids_filtered)} iids")
