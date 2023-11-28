@@ -232,8 +232,8 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
     target_chunk_size='150MB'
     target_chunks_aspect_ratio = {
         'time':20,
-        'x':1, 'i':1, 'ni':1, 'xh':1, 'nlon':1, # TODO: Maybe import all the known spatial dimensions from xmip?
-        'y':1, 'j':1, 'nj':1, 'yh':1, 'nlat':1,
+        'x':1, 'i':1, 'ni':1, 'xh':1, 'nlon':1, 'lon':1, # TODO: Maybe import all the known spatial dimensions from xmip?
+        'y':1, 'j':1, 'nj':1, 'yh':1, 'nlat':1, 'lat':1,
     }
     size_tolerance=0.5
 
