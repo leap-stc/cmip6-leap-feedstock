@@ -248,8 +248,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
 
     except NoMatchingChunks:
         warnings.warn(
-            "Primary algorithm using even divisors along each dimension failed "
-            f"with {e}. Trying secondary algorithm."
+            "Primary algorithm using even divisors along each dimension failed. Trying secondary algorithm."
         )
         try:
             target_chunks = iterative_ratio_increase_algo(
