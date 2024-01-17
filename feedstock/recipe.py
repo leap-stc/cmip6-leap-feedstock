@@ -2,6 +2,7 @@
 """Modified transforms from Pangeo Forge"""
 
 import apache_beam as beam
+from apache_beam.io.gcp import gcsio
 from dataclasses import dataclass
 from typing import List, Dict
 from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
@@ -117,6 +118,35 @@ class TestDataset(beam.PTransform):
             | "Testing - Time Dimension" >> beam.Map(self._test_time)
         )
 
+
+@dataclass
+class Copy(beam.PTransform):
+    target_prefix: str
+    
+    def _copy(self,store: zarr.storage.FSStore) -> zarr.storage.FSStore:
+        gcs = gcsio.GcsIO()
+        # We do need the gs:// prefix? 
+        # TODO: Determine this dynamically from zarr.storage.FSStore
+        source = f"gs://{store.path}" #FIXME more elegant. `.copytree` needs trailing slash
+        target = os.path.join(self.target_prefix, '/'.join(source.split('/')[-3:]))
+        gcs.copytree(source, target)
+        # return a new store with the new path that behaves exactly like the input 
+        # to this stage (so we can slot this stage right before testing/logging stages)
+        return zarr.storage.FSStore(target)
+        
+    def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
+        return (pcoll
+            | "Copying Store" >> beam.Map(self._copy)
+        )
+# Create a Pipeline
+with beam.Pipeline() as p:
+    source_objects = (
+        p
+        | beam.Create([zarr.storage.FSStore('gs://leap-scratch/jbusecke/beam-mover-stage/source/source_store.zarr/')])
+        | "Copy Store to its final resting place" >> Copy(target_prefix='gs://leap-scratch/jbusecke/beam-mover-stage/dynamic-target')
+    )
+
+
 @dataclass
 class CopyStore(beam.PTransform):
     """
@@ -192,7 +222,6 @@ class CopyStore(beam.PTransform):
             | "Copying Zarr Store" >> beam.Map(self._copy_gcs_store)
         )
     
-
 ## Create recipes
 is_test = os.environ['IS_TEST']
 
@@ -373,7 +402,7 @@ for iid, urls in url_dict.items():
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
             )
-        | CopyStore(target_bucket=copy_target_bucket)
+        | Copy(target_prefix='gs://leap-scratch/jbusecke/beam-mover-stage/dataflow-target')
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
         | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
