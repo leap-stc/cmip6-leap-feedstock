@@ -24,6 +24,8 @@ Equiped with that list, please open a [request issue](https://github.com/leap-st
 The cataloging and uploading are very much a work in progress.
 For the moment you can access the data separately from the [main CMIP6 zarr catalog](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) by using the following catalog:
 
+> Warning: This currently does not work due to changes in the LEAP cloud bucket policy. We are working on redirecting the output to the google public dataset bucket. Apologies for the disruption.
+
 ```python
 import intake
 col = intake.open_esm_datastore(

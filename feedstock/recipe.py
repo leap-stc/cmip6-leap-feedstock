@@ -223,7 +223,9 @@ class CopyStore(beam.PTransform):
         )
     
 ## Create recipes
-is_test = os.environ['IS_TEST']
+table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
+is_test = os.environ['IS_TEST'] == 'true' # There must be a better way to do this, but for now this will do
+print(f"{is_test =}")
 
 if is_test:
     setup_logging('DEBUG')
@@ -257,6 +259,7 @@ else:
     table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
     # TODO: To create a non-QC catalog I need to find the difference between the two tables iids
     table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
+    print(f"{table_id = } {table_id_nonqc = } {prune_submission = } {iid_file = }")
 
 print('Running with the following parameters:')
 print(f"{copy_target_bucket = }")
@@ -306,13 +309,32 @@ iids_in_table = bq_interface.iid_list_exists(iids)
 iids_in_table_nonqc = bq_interface_nonqc.iid_list_exists(iids)
 iids_in_table_legacy = bq_interface_legacy.iid_list_exists(iids)
 
+# manual overrides (these will be rewritten each time as long as they exist here)
+overwrite_iids = [
+    "CMIP6.CMIP.NCC.NorESM2-LM.historical.r3i1p1f1.SImon.siitdthick.gn.v20191108",	
+    "CMIP6.ScenarioMIP.NASA-GISS.GISS-E2-1-G-CC.ssp245.r102i1p1f1.Omon.mlotst.gn.v20220115",	
+    "CMIP6.CMIP.NCC.NorESM2-LM.historical.r1i1p1f1.SImon.siitdthick.gn.v20191108",	
+    "CMIP6.CMIP.NCC.NorESM2-MM.historical.r1i1p1f1.SImon.siitdthick.gn.v20191108",	
+    "CMIP6.ScenarioMIP.NASA-GISS.GISS-E2-1-G-CC.ssp245.r102i1p1f1.Omon.spco2.gn.v20220115",
+    "CMIP6.ScenarioMIP.NCAR.CESM2-FV2.ssp585.r1i2p2f1.SImon.siitdthick.gn.v20220915",
+    "CMIP6.CMIP.NCC.NorESM2-MM.historical.r1i1p1f1.SImon.sifb.gn.v20191108",
+    "CMIP6.ScenarioMIP.NASA-GISS.GISS-E2-1-G-CC.ssp245.r102i1p1f1.Omon.chl.gn.v20220115",
+    # "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.thetao.gn.v20200514",
+    # "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.thetao.gn.v20200514",
+    # "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.so.gn.v20200514",
+    # "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.so.gn.v20200514",
+]
+#deactivate high res runs until we find out what is going on there.
+
 # beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
 del bq_interface 
 del bq_interface_nonqc
 del bq_interface_legacy
 
 # Maybe I want a more finegrained check here at some point, but for now this will prevent logged iids from rerunning
-iids_to_skip = set(iids_in_table + iids_in_table_nonqc + iids_in_table_legacy)
+print(f"{overwrite_iids =}")
+iids_to_skip = set(iids_in_table + iids_in_table_nonqc + iids_in_table_legacy) - set(overwrite_iids)
+print(f"{iids_to_skip =}")
 iids_filtered = list(set(iids) - iids_to_skip)
 print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list")
 
@@ -345,7 +367,11 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
     from dynamic_chunks.algorithms import even_divisor_algo, iterative_ratio_increase_algo, NoMatchingChunks
     
     target_chunk_size='150MB'
-    target_chunks_aspect_ratio = {'time': 1}
+    target_chunks_aspect_ratio = {
+        'time':20,
+        'x':1, 'i':1, 'ni':1, 'xh':1, 'nlon':1, 'lon':1, # TODO: Maybe import all the known spatial dimensions from xmip?
+        'y':1, 'j':1, 'nj':1, 'yh':1, 'nlat':1, 'lat':1,
+    }
     size_tolerance=0.5
 
     try:
@@ -354,6 +380,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
             target_chunk_size,
             target_chunks_aspect_ratio,
             size_tolerance,
+            allow_extra_dims=True,
         )
 
     except NoMatchingChunks:
@@ -367,6 +394,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
                 target_chunk_size,
                 target_chunks_aspect_ratio,
                 size_tolerance,
+                allow_extra_dims=True,
             )
         except NoMatchingChunks:
             raise ValueError(
