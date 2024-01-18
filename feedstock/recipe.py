@@ -2,10 +2,11 @@
 """Modified transforms from Pangeo Forge"""
 
 import apache_beam as beam
+from apache_beam.io.gcp import gcsio
 from dataclasses import dataclass
 from typing import List, Dict
 from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
-from pangeo_forge_big_query.utils import BQInterface, LogToBigQuery
+from data_management_utils import BQInterface, LogToBigQuery
 from pangeo_forge_esgf.parsing import parse_instance_ids
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
@@ -16,7 +17,6 @@ import os
 import xarray as xr
 import yaml
 import zarr
-import warnings
 
     
 # Custom Beam Transforms
@@ -119,14 +119,34 @@ class TestDataset(beam.PTransform):
         )
 
 
+@dataclass
+class Copy(beam.PTransform):
+    target_prefix: str
+    
+    def _copy(self,store: zarr.storage.FSStore) -> zarr.storage.FSStore:
+        gcs = gcsio.GcsIO()
+        # We do need the gs:// prefix? 
+        # TODO: Determine this dynamically from zarr.storage.FSStore
+        source = f"gs://{os.path.normpath(store.path)}/" #FIXME more elegant. `.copytree` needs trailing slash
+        target = os.path.join(*[self.target_prefix]+source.split('/')[-3:])
+        gcs.copytree(source, target)
+        # return a new store with the new path that behaves exactly like the input 
+        # to this stage (so we can slot this stage right before testing/logging stages)
+        return zarr.storage.FSStore(target)
+        
+    def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
+        return (pcoll
+            | "Copying Store" >> beam.Map(self._copy)
+        )
+    
 ## Create recipes
 table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
 is_test = os.environ['IS_TEST'] == 'true' # There must be a better way to do this, but for now this will do
 print(f"{is_test =}")
 
-
 if is_test:
     setup_logging('DEBUG')
+    copy_target_bucket = "gs://leap-scratch"
     iid_file = "feedstock/iids_pr.yaml"
     prune_iids = True
     prune_submission = True # if set, only submits a subset of the iids in the final step
@@ -147,6 +167,7 @@ if is_test:
 
 else:
     setup_logging('INFO')
+    copy_target_bucket = "gs://leap-persistent-ro"
     iid_file = 'feedstock/iids.yaml'
     prune_iids = False
     prune_submission = False # if set, only submits a subset of the iids in the final step
@@ -157,10 +178,20 @@ else:
     table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
     print(f"{table_id = } {table_id_nonqc = } {prune_submission = } {iid_file = }")
 
+print('Running with the following parameters:')
+print(f"{copy_target_bucket = }")
+print(f"{iid_file = }")
+print(f"{prune_iids = }")
+print(f"{prune_submission = }")
+print(f"{table_id = }")
+print(f"{table_id_nonqc = }")
+print(f"{table_id_legacy = }")
+
 # load iids from file
 with open(iid_file) as f:
     iids_raw = yaml.safe_load(f)
     iids_raw = [iid for iid in iids_raw if iid]
+
 
 def parse_wildcards(iids:List[str]) -> List[str]:
     """iterate through each list element and 
@@ -173,6 +204,7 @@ def parse_wildcards(iids:List[str]) -> List[str]:
         else:
             iids_parsed.append(iid)
     return iids_parsed
+
 
 # parse out wildcard iids using pangeo-forge-esgf
 print(f"{iids_raw = }")
@@ -222,10 +254,12 @@ iids_to_skip = set(iids_in_table + iids_in_table_nonqc + iids_in_table_legacy) -
 print(f"{iids_to_skip =}")
 iids_filtered = list(set(iids) - iids_to_skip)
 print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list")
-print(f"Running a total of {len(iids_filtered)} iids")
+
 
 if prune_iids:
-    iids_filtered = iids_filtered[0:20]
+    iids_filtered = iids_filtered[0:200]
+
+print(f"Running a total of {len(iids_filtered)} iids")
 
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
 url_dict = asyncio.run(
@@ -241,10 +275,11 @@ if prune_submission:
     url_dict = {iid: url_dict[iid] for iid in list(url_dict.keys())[0:10]}
 
 # Print the actual urls
-print(url_dict)
+print(f"{url_dict = }")
 
 ## Dynamic Chunking Wrapper
 def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
+    import warnings
     # trying to import inside the function
     from dynamic_chunks.algorithms import even_divisor_algo, iterative_ratio_increase_algo, NoMatchingChunks
     
@@ -267,7 +302,8 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
 
     except NoMatchingChunks:
         warnings.warn(
-            "Primary algorithm using even divisors along each dimension failed. Trying secondary algorithm."
+            "Primary algorithm using even divisors along each dimension failed "
+            "with. Trying secondary algorithm."
         )
         try:
             target_chunks = iterative_ratio_increase_algo(
@@ -311,6 +347,7 @@ for iid, urls in url_dict.items():
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
             )
+        | Copy(target_prefix=f'{copy_target_bucket}/data-library/cmip6-testing/copied_stores')
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
         | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
