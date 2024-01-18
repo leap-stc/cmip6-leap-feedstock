@@ -1,0 +1,23 @@
+name: Report an issue with a zarr store
+description: Report an issue with one of the ingested datasets 
+title: "[BUG]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!WARNING]  
+        > Before you raise an issue here, please follow [the troubleshooting steps](https://github.com/leap-stc/cmip6-leap-feedstock#troubleshooting) to identify where in the stack the likely cause is.
+  - type: textarea
+    id: file_list
+    attributes:
+        label: List of instance_ids or zarr store urls which cause you issues.
+        render: markdown
+  - type: textarea
+    id: comments
+    attributes:
+      label: Description
+      description: >
+        Please paste a [Minimal Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example) of the issue you are facing.
+      validations:
+        required: true
