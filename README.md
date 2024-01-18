@@ -24,7 +24,8 @@ Equiped with that list, please open a [request issue](https://github.com/leap-st
 The cataloging and uploading are very much a work in progress.
 For the moment you can access the data separately from the [main CMIP6 zarr catalog](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) by using the following catalog:
 
-> Warning: This currently does not work due to changes in the LEAP cloud bucket policy. We are working on redirecting the output to the google public dataset bucket. Apologies for the disruption.
+> [!WARNING]  
+> **This functionality is currently broken** due to changes in the LEAP cloud bucket polic. We are working hard to restore this functionality redirecting the output to the google public dataset bucket. Apologies for the disruption.. Please check [](https://github.com/leap-stc/cmip6-leap-feedstock/issues/82) for progress.
 
 ```python
 import intake
@@ -33,7 +34,13 @@ col = intake.open_esm_datastore(
 )
 cat = col.search(variable_id='pr', experiment_id='historical')
 ```
-You can then perform the same operations as with the main catalog.
+
+
+You can then perform the same operations as with the main catalog. Please consider using [xMIP](https://github.com/jbusecke/xMIP) to preprocess the data and take care of common data cleaning tasks.
+```
+from xmip.preprocessing import combined_preprocessing
+ddict = cat.to_dataset_dict(preprocess=combined_preprocessing)
+```
 
 ### Non quality-controlled catalog (⛔️use with caution⛔️)
 Some datasets are successfully written to zarr stores, but do not pass our [quality control tests](https://github.com/leap-stc/cmip6-leap-feedstock/blob/9e6290ed2c29a8da93285aeffaea0b639dca79eb/feedstock/recipe.py#L188-L235). You can inspect these datasets in the same way as the quality controlled ones, but the datasets might contain issues like gaps in time, missing attributes etc. Some of these might be fixable, but will require manual work that is for now out of scope of this project.
@@ -46,7 +53,33 @@ col = intake.open_esm_datastore(
 cat = col.search(variable_id='pr', experiment_id='historical')
 ```
 
-### How to run recipes locally (with PGF runner)
+## Troubleshooting
+
+### I have found an issue with one of the cloud zarr stores. Where can I report this?
+Reporting issues is a vital part of this community work, and if you are reading this, I want to thank you for taking the time to do so!
+
+The first step is identifying the type of error, which will determine where to report the error properly. 
+Here are a few steps to triage the error. 
+
+Assuming you are loading the data as instructed above using [intake-esm](https://github.com/intake/intake-esm) and you encounter an issue with the data:
+1. Check if the Problem dissapears when you do not use xmip (omit `preprocess=combined_preprocessing` above). If that fixes the problem, raise an [issue in the xMIP repo](https://github.com/jbusecke/xMIP/issues/new)
+2. Check if the problem disspears when you load the raw zarr store. You can do so by inspecting the `zstore` column of the pandas dataframe underlying the intake-esm collection:
+    ```python
+    display(cat.df)
+    print(cat.df['zstore'].tolist())
+    # you can then open each of the urls like this
+    import xarray as xr
+    ds_test = xr.open_dataset(url, engine='zarr', chunks={})
+    ```
+    If this solves your problem, you should head over to intake-esm and check the [discussion topics](https://github.com/intake/intake-esm/discussions) and [issues](https://github.com/intake/intake-esm/issues) and raise either one if appropriate.
+3. If your error persists, this is either related to the ingestion here or is an error in the original ESGF data. Please raise an issue [right here](https://github.com/leap-stc/cmip6-leap-feedstock/issues/new?assignees=&labels=bug&projects=&template=problem.yaml&title=%5BBUG%5D%3A+) and we will get to the bottom of it.
+
+Thanks for helping to improve everyones experience with CMIP6 data! 
+
+![](https://media.giphy.com/media/p0xvfeVhS7tlhGzIoh/giphy-downsized-large.gif)
+
+
+## How to run recipes locally (with PGF runner)
 - Make sure to set up the environment (TODO: Add this as docs on pangeo-forge-runner)
 - Create a scratch dir (e.g. on the desktop it should not be within a repo)
 - call  pfg with a local path `pangeo-forge-runner bake --repo path_to_repo -f path_to_config.json`
