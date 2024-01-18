@@ -19,5 +19,3 @@ body:
       label: Description
       description: >
         Please paste a [Minimal Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example) of the issue you are facing.
-      validations:
-        required: true
