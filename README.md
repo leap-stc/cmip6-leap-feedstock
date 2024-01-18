@@ -52,7 +52,10 @@ col = intake.open_esm_datastore(
 )
 cat = col.search(variable_id='pr', experiment_id='historical')
 ```
-## I have found an issue with one of the cloud zarr stores. Where can I report this?
+
+## Troubleshooting
+
+### I have found an issue with one of the cloud zarr stores. Where can I report this?
 Reporting issues is a vital part of this community work, and if you are reading this, I want to thank you for taking the time to do so!
 
 The first step is identifying the type of error, which will determine where to report the error properly. 
