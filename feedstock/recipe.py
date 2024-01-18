@@ -6,7 +6,7 @@ from apache_beam.io.gcp import gcsio
 from dataclasses import dataclass
 from typing import List, Dict
 from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
-from pangeo_forge_big_query.utils import BQInterface, LogToBigQuery
+from data_management_utils import BQInterface, LogToBigQuery
 from pangeo_forge_esgf.parsing import parse_instance_ids
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
