@@ -1,4 +1,4 @@
-git+https://github.com/carbonplan/pangeo-forge-big-query
+git+https://github.com/leap-stc/data-management-utils@0.0.1
 pangeo-forge-esgf==0.1.1
 pangeo-forge-recipes==0.10.4
 dynamic-chunks==0.0.2
