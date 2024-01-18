@@ -347,7 +347,7 @@ for iid, urls in url_dict.items():
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
             )
-        | Copy(target_prefix='gs://leap-scratch/jbusecke/beam-mover-stage/dataflow-target')
+        | Copy(target_prefix=f'{copy_target_bucket}/data-library/cmip6-testing/copied_stores')
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
         | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
