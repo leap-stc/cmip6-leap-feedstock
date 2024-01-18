@@ -72,7 +72,7 @@ Assuming you are loading the data as instructed above using [intake-esm](https:/
     ds_test = xr.open_dataset(url, engine='zarr', chunks={})
     ```
     If this solves your problem, you should head over to intake-esm and check the [discussion topics](https://github.com/intake/intake-esm/discussions) and [issues](https://github.com/intake/intake-esm/issues) and raise either one if appropriate.
-3. If your error persists, this is either related to the ingestion here or is an error in the original ESGF data. Please raise an issue over in this repository and we will get to the bottom of it.
+3. If your error persists, this is either related to the ingestion here or is an error in the original ESGF data. Please raise an issue [right here](https://github.com/leap-stc/cmip6-leap-feedstock/issues/new?assignees=&labels=bug&projects=&template=problem.yaml&title=%5BBUG%5D%3A+) and we will get to the bottom of it.
 
 Thanks for helping to improve everyones experience with CMIP6 data! 
 
