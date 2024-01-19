@@ -130,10 +130,10 @@ class Copy(beam.PTransform):
         target = os.path.join(*[self.target_prefix]+source.split('/')[-3:])
         # gcs = gcsio.GcsIO()
         # gcs.copytree(source, target)
-
+        print(f"HERE: Copying {source} to {target}")
         import gcsfs
         fs = gcsfs.GCSFileSystem()
-        fs.cp(os.path.normpath(source), os.path.normpath(target), recursive=True)
+        fs.cp(source, target, recursive=True)
         # return a new store with the new path that behaves exactly like the input 
         # to this stage (so we can slot this stage right before testing/logging stages)
         return zarr.storage.FSStore(target)
