@@ -56,11 +56,11 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
       - name: Upload csv files to GCS
         run: |
-          gcloud storage cp *.csv gs://leap-persistent-ro/data-library/catalogs/cmip6-test/
+          gcloud storage cp *.csv gs://cmip6/cmip6-pgf-ingestion-test/catalogs/
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
-      - name: Set csv file object to public
-        run: |
-          gcloud storage objects update gs://leap-persistent-ro/data-library/catalogs/cmip6-test/leap-pangeo-cmip6-noqc-test.csv gs://leap-persistent-ro/data-library/catalogs/cmip6-test/leap-pangeo-cmip6-test.csv --add-acl-grant=entity=AllUsers,role=READER
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
+      # - name: Set csv file object to public
+      #   run: |
+      #     gcloud storage objects update gs://leap-persistent-ro/data-library/catalogs/cmip6-test/leap-pangeo-cmip6-noqc-test.csv gs://leap-persistent-ro/data-library/catalogs/cmip6-test/leap-pangeo-cmip6-test.csv --add-acl-grant=entity=AllUsers,role=READER
+      #   env:
+      #     GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
