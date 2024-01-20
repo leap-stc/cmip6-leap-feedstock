@@ -346,7 +346,7 @@ for iid, urls in url_dict.items():
             store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
-            consolidate_dimension_coords=True,
+            consolidate_dimension_coordinates=True,
             )
         | Copy(target_prefix=f'{copy_target_bucket}/data-library/cmip6-testing/copied_stores')
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
