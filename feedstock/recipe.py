@@ -100,7 +100,6 @@ class Copy(beam.PTransform):
         )
     
 ## Create recipes
-table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
 is_test = os.environ['IS_TEST'] == 'true' # There must be a better way to do this, but for now this will do
 print(f"{is_test =}")
 
@@ -110,17 +109,14 @@ if is_test:
     iid_file = "feedstock/iids_pr.yaml"
     prune_iids = True
     prune_submission = True # if set, only submits a subset of the iids in the final step
-    table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_pr'
-    table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_pr_nonqc'
-    table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy_pr"
-    #TODO: Clear out both tables before running?
-    print(f"{table_id = } {table_id_nonqc = } {prune_submission = } {iid_file = }")
+    table_id = 'leap-pangeo.testcmip6.cmip6_consolidated_testing_pr'
+    print(f"{table_id = } {prune_submission = } {iid_file = }")
 
     ## make sure the tables are deleted before running so we can run the same iids over and over again
     ## TODO: this could be integtrated in the CMIPBQInterface class
     from google.cloud import bigquery
     client = bigquery.Client()
-    for table in [table_id, table_id_nonqc, table_id_legacy]:
+    for table in [table_id]:
         client.delete_table(table, not_found_ok=True)  # Make an API request.
         print("Deleted table '{}'.".format(table))
     del client
@@ -132,11 +128,8 @@ else:
     prune_iids = False
     prune_submission = False # if set, only submits a subset of the iids in the final step
     #TODO: rename these more cleanly when we move to the official bucket
-    table_id = 'leap-pangeo.testcmip6.cmip6_feedstock_test2'
-    table_id_nonqc = 'leap-pangeo.testcmip6.cmip6_feedstock_test2_nonqc'
-    # TODO: To create a non-QC catalog I need to find the difference between the two tables iids
-    table_id_legacy = "leap-pangeo.testcmip6.cmip6_legacy"
-    print(f"{table_id = } {table_id_nonqc = } {prune_submission = } {iid_file = }")
+    table_id = 'leap-pangeo.testcmip6.cmip6_consolidated_manual_testing' # TODO rename to `leap-pangeo.cmip6_pgf_ingestion.cmip6`
+    print(f"{table_id = } {prune_submission = } {iid_file = }")
 
 print('Running with the following parameters:')
 print(f"{copy_target_bucket = }")
@@ -144,8 +137,6 @@ print(f"{iid_file = }")
 print(f"{prune_iids = }")
 print(f"{prune_submission = }")
 print(f"{table_id = }")
-print(f"{table_id_nonqc = }")
-print(f"{table_id_legacy = }")
 
 # load iids from file
 with open(iid_file) as f:
@@ -178,13 +169,9 @@ iids = list(set(iids))
 print("Pruning iids that already exist")
 
 bq_interface = CMIPBQInterface(table_id=table_id)
-bq_interface_nonqc = CMIPBQInterface(table_id=table_id_nonqc)
-bq_interface_legacy = CMIPBQInterface(table_id=table_id_legacy)
 
 # get lists of the iids already logged
 iids_in_table = bq_interface.iid_list_exists(iids)
-iids_in_table_nonqc = bq_interface_nonqc.iid_list_exists(iids)
-iids_in_table_legacy = bq_interface_legacy.iid_list_exists(iids)
 
 # manual overrides (these will be rewritten each time as long as they exist here)
 overwrite_iids = [
@@ -205,8 +192,6 @@ overwrite_iids = [
 
 # beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
 del bq_interface 
-del bq_interface_nonqc
-del bq_interface_legacy
 
 # Maybe I want a more finegrained check here at some point, but for now this will prevent logged iids from rerunning
 print(f"{overwrite_iids =}")
@@ -308,7 +293,7 @@ for iid, urls in url_dict.items():
             dynamic_chunking_fn=dynamic_chunking_func,
             )
         | Copy(target_prefix=f'{copy_target_bucket}/data-library/cmip6-testing/copied_stores')
-        | "Logging to bigquery (non-QC)" >> LogCMIPToBigQuery(iid=iid, table_id=table_id_nonqc, tests_passed=False)
+        | "Logging to bigquery (non-QC)" >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=False)
         | TestDataset(iid=iid)
         | "Logging to bigquery (QC)" >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=True)
         )
