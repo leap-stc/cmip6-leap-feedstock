@@ -337,7 +337,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
 recipes = {}
 
 for iid, urls in url_dict.items():
-    target_prefix = f'{copy_target_bucket}data-library/cmip6-testing/copied_stores' 
+    target_prefix = f'{copy_target_bucket}' 
     print(f"{target_prefix = }")
     pattern = pattern_from_file_sequence(
         urls,
