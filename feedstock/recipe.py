@@ -150,7 +150,8 @@ print(f"{is_test =}")
 
 if is_test:
     setup_logging('DEBUG')
-    copy_target_bucket = "gs://cmip6/testing_delete_after/copied_pr/" #TODO: Absolutely change this
+    # copy_target_bucket = "gs://leap-scratch/data-library/cmip6-pr-copied/
+    copy_target_bucket ="gs://cmip6/cmip6-pgf-ingestion-test/zarr_stores_pr/" #TODO: Change this back once we are ready to release this.
     iid_file = "feedstock/iids_pr.yaml"
     prune_iids = True
     prune_submission = True # if set, only submits a subset of the iids in the final step
@@ -171,7 +172,7 @@ if is_test:
 
 else:
     setup_logging('INFO')
-    copy_target_bucket = "gs://cmip6/testing_delete_after/copied_prod/"
+    copy_target_bucket = "gs://cmip6/cmip6-pgf-ingestion-test/zarr_stores/"
     iid_file = 'feedstock/iids.yaml'
     prune_iids = False
     prune_submission = False # if set, only submits a subset of the iids in the final step
