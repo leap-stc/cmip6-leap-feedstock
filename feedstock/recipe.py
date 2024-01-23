@@ -200,7 +200,7 @@ del bq_interface
 
 # Maybe I want a more finegrained check here at some point, but for now this will prevent logged iids from rerunning
 print(f"{overwrite_iids =}")
-iids_to_skip = set(iids_in_table + iids_in_table_nonqc + iids_in_table_legacy) - set(overwrite_iids)
+iids_to_skip = set(iids_in_table) - set(overwrite_iids)
 print(f"{iids_to_skip =}")
 iids_filtered = list(set(iids) - iids_to_skip)
 print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list")
