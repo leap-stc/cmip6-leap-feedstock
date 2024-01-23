@@ -45,7 +45,7 @@ async def fetch_instance_ids(url, params):
             retracted_flat.extend(l)
         return retracted_flat
     
-retracted_iids = await fetch_instance_ids(url, params)
+retracted_iids = asyncio.run(fetch_instance_ids(url, params))
 
 table_id = 'leap-pangeo.testcmip6.cmip6_consolidated_manual_testing' #TODO: change to production table
 bq = CMIPBQInterface(table_id)
