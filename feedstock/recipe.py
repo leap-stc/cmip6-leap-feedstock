@@ -6,7 +6,8 @@ from apache_beam.io.gcp import gcsio
 from dataclasses import dataclass
 from typing import List, Dict
 from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
-from leap_data_management_utils import BQInterface, LogToBigQuery
+from leap_data_management_utils import IIDEntry, CMIPBQInterface, LogCMIPToBigQuery
+from leap_data_management_utils.cmip_testing import test_all
 from pangeo_forge_esgf.parsing import parse_instance_ids
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
@@ -60,6 +61,7 @@ class Preprocessor(beam.PTransform):
             | "Fix coordinates" >> beam.Map(self._keep_only_variable_id)
             | "Sanitize Attrs" >> beam.Map(self._sanitize_attrs)
         )
+    
 
 @dataclass
 class TestDataset(beam.PTransform):
@@ -67,57 +69,15 @@ class TestDataset(beam.PTransform):
     Test stage for data written to zarr store
     """
     iid: str
-    
-    @staticmethod
-    def _get_dataset(store: zarr.storage.FSStore) -> xr.Dataset:
-        import xarray as xr
-        return xr.open_dataset(store, engine='zarr', chunks={}, use_cftime=True)
-       
-    def _test_open_store(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
-        """Can the store be opened?"""
-        print(f"Written path: {store.path =}")
-        ds = self._get_dataset(store)
-        print(ds)
-        return store
-        
-    def _test_time(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
-        """
-        Check time dimension
-        For now checks:
-        - That time increases strictly monotonically
-        - That no large gaps in time (e.g. missing file) are present
-        """
-        ds = self._get_dataset(store)
-        time_diff = ds.time.diff('time').astype(int)
-        # assert that time increases monotonically
-        print(time_diff)
-        assert (time_diff > 0).all()
-        
-        # assert that there are no large time gaps
-        mean_time_diff = time_diff.mean()
-        normalized_time_diff = abs((time_diff - mean_time_diff)/mean_time_diff)
-        assert (normalized_time_diff<0.05).all()
-        return store
-    
-    def _test_attributes(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
-        ds = self._get_dataset(store)
-        
-        # check completeness of attributes 
-        iid_schema = "mip_era.activity_id.institution_id.source_id.experiment_id.variant_label.table_id.variable_id.grid_label.version"
-        for facet_value, facet in zip(self.iid.split('.'), iid_schema.split('.')):
-            if not 'version' in facet: #(TODO: Why is the version not in all datasets?)
-                print(f"Checking {facet = } in dataset attributes")
-                assert ds.attrs[facet] == facet_value
-          
+
+    def _test(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
+        test_all(store, self.iid)
         return store
     
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
         return (pcoll
-            | "Testing - Open Store" >> beam.Map(self._test_open_store)
-            | "Testing - Attributes" >> beam.Map(self._test_attributes)
-            | "Testing - Time Dimension" >> beam.Map(self._test_time)
+            | "Testing - Running all tests" >> beam.Map(self._test)
         )
-
 
 @dataclass
 class Copy(beam.PTransform):
@@ -157,7 +117,7 @@ if is_test:
     print(f"{table_id = } {table_id_nonqc = } {prune_submission = } {iid_file = }")
 
     ## make sure the tables are deleted before running so we can run the same iids over and over again
-    ## TODO: this could be integtrated in the BQInterface class
+    ## TODO: this could be integtrated in the CMIPBQInterface class
     from google.cloud import bigquery
     client = bigquery.Client()
     for table in [table_id, table_id_nonqc, table_id_legacy]:
@@ -217,9 +177,9 @@ iids = list(set(iids))
 # Prune the url dict to only include items that have not been logged to BQ yet
 print("Pruning iids that already exist")
 
-bq_interface = BQInterface(table_id=table_id)
-bq_interface_nonqc = BQInterface(table_id=table_id_nonqc)
-bq_interface_legacy = BQInterface(table_id=table_id_legacy)
+bq_interface = CMIPBQInterface(table_id=table_id)
+bq_interface_nonqc = CMIPBQInterface(table_id=table_id_nonqc)
+bq_interface_legacy = CMIPBQInterface(table_id=table_id_legacy)
 
 # get lists of the iids already logged
 iids_in_table = bq_interface.iid_list_exists(iids)
@@ -348,7 +308,7 @@ for iid, urls in url_dict.items():
             dynamic_chunking_fn=dynamic_chunking_func,
             )
         | Copy(target_prefix=f'{copy_target_bucket}/data-library/cmip6-testing/copied_stores')
-        | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
+        | "Logging to bigquery (non-QC)" >> LogCMIPToBigQuery(iid=iid, table_id=table_id_nonqc, tests_passed=False)
         | TestDataset(iid=iid)
-        | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
+        | "Logging to bigquery (QC)" >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=True)
         )
