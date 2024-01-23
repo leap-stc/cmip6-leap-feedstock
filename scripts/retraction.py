@@ -44,50 +44,50 @@ async def fetch_instance_ids(url, params):
         for l in retracted:
             retracted_flat.extend(l)
         return retracted_flat
-    
 
+if __name__ ==  '__main__':
 
-table_id = 'leap-pangeo.testcmip6.cmip6_consolidated_manual_testing' #TODO: change to production table
-bq = CMIPBQInterface(table_id)
-params = {
-    "type": "Dataset",
-    "mip_era": "CMIP6",
-    "replica": "none", # this is horribly documented! But `none` should give both replicas and originals.
-    "distrib": "true",
-    "retracted": "true",
-    "format": "application/solr+json",
-    "fields": "instance_id",
-}
-url = "http://esgf-node.llnl.gov/esg-search/search"
+    table_id = 'leap-pangeo.testcmip6.cmip6_consolidated_manual_testing' #TODO: change to production table
+    bq = CMIPBQInterface(table_id)
+    params = {
+        "type": "Dataset",
+        "mip_era": "CMIP6",
+        "replica": "none", # this is horribly documented! But `none` should give both replicas and originals.
+        "distrib": "true",
+        "retracted": "true",
+        "format": "application/solr+json",
+        "fields": "instance_id",
+    }
+    url = "http://esgf-node.llnl.gov/esg-search/search"
 
-# Get all retractions from ESGF
-retracted_iids = asyncio.run(fetch_instance_ids(url, params))
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(fetch_instance_ids(url, params))  
 
-# Get all the latest entries
-df_all = bq.get_latest()
+    # Get all the latest entries
+    df_all = bq.get_latest()
 
-# Find all entries that match ESGF retractions
-df_retracted = df_all[df_all['instance_id'].isin(retracted_iids)]
+    # Find all entries that match ESGF retractions
+    df_retracted = df_all[df_all['instance_id'].isin(retracted_iids)]
 
-# Find all the entries that are not marked as retracted yet
-to_retract = df_retracted[df_retracted['retracted'].isin([False])]
+    # Find all the entries that are not marked as retracted yet
+    to_retract = df_retracted[df_retracted['retracted'].isin([False])]
 
-# Print statistics and create report html
-print(
-    f"Got {len(retracted_iids)} retractions from ESGF.\n"
-    f"{len(df_retracted)} of our stores are affected.\n"
-    f"{len(to_retract)} stores will be newly marked as retracted.\n"
-    f"See retraction_report.html for details"
-)
-to_retract.to_html('retraction_report.html')
+    # Print statistics and create report html
+    print(
+        f"Got {len(retracted_iids)} retractions from ESGF.\n"
+        f"{len(df_retracted)} of our stores are affected.\n"
+        f"{len(to_retract)} stores will be newly marked as retracted.\n"
+        f"See retraction_report.html for details"
+    )
+    to_retract.to_html('retraction_report.html')
 
-## Create IIDEntry objects for all the entries that need to be retracted
-iid_entries_to_retract = []
-for idx, row in to_retract.iloc[:3,:].iterrows(): #TODO: remove the [:3,:] for production
-    iid_entry = IIDEntry(iid=row.instance_id, store=row.store, retracted=True, tests_passed=row.tests_passed)
-    iid_entries_to_retract.append(iid_entry)
+    ## Create IIDEntry objects for all the entries that need to be retracted
+    iid_entries_to_retract = []
+    for idx, row in to_retract.iloc[:3,:].iterrows(): #TODO: remove the [:3,:] for production
+        iid_entry = IIDEntry(iid=row.instance_id, store=row.store, retracted=True, tests_passed=row.tests_passed)
+        iid_entries_to_retract.append(iid_entry)
 
-# set values to retract in batches
-batchsize = 1000 # not sure what the max no of entries is that bq can handle at once
-for batch_iid_entries in [iid_entries_to_retract[i:i+batchsize] for i in range(0,len(iid_entries_to_retract), batchsize)]:
-    bq.insert_multiple_iids(batch_iid_entries)
+    # set values to retract in batches
+    batchsize = 1000 # not sure what the max no of entries is that bq can handle at once
+    for batch_iid_entries in [iid_entries_to_retract[i:i+batchsize] for i in range(0,len(iid_entries_to_retract), batchsize)]:
+        bq.insert_multiple_iids(batch_iid_entries)
