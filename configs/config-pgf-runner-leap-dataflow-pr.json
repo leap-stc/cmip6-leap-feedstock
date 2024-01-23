@@ -5,7 +5,7 @@
     },
     "DataflowBakery": {
         "use_public_ips": true,
-        "service_account_email": "julius-leap-dataflow@leap-pangeo.iam.gserviceaccount.com",
+        "service_account_email": "public-cmip-google-cloud@leap-pangeo.iam.gserviceaccount.com",
         "project_id": "leap-pangeo",
         "temp_gcs_location": "gs://leap-scratch/data-library/temp",
         "use_dataflow_prime": true,
@@ -13,10 +13,10 @@
     },
     "TargetStorage": {
         "fsspec_class": "gcsfs.GCSFileSystem",
-        "root_path": "gs://leap-scratch/data-library/cmip6-pr/{job_name}"
+        "root_path": "gs://leap-scratch/data-library/cmip6-pgf-ingestion/pr/{job_name}"
     },
     "InputCacheStorage": {
         "fsspec_class": "gcsfs.GCSFileSystem",
-        "root_path": "gs://leap-scratch/data-library/cache"
+        "root_path": "gs://leap-scratch/data-library/cmip6-pgf-ingestion/cache"
     }
 }

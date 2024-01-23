@@ -124,12 +124,16 @@ class Copy(beam.PTransform):
     target_prefix: str
     
     def _copy(self,store: zarr.storage.FSStore) -> zarr.storage.FSStore:
-        gcs = gcsio.GcsIO()
         # We do need the gs:// prefix? 
         # TODO: Determine this dynamically from zarr.storage.FSStore
         source = f"gs://{os.path.normpath(store.path)}/" #FIXME more elegant. `.copytree` needs trailing slash
         target = os.path.join(*[self.target_prefix]+source.split('/')[-3:])
-        gcs.copytree(source, target)
+        # gcs = gcsio.GcsIO()
+        # gcs.copytree(source, target)
+        print(f"HERE: Copying {source} to {target}")
+        import gcsfs
+        fs = gcsfs.GCSFileSystem()
+        fs.cp(source, target, recursive=True)
         # return a new store with the new path that behaves exactly like the input 
         # to this stage (so we can slot this stage right before testing/logging stages)
         return zarr.storage.FSStore(target)
@@ -146,7 +150,8 @@ print(f"{is_test =}")
 
 if is_test:
     setup_logging('DEBUG')
-    copy_target_bucket = "gs://leap-scratch"
+    # copy_target_bucket = "gs://leap-scratch/data-library/cmip6-pr-copied/
+    copy_target_bucket ="gs://cmip6/cmip6-pgf-ingestion-test/zarr_stores_pr/" #TODO: Change this back once we are ready to release this.
     iid_file = "feedstock/iids_pr.yaml"
     prune_iids = True
     prune_submission = True # if set, only submits a subset of the iids in the final step
@@ -167,7 +172,7 @@ if is_test:
 
 else:
     setup_logging('INFO')
-    copy_target_bucket = "gs://leap-persistent-ro"
+    copy_target_bucket = "gs://cmip6/cmip6-pgf-ingestion-test/zarr_stores/"
     iid_file = 'feedstock/iids.yaml'
     prune_iids = False
     prune_submission = False # if set, only submits a subset of the iids in the final step
@@ -332,6 +337,8 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
 recipes = {}
 
 for iid, urls in url_dict.items():
+    target_prefix = f'{copy_target_bucket}' 
+    print(f"{target_prefix = }")
     pattern = pattern_from_file_sequence(
         urls,
         concat_dim='time'
@@ -347,7 +354,7 @@ for iid, urls in url_dict.items():
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
             )
-        | Copy(target_prefix=f'{copy_target_bucket}/data-library/cmip6-testing/copied_stores')
+        | Copy(target_prefix=target_prefix)
         | "Logging to non-QC table" >> LogToBigQuery(iid=iid, table_id=table_id_nonqc)
         | TestDataset(iid=iid)
         | "Logging to QC table" >> LogToBigQuery(iid=iid, table_id=table_id)
