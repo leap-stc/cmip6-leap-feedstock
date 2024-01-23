@@ -22,7 +22,6 @@ async def fetch_instance_ids(url, params):
         # Initial response
         init_response = await client.get(url, params=params|{'offset':0, 'limit':1})
         n_res = init_response.json()['response']['numFound']
-        # n_res = 4000 # for testing
         
         # fetch batches
         batchsize = 10000
@@ -61,7 +60,7 @@ if __name__ ==  '__main__':
     url = "http://esgf-node.llnl.gov/esg-search/search"
 
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(fetch_instance_ids(url, params))  
+    retracted_iids = loop.run_until_complete(fetch_instance_ids(url, params))  
 
     # Get all the latest entries
     df_all = bq.get_latest()
