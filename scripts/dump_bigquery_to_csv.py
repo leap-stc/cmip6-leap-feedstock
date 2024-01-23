@@ -22,7 +22,7 @@ fs = gcsfs.GCSFileSystem()
 
 for filename, bq_df in [
     ("qc", df_qc),
-    ("qc_failed", df_qc_failed),
+    ("noqc", df_qc_failed),
     ("retracted", df_retracted),
 ]:
     path = os.path.join(
