@@ -45,10 +45,23 @@ async def fetch_instance_ids(url, params):
             retracted_flat.extend(l)
         return retracted_flat
     
-retracted_iids = asyncio.run(fetch_instance_ids(url, params))
+
 
 table_id = 'leap-pangeo.testcmip6.cmip6_consolidated_manual_testing' #TODO: change to production table
 bq = CMIPBQInterface(table_id)
+params = {
+    "type": "Dataset",
+    "mip_era": "CMIP6",
+    "replica": "none", # this is horribly documented! But `none` should give both replicas and originals.
+    "distrib": "true",
+    "retracted": "true",
+    "format": "application/solr+json",
+    "fields": "instance_id",
+}
+url = "http://esgf-node.llnl.gov/esg-search/search"
+
+# Get all retractions from ESGF
+retracted_iids = asyncio.run(fetch_instance_ids(url, params))
 
 # Get all the latest entries
 df_all = bq.get_latest()
