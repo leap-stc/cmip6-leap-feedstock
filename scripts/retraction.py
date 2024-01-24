@@ -85,7 +85,7 @@ if __name__ == "__main__":
         f"Got {len(retracted_iids)} retractions from ESGF.\n"
         f"{len(df_retracted)} of our stores are affected.\n"
         f"{len(to_retract)} stores will be newly marked as retracted.\n"
-        f"See http://storage.googleapis.com{report_path} for details"
+        f"See http://storage.googleapis.com/{report_path} for details"
     )
 
     ## Create IIDEntry objects for all the entries that need to be retracted
