@@ -21,36 +21,36 @@ Equiped with that list, please open a [request issue](https://github.com/leap-st
 
 
 ## How to access the newly uploaded data?
-The cataloging and uploading are very much a work in progress.
-For the moment you can access the data separately from the [main CMIP6 zarr catalog](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) by using the following catalog:
+
+We are very excited to announce the new beta for the `Pangeo-ESGF CMIP6 Zarr 2.0` public data 🎉
+
+You can access the data in a similar way to the [legacy CMIP6 zarr catalog](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) by choosing between these three catalogs:
+- The `main` catalog `"catalog.json"` which contains datasets that pass our test and are not retracted.
+    - ✨ These datasets should be fully ready for publications
+- The `no-QC` catalog `"catalog_noqc.json"`: Some datasets are successfully written to zarr stores, but do not pass our [quality control tests](https://github.com/leap-stc/cmip6-leap-feedstock/blob/9e6290ed2c29a8da93285aeffaea0b639dca79eb/feedstock/recipe.py#L188-L235). You can inspect these datasets in the same way as the quality controlled ones, but the datasets might contain issues like gaps in time, missing attributes etc. Some of these might be fixable, but will require manual work. If you believe that a dataset in this catalog is fixable and should be added to the main catalog, please report the fix in our [issue tracker](https://github.com/leap-stc/cmip6-leap-feedstock/issues/new).
+    -  ⚠️ Many of these datasets are probably not fit for publications. Proceed with care when working with these.
+- The `retracted` catalog `"catalog_retracted.json"`: These datasets have been officially retracted by ESGF. We retain all ingested stores to enable researchers to quantify changes due to a retraction. You can access all datasets that have been ingested and later retracted via this catalog.
+    - ☠️ None of these datasets should be used in publications
+
+```python
+import intake
+# uncomment/comment lines to swap catalogs
+url = "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog.json" # Only stores that pass current tests
+# url = "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_noqc.json" # Only stores that fail current tests
+# url = "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_retracted.json" # Only stores that have been retracted by ESGF
+col = intake.open_esm_datastore(url)
+```
 
 > [!WARNING]  
-> **This functionality is currently broken** due to changes in the LEAP cloud bucket polic. We are working hard to restore this functionality redirecting the output to the google public dataset bucket. Apologies for the disruption.. Please check [](https://github.com/leap-stc/cmip6-leap-feedstock/issues/82) for progress.
+> **Expect changes** We are thankful to you for testing the beta version of this catalog but please keep in mind that things can change rapidly (e.g. stores can be moved from one catalog to another) and prepare accordingly.Please check [](https://github.com/leap-stc/cmip6-leap-feedstock/issues/82) for progress towards the final release.
 
-```python
-import intake
-col = intake.open_esm_datastore(
-    "https://storage.googleapis.com/leap-persistent-ro/data-library/catalogs/cmip6-test/leap-pangeo-cmip6-test.json"
-)
+You can then perform the same operations as with the legacy catalog (please check out the [official docs](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) for more info). 
+
+Also please consider using [xMIP](https://github.com/jbusecke/xMIP) to preprocess the data and take care of common data cleaning tasks.
+```
 cat = col.search(variable_id='pr', experiment_id='historical')
-```
-
-
-You can then perform the same operations as with the main catalog. Please consider using [xMIP](https://github.com/jbusecke/xMIP) to preprocess the data and take care of common data cleaning tasks.
-```
 from xmip.preprocessing import combined_preprocessing
 ddict = cat.to_dataset_dict(preprocess=combined_preprocessing)
-```
-
-### Non quality-controlled catalog (⛔️use with caution⛔️)
-Some datasets are successfully written to zarr stores, but do not pass our [quality control tests](https://github.com/leap-stc/cmip6-leap-feedstock/blob/9e6290ed2c29a8da93285aeffaea0b639dca79eb/feedstock/recipe.py#L188-L235). You can inspect these datasets in the same way as the quality controlled ones, but the datasets might contain issues like gaps in time, missing attributes etc. Some of these might be fixable, but will require manual work that is for now out of scope of this project.
-Be very careful when using these datasets, in particular for publications!
-```python
-import intake
-col = intake.open_esm_datastore(
-    "https://storage.googleapis.com/leap-persistent-ro/data-library/catalogs/cmip6-test/leap-pangeo-cmip6-noqc-test.json"
-)
-cat = col.search(variable_id='pr', experiment_id='historical')
 ```
 
 ## Troubleshooting
