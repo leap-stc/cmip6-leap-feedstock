@@ -10,7 +10,7 @@ from leap_data_management_utils.cmip_utils import IIDEntry, CMIPBQInterface
 
 # Suggested workaround: https://github.com/encode/httpx/issues/1171#issuecomment-791614435
 
-max_connections = 5
+max_connections = 6
 semaphore = asyncio.Semaphore(max_connections)
 limits = httpx.Limits(max_connections=3, max_keepalive_connections=1)
 
@@ -26,7 +26,7 @@ async def fetch_batch_instance_ids(
 
 
 async def fetch_instance_ids(url, params):
-    async with httpx.AsyncClient(limits=limits, timeout=30.0) as client:
+    async with httpx.AsyncClient(limits=limits, timeout=60.0) as client:
         # Initial response
         init_response = await client.get(url, params=params | {"offset": 0, "limit": 1})
         n_res = init_response.json()["response"]["numFound"]
