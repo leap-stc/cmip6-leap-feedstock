@@ -73,7 +73,6 @@ if __name__ == "__main__":
 
     # Find all the entries that are not marked as retracted yet
     to_retract = df_retracted[df_retracted["retracted"].isin([False])]
-    to_retract = to_retract.iloc[:3,:] # TODO: remove the [:3,:] for production
 
     # Print statistics and create report html
     to_retract.to_html("retraction_report.html")
@@ -96,8 +95,7 @@ if __name__ == "__main__":
     print(
         f"Got {len(retracted_iids)} retractions from ESGF.\n"
         f"{len(df_retracted)} of our stores are affected.\n"
-        f"{len(to_retract)} stores are be newly marked as retracted.\n"
-        f"{len(iid_entries_to_retract)} will be retracted in BigQuery.\n"
+        f"{len(to_retract)} stores will be newly marked as retracted.\n"
         f"See http://storage.googleapis.com/{report_path} for details\n"
     )
 
