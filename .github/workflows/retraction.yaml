@@ -27,11 +27,6 @@ jobs:
           python scripts/retraction.py
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
-      - name: Upload-retraction-report
-        uses: actions/upload-artifact@v3
-        with:
-          name: retraction-report
-          path: "scripts/retraction-report.html"
 
   rerun-failed-jobs:
       runs-on: ubuntu-latest

@@ -73,6 +73,7 @@ if __name__ == "__main__":
 
     # Find all the entries that are not marked as retracted yet
     to_retract = df_retracted[df_retracted["retracted"].isin([False])]
+    to_retract = to_retract.iloc[:3,:] # TODO: remove the [:3,:] for production
 
     # Print statistics and create report html
     to_retract.to_html("retraction_report.html")
@@ -81,18 +82,9 @@ if __name__ == "__main__":
     report_path = f"cmip6/cmip6-pgf-ingestion-test/reports/retraction_report_{datetime.datetime.utcnow().isoformat()}.html"
     fs.put("retraction_report.html", f"gs://{report_path}")
 
-    print(
-        f"Got {len(retracted_iids)} retractions from ESGF.\n"
-        f"{len(df_retracted)} of our stores are affected.\n"
-        f"{len(to_retract)} stores will be newly marked as retracted.\n"
-        f"See http://storage.googleapis.com/{report_path} for details"
-    )
-
     ## Create IIDEntry objects for all the entries that need to be retracted
     iid_entries_to_retract = []
-    for idx, row in to_retract.iloc[
-        :3, :
-    ].iterrows():  # TODO: remove the [:3,:] for production
+    for idx, row in to_retract.iterrows():  
         iid_entry = IIDEntry(
             iid=row.instance_id,
             store=row.store,
@@ -100,6 +92,14 @@ if __name__ == "__main__":
             tests_passed=row.tests_passed,
         )
         iid_entries_to_retract.append(iid_entry)
+
+    print(
+        f"Got {len(retracted_iids)} retractions from ESGF.\n"
+        f"{len(df_retracted)} of our stores are affected.\n"
+        f"{len(to_retract)} stores are be newly marked as retracted.\n"
+        f"{len(iid_entries_to_retract)} will be retracted in BigQuery.\n"
+        f"See http://storage.googleapis.com/{report_path} for details\n"
+    )
 
     # set values to retract in batches
     batchsize = (
