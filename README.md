@@ -42,7 +42,7 @@ col = intake.open_esm_datastore(url)
 ```
 
 > [!WARNING]  
-> **Expect changes** We are thankful to you for testing the beta version of this catalog but please keep in mind that things can change rapidly (e.g. stores can be moved from one catalog to another) and prepare accordingly.Please check for progress towards the final release [here](https://github.com/leap-stc/cmip6-leap-feedstock/issues/82) .
+> **Expect changes** We are thankful to you for testing the beta version of this catalog but please keep in mind that things can change rapidly (e.g. stores can be moved from one catalog to another) and prepare accordingly. Please check for progress towards the final release [here](https://github.com/leap-stc/cmip6-leap-feedstock/issues/82) .
 
 You can then perform the same operations as with the legacy catalog (please check out the [official docs](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) for more info). 
 
