@@ -33,17 +33,19 @@
     # - 'CMIP6.*.*.*.ssp126.*.SImon.siitdthick.*.*'
     # - 'CMIP6.*.*.*.ssp245.*.SImon.siitdthick.*.*'
     - 'CMIP6.*.*.*.ssp585.*.SImon.siitdthick.*.*'
-    # # for CMIP6 pco2 testbed
-    # - "CMIP6.*.*.*.historical.*.Omon.spco2.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.tos.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.sos.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.chl.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.mlotst.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.spco2.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.tos.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*"
+    # for CMIP6 pco2 testbed
+    - "CMIP6.*.*.*.historical.*.Omon.dpco2.*.*"
+    - "CMIP6.*.*.*.historical.*.Omon.spco2.*.*"
+    - "CMIP6.*.*.*.historical.*.Omon.tos.*.*"
+    - "CMIP6.*.*.*.historical.*.Omon.sos.*.*"
+    - "CMIP6.*.*.*.historical.*.Omon.chl.*.*"
+    - "CMIP6.*.*.*.historical.*.Omon.mlotst.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.dpco2.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.spco2.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.tos.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*"
     # # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/72
     # - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.so.gn.v20200514"
     # - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.thetao.gn.v20200514"
