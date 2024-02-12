@@ -7,7 +7,7 @@
         "use_public_ips": true,
         "service_account_email": "public-cmip-google-cloud@leap-pangeo.iam.gserviceaccount.com",
         "project_id": "leap-pangeo",
-        "temp_gcs_location": "gs://leap-scratch/data-library/temp",
+        "temp_gcs_location": "gs://leap-scratch/data-library/cmip6-pgf-ingestion/temp",
         "use_dataflow_prime": true,
         "max_num_workers": 10
     },
