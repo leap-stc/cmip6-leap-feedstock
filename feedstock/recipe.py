@@ -200,7 +200,7 @@ print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list
 if prune_iids:
     iids_filtered = iids_filtered[0:200]
 
-print(f"Running a total of {len(iids_filtered)} iids")
+print(f"🚀 Requesting a total of {len(iids_filtered)} iids")
 
 # Get the urls from ESGF at Runtime (only for the pruned list to save time)
 url_dict = asyncio.run(
@@ -214,6 +214,8 @@ url_dict = asyncio.run(
 
 if prune_submission:
     url_dict = {iid: url_dict[iid] for iid in list(url_dict.keys())[0:10]}
+
+print(f"🚀 Submitting a total of {len(url_dict)} iids")
 
 # Print the actual urls
 print(f"{url_dict = }")
