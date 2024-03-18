@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Authenticate to Google Cloud
         id: "auth"
-        uses: google-github-actions/auth@v1
+        uses: google-github-actions/auth@v2
         with:
           credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
       - name: Set up Cloud SDK and upload csv files
