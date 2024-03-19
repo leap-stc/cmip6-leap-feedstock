@@ -11,7 +11,7 @@ from leap_data_management_utils.cmip_testing import test_all
 from pangeo_forge_esgf.parsing import parse_instance_ids
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
-    OpenURLWithFSSpec, OpenWithXarray, StoreToZarr, Indexed, T
+    OpenURLWithFSSpec, OpenWithXarray, StoreToZarr, Indexed, T, ConsolidateMetadata, ConsolidateDimensionCoordinates
 )
 import asyncio
 import os
@@ -290,6 +290,8 @@ for iid, urls in url_dict.items():
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
             )
+        | ConsolidateDimensionCoordinates()
+        | ConsolidateMetadata()
         | Copy(target_prefix=copy_target_bucket)
         | "Logging to bigquery (non-QC)" >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=False)
         | TestDataset(iid=iid)
