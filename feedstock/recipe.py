@@ -109,7 +109,7 @@ print(f"{is_test =}")
 
 if is_test:
     setup_logging('DEBUG')
-    copy_target_bucket = "gs://leap-scratch/data-library/cmip6-pr-copied/
+    copy_target_bucket = "gs://leap-scratch/data-library/cmip6-pr-copied/"
     iid_file = "feedstock/iids_pr.yaml"
     prune_iids = True
     prune_submission = True # if set, only submits a subset of the iids in the final step
