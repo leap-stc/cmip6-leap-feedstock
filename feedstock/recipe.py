@@ -109,8 +109,7 @@ print(f"{is_test =}")
 
 if is_test:
     setup_logging('DEBUG')
-    # copy_target_bucket = "gs://leap-scratch/data-library/cmip6-pr-copied/
-    copy_target_bucket ="gs://cmip6/cmip6-pgf-ingestion-test/zarr_stores_pr/" #TODO: Change this back once we are ready to release this.
+    copy_target_bucket = "gs://leap-scratch/data-library/cmip6-pr-copied/
     iid_file = "feedstock/iids_pr.yaml"
     prune_iids = True
     prune_submission = True # if set, only submits a subset of the iids in the final step
@@ -275,8 +274,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
 recipes = {}
 
 for iid, urls in url_dict.items():
-    target_prefix = f'{copy_target_bucket}' 
-    print(f"{target_prefix = }")
+    print(f"{copy_target_bucket = }")
     pattern = pattern_from_file_sequence(
         urls,
         concat_dim='time'
