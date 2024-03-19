@@ -19,7 +19,7 @@ jobs:
           credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
       - name: Set up Cloud SDK and upload csv files
         uses: google-github-actions/setup-gcloud@v2
-      - name: Kill all active jobs older than 24 hours
+      - name: Kill all active jobs older than 6 hours
         shell: python -u {0}
         run: |
           import subprocess
@@ -27,7 +27,7 @@ jobs:
 
           jobs = json.loads(subprocess.check_output([
             "gcloud", "dataflow", "jobs", "list",
-            "--created-before=-p24h", "--status=active",
+            "--created-before=-p6h", "--status=active",
             "--filter=name:a618127503*", "--format=json",
             "--region=us-central1"
           ]))
