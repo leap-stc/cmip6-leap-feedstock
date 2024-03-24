@@ -97,4 +97,4 @@
     # - "CMIP6.CMIP.AS-RCEC.TaiESM1.historical.r1i1p1f1.6hrLev.ta.gn.v20201112"
     # - "CMIP6.CMIP.AS-RCEC.TaiESM1.historical.r1i1p1f1.6hrLev.hus.gn.v202011"
     # # For testing to improve chunking
-    - "CMIP6.*.*.GISS-E2-1-G.historical.*.Omon.tos.gn.*"
+    - "CMIP6.*.*.GISS-E2-1-G.historical.r202i1p1f6.Omon.tos.gn.*"
