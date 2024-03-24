@@ -267,7 +267,8 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
             raise e
     except Exception as e:
         raise e
-    
+
+    print(f"Dynamic Chunking determined {target_chunks =}")
     return target_chunks 
 
 ## Create the recipes
