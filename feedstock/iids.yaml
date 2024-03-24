@@ -24,28 +24,28 @@
     # - 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.vo.gn.v20200212'
     # - 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911'
     # - 'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710'
-    # # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/41
-    # - 'CMIP6.*.*.*.historical.*.SImon.sifb.*.*'
-    # - 'CMIP6.*.*.*.ssp126.*.SImon.sifb.*.*'
-    # - 'CMIP6.*.*.*.ssp245.*.SImon.sifb.*.*'
-    # - 'CMIP6.*.*.*.ssp585.*.SImon.sifb.*.*'
-    # - 'CMIP6.*.*.*.historical.*.SImon.siitdthick.*.*'
-    # - 'CMIP6.*.*.*.ssp126.*.SImon.siitdthick.*.*'
-    # - 'CMIP6.*.*.*.ssp245.*.SImon.siitdthick.*.*'
-    # - 'CMIP6.*.*.*.ssp585.*.SImon.siitdthick.*.*'
-    # # for CMIP6 pco2 testbed
-    # - "CMIP6.*.*.*.historical.*.Omon.dpco2.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.spco2.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.tos.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.sos.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.chl.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.mlotst.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.dpco2.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.spco2.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.tos.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*"
+    # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/41
+    - 'CMIP6.*.*.*.historical.*.SImon.sifb.*.*'
+    - 'CMIP6.*.*.*.ssp126.*.SImon.sifb.*.*'
+    - 'CMIP6.*.*.*.ssp245.*.SImon.sifb.*.*'
+    - 'CMIP6.*.*.*.ssp585.*.SImon.sifb.*.*'
+    - 'CMIP6.*.*.*.historical.*.SImon.siitdthick.*.*'
+    - 'CMIP6.*.*.*.ssp126.*.SImon.siitdthick.*.*'
+    - 'CMIP6.*.*.*.ssp245.*.SImon.siitdthick.*.*'
+    - 'CMIP6.*.*.*.ssp585.*.SImon.siitdthick.*.*'
+    # for CMIP6 pco2 testbed
+    - "CMIP6.*.*.*.historical.*.Omon.dpco2.*.*"
+    - "CMIP6.*.*.*.historical.*.Omon.spco2.*.*"
+    - "CMIP6.*.*.*.historical.*.Omon.tos.*.*"
+    - "CMIP6.*.*.*.historical.*.Omon.sos.*.*"
+    - "CMIP6.*.*.*.historical.*.Omon.chl.*.*"
+    - "CMIP6.*.*.*.historical.*.Omon.mlotst.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.dpco2.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.spco2.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.tos.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*"
+    - "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*"
     # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/72
     # - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.so.gn.v20200514"
     # - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.thetao.gn.v20200514"
@@ -96,5 +96,3 @@
     # - "CMIP6.CMIP.AS-RCEC.TaiESM1.historical.r1i1p1f1.3hr.pr.gn.v20201013"
     # - "CMIP6.CMIP.AS-RCEC.TaiESM1.historical.r1i1p1f1.6hrLev.ta.gn.v20201112"
     # - "CMIP6.CMIP.AS-RCEC.TaiESM1.historical.r1i1p1f1.6hrLev.hus.gn.v202011"
-    # # For testing to improve chunking
-    - "CMIP6.*.*.GISS-E2-1-G.historical.r202i1p1f6.Omon.tos.gn.*"
