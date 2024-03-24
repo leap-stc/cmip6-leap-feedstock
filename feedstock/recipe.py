@@ -14,12 +14,14 @@ from pangeo_forge_recipes.transforms import (
     OpenURLWithFSSpec, OpenWithXarray, StoreToZarr, Indexed, T, ConsolidateMetadata, ConsolidateDimensionCoordinates
 )
 import asyncio
+import logging
 import os
 import xarray as xr
 import yaml
 import zarr
 
-    
+logger = logging.getLogger(__name__)
+
 # Custom Beam Transforms
 
 @dataclass
@@ -224,7 +226,8 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
     import warnings
     # trying to import inside the function
     from dynamic_chunks.algorithms import even_divisor_algo, iterative_ratio_increase_algo, NoMatchingChunks
-    
+    logger.info(f"Input Dataset for dynamic chunking {ds =}")
+
     target_chunk_size='150MB'
     target_chunks_aspect_ratio = {
         'time':10,
@@ -267,8 +270,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
             raise e
     except Exception as e:
         raise e
-
-    print(f"Dynamic Chunking determined {target_chunks =}")
+    logger.info(f"Dynamic Chunking determined {target_chunks =}")
     return target_chunks 
 
 ## Create the recipes
