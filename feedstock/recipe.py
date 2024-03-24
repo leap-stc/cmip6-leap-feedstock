@@ -5,6 +5,7 @@ import apache_beam as beam
 from apache_beam.io.gcp import gcsio
 from dataclasses import dataclass
 from typing import List, Dict
+from dask.utils import parse_bytes
 from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
 from leap_data_management_utils import IIDEntry, CMIPBQInterface, LogCMIPToBigQuery
 from leap_data_management_utils.cmip_testing import test_all
@@ -236,42 +237,47 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
     }
     size_tolerance=0.5
 
-    try:
-        target_chunks = even_divisor_algo(
-            ds,
-            target_chunk_size,
-            target_chunks_aspect_ratio,
-            size_tolerance,
-            allow_extra_dims=True,
-        )
+    # Some datasets are smaller than the target chunk size and should not be chunked at all
+    if ds.nbytes < parse_bytes (target_chunk_size):
+        target_chunks = dict(ds.dims)
 
-    except NoMatchingChunks:
-        warnings.warn(
-            "Primary algorithm using even divisors along each dimension failed "
-            "with. Trying secondary algorithm."
-            f"Input {ds=}"
-        )
+    else:
         try:
-            target_chunks = iterative_ratio_increase_algo(
+            target_chunks = even_divisor_algo(
                 ds,
                 target_chunk_size,
                 target_chunks_aspect_ratio,
                 size_tolerance,
                 allow_extra_dims=True,
             )
+    
         except NoMatchingChunks:
-            raise ValueError(
-                (
-                    "Could not find any chunk combinations satisfying "
-                    "the size constraint with either algorithm."
-                    f"Input {ds=}"
-                )
+            warnings.warn(
+                "Primary algorithm using even divisors along each dimension failed "
+                "with. Trying secondary algorithm."
+                f"Input {ds=}"
             )
-        # If something fails 
+            try:
+                target_chunks = iterative_ratio_increase_algo(
+                    ds,
+                    target_chunk_size,
+                    target_chunks_aspect_ratio,
+                    size_tolerance,
+                    allow_extra_dims=True,
+                )
+            except NoMatchingChunks:
+                raise ValueError(
+                    (
+                        "Could not find any chunk combinations satisfying "
+                        "the size constraint with either algorithm."
+                        f"Input {ds=}"
+                    )
+                )
+            # If something fails 
+            except Exception as e:
+                raise e
         except Exception as e:
             raise e
-    except Exception as e:
-        raise e
     logger.info(f"Dynamic Chunking determined {target_chunks =}")
     return target_chunks 
 
