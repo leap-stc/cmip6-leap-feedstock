@@ -249,6 +249,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
         warnings.warn(
             "Primary algorithm using even divisors along each dimension failed "
             "with. Trying secondary algorithm."
+            f"Input {ds=}"
         )
         try:
             target_chunks = iterative_ratio_increase_algo(
@@ -263,6 +264,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
                 (
                     "Could not find any chunk combinations satisfying "
                     "the size constraint with either algorithm."
+                    f"Input {ds=}"
                 )
             )
         # If something fails 
