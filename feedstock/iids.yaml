@@ -25,35 +25,35 @@
     # - 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911'
     # - 'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710'
     # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/41
-    - 'CMIP6.*.*.*.historical.*.SImon.sifb.*.*'
-    - 'CMIP6.*.*.*.ssp126.*.SImon.sifb.*.*'
-    - 'CMIP6.*.*.*.ssp245.*.SImon.sifb.*.*'
-    - 'CMIP6.*.*.*.ssp585.*.SImon.sifb.*.*'
-    - 'CMIP6.*.*.*.historical.*.SImon.siitdthick.*.*'
-    - 'CMIP6.*.*.*.ssp126.*.SImon.siitdthick.*.*'
-    - 'CMIP6.*.*.*.ssp245.*.SImon.siitdthick.*.*'
-    - 'CMIP6.*.*.*.ssp585.*.SImon.siitdthick.*.*'
+    # - 'CMIP6.*.*.*.historical.*.SImon.sifb.*.*'
+    # - 'CMIP6.*.*.*.ssp126.*.SImon.sifb.*.*'
+    # - 'CMIP6.*.*.*.ssp245.*.SImon.sifb.*.*'
+    # - 'CMIP6.*.*.*.ssp585.*.SImon.sifb.*.*'
+    # - 'CMIP6.*.*.*.historical.*.SImon.siitdthick.*.*'
+    # - 'CMIP6.*.*.*.ssp126.*.SImon.siitdthick.*.*'
+    # - 'CMIP6.*.*.*.ssp245.*.SImon.siitdthick.*.*'
+    # - 'CMIP6.*.*.*.ssp585.*.SImon.siitdthick.*.*'
     # for CMIP6 pco2 testbed
-    - "CMIP6.*.*.*.historical.*.Omon.dpco2.*.*"
-    - "CMIP6.*.*.*.historical.*.Omon.spco2.*.*"
-    - "CMIP6.*.*.*.historical.*.Omon.tos.*.*"
-    - "CMIP6.*.*.*.historical.*.Omon.sos.*.*"
-    - "CMIP6.*.*.*.historical.*.Omon.chl.*.*"
-    - "CMIP6.*.*.*.historical.*.Omon.mlotst.*.*"
-    - "CMIP6.*.*.*.ssp245.*.Omon.dpco2.*.*"
-    - "CMIP6.*.*.*.ssp245.*.Omon.spco2.*.*"
-    - "CMIP6.*.*.*.ssp245.*.Omon.tos.*.*"
-    - "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*"
-    - "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*"
-    - "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*"
+    # - "CMIP6.*.*.*.historical.*.Omon.dpco2.*.*"
+    # - "CMIP6.*.*.*.historical.*.Omon.spco2.*.*"
+    # - "CMIP6.*.*.*.historical.*.Omon.tos.*.*"
+    # - "CMIP6.*.*.*.historical.*.Omon.sos.*.*"
+    # - "CMIP6.*.*.*.historical.*.Omon.chl.*.*"
+    # - "CMIP6.*.*.*.historical.*.Omon.mlotst.*.*"
+    # - "CMIP6.*.*.*.ssp245.*.Omon.dpco2.*.*"
+    # - "CMIP6.*.*.*.ssp245.*.Omon.spco2.*.*"
+    # - "CMIP6.*.*.*.ssp245.*.Omon.tos.*.*"
+    # - "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*"
+    # - "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*"
+    # - "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*"
     # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/72
-    # - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.so.gn.v20200514"
+    - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.so.gn.v20200514"
     # - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.thetao.gn.v20200514"
     # - "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.so.gn.v20200514"
     # - "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.thetao.gn.v20200514"
     # From https://github.com/leap-stc/cmip6-leap-feedstock/issues/101
     # - "CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r4i1p1f1.3hr.pr.gn.v20210607"
-    # - "CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r4i1p1f1.6hrLev.hus.gn.v20210921"
+    - "CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r4i1p1f1.6hrLev.hus.gn.v20210921"
     # - "CMIP6.CMIP.CSIRO.ACCESS-ESM1-5.historical.r1i1p1f1.3hr.pr.gn.v20191115"
     # - "CMIP6.CMIP.CSIRO.ACCESS-ESM1-5.historical.r1i1p1f1.6hrLev.ta.gn.v20191115"
     # - "CMIP6.CMIP.CSIRO.ACCESS-ESM1-5.historical.r1i1p1f1.6hrLev.hus.gn.v20191115"
@@ -65,7 +65,7 @@
     # - "CMIP6.CMIP.CMCC.CMCC-CM2-SR5.historical.r1i1p1f1.3hr.pr.gn.v20200616"
     # - "CMIP6.CMIP.CMCC.CMCC-CM2-SR5.historical.r1i1p1f1.6hrLev.ta.gn.v20200616"
     # - "CMIP6.CMIP.CMCC.CMCC-CM2-SR5.historical.r1i1p1f1.6hrLev.hus.gn.v20200616"
-    # - "CMIP6.CMIP.CMCC.CMCC-ESM2.historical.r1i1p1f1.3hr.pr.gn.v20210114"
+    - "CMIP6.CMIP.CMCC.CMCC-ESM2.historical.r1i1p1f1.3hr.pr.gn.v20210114"
     # - "CMIP6.CMIP.CMCC.CMCC-ESM2.historical.r1i1p1f1.6hrLev.ta.gn.v20210114"
     # - "CMIP6.CMIP.CMCC.CMCC-ESM2.historical.r1i1p1f1.6hrLev.hus.gn.v20210114"
     # - "CMIP6.CMIP.CCCma.CanESM5.historical.r1i1p2f1.3hr.pr.gn.v20190429"
@@ -81,7 +81,7 @@
     # - "CMIP6.CMIP.CCCR-IITM.IITM-ESM.historical.r1i1p1f1.6hrLev.hus.gn.v20191226"
     # - "CMIP6.CMIP.MIROC.MIROC-ES2L.historical.r1i1p1f2.3hr.pr.gn.v20191129"
     # - "CMIP6.CMIP.MIROC.MIROC-ES2L.historical.r1i1p1f2.6hrLev.ta.gn.v20191129"
-    # - "CMIP6.CMIP.MIROC.MIROC-ES2L.historical.r1i1p1f2.6hrLev.hus.gn.v20191129"
+    - "CMIP6.CMIP.MIROC.MIROC-ES2L.historical.r1i1p1f2.6hrLev.hus.gn.v20191129"
     # - "CMIP6.CMIP.MIROC.MIROC6.historical.r1i1p1f1.3hr.pr.gn.v20190912"
     # - "CMIP6.CMIP.HAMMOZ-Consortium.MPI-ESM-1-2-HAM.historical.r1i1p1f1.3hr.pr.gn.v20190627"
     # - "CMIP6.CMIP.HAMMOZ-Consortium.MPI-ESM-1-2-HAM.historical.r1i1p1f1.6hrLev.ta.gn.v20190627"
