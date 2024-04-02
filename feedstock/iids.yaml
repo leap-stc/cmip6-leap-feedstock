@@ -1,56 +1,24 @@
     # from https://github.com/Timh37/CMIP6cex/issues/2
-    # - 'CMIP6.*.*.*.historical.*.day.psl.*.*' #inline comment
-    # - 'CMIP6.*.*.*.historical.*.day.sfcWind.*.*'
-    # - 'CMIP6.*.*.*.historical.*.day.pr.*.*'
-    # - 'CMIP6.*.*.*.ssp245.*.day.psl.*.*'
-    # - 'CMIP6.*.*.*.ssp245.*.day.sfcWind.*.*'
-    # - 'CMIP6.*.*.*.ssp245.*.day.pr.*.*'
-    # - 'CMIP6.*.*.*.ssp585.*.day.psl.*.*'
-    # - 'CMIP6.*.*.*.ssp585.*.day.sfcWind.*.*'
-    # - 'CMIP6.*.*.*.ssp585.*.day.pr.*.*'
-    # # from https://github.com/pangeo-forge/cmip6-feedstock/issues/22
-    # - 'CMIP6.*.*.*.historical.*.Omon.zmeso.*.*'
-    # - 'CMIP6.*.*.*.ssp126.*.Omon.zmeso.*.*'
-    # - 'CMIP6.*.*.*.ssp245.*.Omon.zmeso.*.*'
-    # - 'CMIP6.*.*.*.ssp585.*.Omon.zmeso.*.*'
-    # # PMIP velocities
-    # - 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gn.v20191002'
-    # - 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.uo.gn.v20200212'
-    # - 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200212'
-    # - 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gr1.v20200911'
-    # - 'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200909'
-    # - 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.vo.gn.v20200212'
-    # - 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gn.v20191002'
-    # - 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.vo.gn.v20200212'
-    # - 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911'
-    # - 'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710'
+    - "CMIP6.*.*.*.[historical, ssp245, ssp585].*.day.[psl, pr, sfcWind].*.*"
+    # from https://github.com/pangeo-forge/cmip6-feedstock/issues/22
+    - "CMIP6.*.*.*.[historical, ssp126, ssp245, ssp585].*.Omon.zmeso.*.*"
+    # PMIP velocities
+    - 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gn.v20191002'
+    - 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.uo.gn.v20200212'
+    - 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200212'
+    - 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gr1.v20200911'
+    - 'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.uo.gn.v20200909'
+    - 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Omon.vo.gn.v20200212'
+    - 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gn.v20191002'
+    - 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.vo.gn.v20200212'
+    - 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.vo.gr1.v20200911'
+    - 'CMIP6.PMIP.MPI-M.MPI-ESM1-2-LR.lgm.r1i1p1f1.Omon.vo.gn.v20190710'
     # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/41
-    # - 'CMIP6.*.*.*.historical.*.SImon.sifb.*.*'
-    # - 'CMIP6.*.*.*.ssp126.*.SImon.sifb.*.*'
-    # - 'CMIP6.*.*.*.ssp245.*.SImon.sifb.*.*'
-    # - 'CMIP6.*.*.*.ssp585.*.SImon.sifb.*.*'
-    # - 'CMIP6.*.*.*.historical.*.SImon.siitdthick.*.*'
-    # - 'CMIP6.*.*.*.ssp126.*.SImon.siitdthick.*.*'
-    # - 'CMIP6.*.*.*.ssp245.*.SImon.siitdthick.*.*'
-    # - 'CMIP6.*.*.*.ssp585.*.SImon.siitdthick.*.*'
+    - "CMIP6.*.*.*.[historical, ssp126, ssp245, ssp585].*.SImon.[sifb,siitdthick].*.*"
     # for CMIP6 pco2 testbed
-    # - "CMIP6.*.*.*.historical.*.Omon.dpco2.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.spco2.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.tos.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.sos.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.chl.*.*"
-    # - "CMIP6.*.*.*.historical.*.Omon.mlotst.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.dpco2.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.spco2.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.tos.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.sos.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*"
-    # - "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*"
+    - "CMIP6.*.*.*.[historical, ssp245].*.Omon.[dpco2, tos, sos, chl, mlotst].*.*"
     # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/72
-    - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.so.gn.v20200514"
-    - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.thetao.gn.v20200514"
-    - "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.so.gn.v20200514"
-    - "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.thetao.gn.v20200514"
+    - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.[highres-future,hist-1950].r1i1p1f1.Omon.[thetao,so].gn.*"
     # From https://github.com/leap-stc/cmip6-leap-feedstock/issues/101
     - "CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r4i1p1f1.3hr.pr.gn.v20210607"
     - "CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r4i1p1f1.6hrLev.hus.gn.v20210921"
