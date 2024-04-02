@@ -47,10 +47,7 @@
     # - "CMIP6.*.*.*.ssp245.*.Omon.chl.*.*"
     # - "CMIP6.*.*.*.ssp245.*.Omon.mlotst.*.*"
     # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/72
-    # - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.so.gn.v20200514"
-    # - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.thetao.gn.v20200514"
-    # - "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.so.gn.v20200514"
-    # - "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.thetao.gn.v20200514"
+    - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.[highres-future,hist-1950].r1i1p1f1.Omon.[thetao,so].gn.*"
     # From https://github.com/leap-stc/cmip6-leap-feedstock/issues/101
     - "CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r4i1p1f1.3hr.pr.gn.v20210607"
     - "CMIP6.CMIP.CSIRO-ARCCSS.ACCESS-CM2.historical.r4i1p1f1.6hrLev.hus.gn.v20210921"
