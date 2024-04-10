@@ -43,8 +43,8 @@ async def fetch_instance_ids(url, params):
         retracted = await tqdm.gather(*tasks)
 
         retracted_flat = []
-        for l in retracted:
-            retracted_flat.extend(l)
+        for lst in retracted:
+            retracted_flat.extend(lst)
         return retracted_flat
 
 
