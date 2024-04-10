@@ -1,12 +1,12 @@
 name: Report an issue with a zarr store
-description: Report an issue with one of the ingested datasets 
+description: Report an issue with one of the ingested datasets
 title: "[BUG]: "
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        > [!WARNING]  
+        > [!WARNING]
         > Before you raise an issue here, please follow [the troubleshooting steps](https://github.com/leap-stc/cmip6-leap-feedstock#troubleshooting) to identify where in the stack the likely cause is.
   - type: textarea
     id: comments

@@ -1,3 +1,4 @@
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/leap-stc/cmip6-leap-feedstock/main.svg)](https://results.pre-commit.ci/latest/github/leap-stc/cmip6-leap-feedstock/main)
 [![DOI](https://zenodo.org/badge/618127503.svg)](https://zenodo.org/badge/latestdoi/618127503)
 
 # CMIP6-LEAP-feedstock
@@ -41,10 +42,10 @@ url = "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/cat
 col = intake.open_esm_datastore(url)
 ```
 
-> [!WARNING]  
+> [!WARNING]
 > **Expect changes** We are thankful to you for testing the beta version of this catalog but please keep in mind that things can change rapidly (e.g. stores can be moved from one catalog to another) and prepare accordingly. Please check for progress towards the final release [here](https://github.com/leap-stc/cmip6-leap-feedstock/issues/82) .
 
-You can then perform the same operations as with the legacy catalog (please check out the [official docs](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) for more info). 
+You can then perform the same operations as with the legacy catalog (please check out the [official docs](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) for more info).
 
 > [!NOTE]
 > Some facet values were renamed to follow the ESGF convention. `'member_id'` is now `'variant_label'` and `'dcpp_init_year'` is now `'sub_experiment_id'`. As described in the [CMIP6 global attributes and filenames controlled vocabulary](https://docs.google.com/document/d/1h0r8RZr_f3-8egBMMh7aqLwy3snpD6_MrDz1q8n5XUk/edit) the faced `'member_id'` is now "a compound construction from sub_experiment_id and variant_label". In most cases `variant_label = member_id`, but if `"sub_experiment_id"` is not none, `member_id = <sub_experiment_id>-<variant_label>`.
@@ -74,7 +75,7 @@ def search_iids(col_url:str):
     col = intake.open_esm_datastore(col_url)
     iids_all= [zstore_to_iid(z) for z in col.df['zstore'].tolist()]
     return [iid for iid in iids_all if iid in iids_requested]
-    
+
 
 iids_requested = [
 'your_fav_iid',
@@ -103,8 +104,8 @@ print(f"\n\nStill missing {len(missing_iids)} of {len(iids_requested)}: \n{missi
 ### I have found an issue with one of the cloud zarr stores. Where can I report this?
 Reporting issues is a vital part of this community work, and if you are reading this, I want to thank you for taking the time to do so!
 
-The first step is identifying the type of error, which will determine where to report the error properly. 
-Here are a few steps to triage the error. 
+The first step is identifying the type of error, which will determine where to report the error properly.
+Here are a few steps to triage the error.
 
 Assuming you are loading the data as instructed above using [intake-esm](https://github.com/intake/intake-esm) and you encounter an issue with the data:
 1. Check if the Problem dissapears when you do not use xmip (omit `preprocess=combined_preprocessing` above). If that fixes the problem, raise an [issue in the xMIP repo](https://github.com/jbusecke/xMIP/issues/new)
@@ -119,7 +120,7 @@ Assuming you are loading the data as instructed above using [intake-esm](https:/
     If this solves your problem, you should head over to intake-esm and check the [discussion topics](https://github.com/intake/intake-esm/discussions) and [issues](https://github.com/intake/intake-esm/issues) and raise either one if appropriate.
 3. If your error persists, this is either related to the ingestion here or is an error in the original ESGF data. Please raise an issue [right here](https://github.com/leap-stc/cmip6-leap-feedstock/issues/new?assignees=&labels=bug&projects=&template=problem.yaml&title=%5BBUG%5D%3A+) and we will get to the bottom of it.
 
-Thanks for helping to improve everyones experience with CMIP6 data! 
+Thanks for helping to improve everyones experience with CMIP6 data!
 
 ![](https://media.giphy.com/media/p0xvfeVhS7tlhGzIoh/giphy-downsized-large.gif)
 

@@ -1,6 +1,5 @@
 from leap_data_management_utils import CMIPBQInterface
 from leap_data_management_utils.cmip_catalog import bq_df_to_intake_esm
-import pandas as pd
 import os
 import gcsfs
 from datetime import date

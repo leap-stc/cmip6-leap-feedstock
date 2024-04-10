@@ -4,7 +4,7 @@ dynamic-chunks==0.0.2
 git+https://github.com/ranchodeluxe/xarray@ranchodeluxe-patch-1#egg=xarray
 git+https://github.com/ranchodeluxe/rioxarray
 git+https://github.com/ranchodeluxe/datatree@main#egg=xarray-datatree
-git+https://github.com/pangeo-forge/pangeo-forge-recipes@jb/xarray-hack #see @gc/cached_disabled but with cache 
+git+https://github.com/pangeo-forge/pangeo-forge-recipes@jb/xarray-hack #see @gc/cached_disabled but with cache
 zarr==2.16.1
 gcsfs
 apache-beam[gcp]

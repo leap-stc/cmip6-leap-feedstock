@@ -16,7 +16,7 @@ on:
       - 'configs/**'
       - '.github/workflows/deploy.yaml'
 
-    
+
   # schedule:
   #   - cron: "0 * * * SUN" # run every sunday
 

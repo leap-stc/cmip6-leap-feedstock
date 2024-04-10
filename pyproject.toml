@@ -1,0 +1,2 @@
+[tool.ruff.lint]
+ignore = ["E712"] #ignore those shitty pandas lines in scripts/dump_bigquery_to_csv.py
