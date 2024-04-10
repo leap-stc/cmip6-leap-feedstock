@@ -6,14 +6,13 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
+      - id: check-added-large-files
+      - id: check-toml
       - id: trailing-whitespace
       - id: end-of-file-fixer
-      - id: check-docstring-first
       - id: check-json
       - id: check-yaml
-      - id: double-quote-string-fixer
       - id: debug-statements
-      - id: mixed-line-ending
   - repo: https://github.com/astral-sh/ruff-pre-commit
       # Ruff version.
       rev: v0.3.5
