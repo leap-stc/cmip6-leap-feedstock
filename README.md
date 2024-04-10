@@ -62,6 +62,7 @@ ddict = cat.to_dataset_dict(preprocess=combined_preprocessing)
 You can check if some of your iids are already ingested with this code snippet:
 ```python
 import intake
+
 def zstore_to_iid(zstore: str):
     # this is a bit whacky to account for the different way of storing old/new stores
     iid =  '.'.join(zstore.replace('gs://','').replace('.zarr','').replace('.','/').split('/')[-11:-1])
