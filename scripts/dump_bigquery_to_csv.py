@@ -5,31 +5,31 @@ import os
 import gcsfs
 from datetime import date
 
-table_id = "leap-pangeo.testcmip6.cmip6_consolidated_manual_testing"
-target_prefix = "gs://cmip6/cmip6-pgf-ingestion-test/catalog/"
+table_id = 'leap-pangeo.testcmip6.cmip6_consolidated_manual_testing'
+target_prefix = 'gs://cmip6/cmip6-pgf-ingestion-test/catalog/'
 
 bq = CMIPBQInterface(table_id=table_id)
 
 df_all = bq.get_latest()
 
-df_retracted = df_all[df_all["retracted"] == True]
-df_all_wo_retracted = df_all[df_all["retracted"] == False]
+df_retracted = df_all[df_all['retracted'] == True]
+df_all_wo_retracted = df_all[df_all['retracted'] == False]
 
-df_qc_failed = df_all_wo_retracted[df_all_wo_retracted["tests_passed"] == False]
-df_qc = df_all_wo_retracted[df_all_wo_retracted["tests_passed"] == True]
+df_qc_failed = df_all_wo_retracted[df_all_wo_retracted['tests_passed'] == False]
+df_qc = df_all_wo_retracted[df_all_wo_retracted['tests_passed'] == True]
 
 fs = gcsfs.GCSFileSystem()
 
 for filename, bq_df in [
-    ("qc", df_qc),
-    ("noqc", df_qc_failed),
-    ("retracted", df_retracted),
+    ('qc', df_qc),
+    ('noqc', df_qc_failed),
+    ('retracted', df_retracted),
 ]:
-    path = os.path.join(target_prefix, f"pangeo_esgf_zarr_{filename}.csv")
+    path = os.path.join(target_prefix, f'pangeo_esgf_zarr_{filename}.csv')
     path_backup = os.path.join(
         target_prefix,
-        "backups",
-        f"pangeo_esgf_zarr_{filename}_backup_{date.today()}.csv",
+        'backups',
+        f'pangeo_esgf_zarr_{filename}_backup_{date.today()}.csv',
     )
 
     if len(bq_df) > 0:
