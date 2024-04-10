@@ -1,3 +1,4 @@
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/leap-stc/cmip6-leap-feedstock/main.svg)](https://results.pre-commit.ci/latest/github/leap-stc/cmip6-leap-feedstock/main)
 [![DOI](https://zenodo.org/badge/618127503.svg)](https://zenodo.org/badge/latestdoi/618127503)
 
 # CMIP6-LEAP-feedstock
