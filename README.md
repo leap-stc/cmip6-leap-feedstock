@@ -62,9 +62,13 @@ ddict = cat.to_dataset_dict(preprocess=combined_preprocessing)
 You can check if some of your iids are already ingested with this code snippet:
 ```python
 import intake
+
 def zstore_to_iid(zstore: str):
     # this is a bit whacky to account for the different way of storing old/new stores
-    return '.'.join(zstore.replace('gs://','').replace('.zarr','').replace('.','/').split('/')[-11:-1])
+    iid =  '.'.join(zstore.replace('gs://','').replace('.zarr','').replace('.','/').split('/')[-11:-1])
+    if not iid.startswith('CMIP6'):
+        iid =  '.'.join(zstore.replace('gs://','').replace('.zarr','').replace('.','/').split('/')[-10:])
+    return iid
 
 def search_iids(col_url:str):
     col = intake.open_esm_datastore(col_url)
