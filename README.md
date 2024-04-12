@@ -100,7 +100,7 @@ print(f"\n\nStill missing {len(missing_iids)} of {len(iids_requested)}: \n{missi
 ```
 
 ## What do you actually do to the data?
-The goal of this feedstock is to make CMIP6 data analysis-ready, but not modify the source data in any way. 
+The goal of this feedstock is to make CMIP6 data analysis-ready, but not modify the source data in any way.
 
 The current workflow involves the following steps for every instance id:
 - Query the ESGF API using [pangeo-forge-esgf](https://github.com/jbusecke/pangeo-forge-esgf) to get a list of urls that represent all files for a single dataset
