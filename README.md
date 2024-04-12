@@ -99,6 +99,19 @@ missing_iids = list(set(iids_requested) - set(iids_found))
 print(f"\n\nStill missing {len(missing_iids)} of {len(iids_requested)}: \n{missing_iids=}")
 ```
 
+## What do you actually do to the data?
+The goal of this feedstock is to make CMIP6 data analysis-ready, but not modify the source data in any way.
+
+The current workflow involves the following steps for every instance id:
+- Query the ESGF API using [pangeo-forge-esgf](https://github.com/jbusecke/pangeo-forge-esgf) to get a list of urls that represent all files for a single dataset
+- [Preprocess](https://github.com/leap-stc/cmip6-leap-feedstock/blob/32041e50485448505182172faf854e607df0606d/feedstock/recipe.py#L35-L70) each dataset resulting from a file. This step sanitizes some attribute formatting and moves additional variables to the coordinates of the dataset. This does **not alter** the data or naming in any way.
+- Combine datasets along the time dimension.
+- [Dynamically rechunk](https://github.com/leap-stc/cmip6-leap-feedstock/blob/32041e50485448505182172faf854e607df0606d/feedstock/recipe.py#L245-L317) and store the data to zarr.
+- Consolidate the metadata and dimension coordinates of the zarr store.
+
+None of these steps attempt to correct any naming issues ([xMIP](https://github.com/jbusecke/xMIP) can do this after you load the data), or at any point modify the data itself! The xarray datasets you load from zarr should give you the same data you would get if you download the netcdf files and open them with xarray locally!
+
+
 ## Troubleshooting
 
 ### I have found an issue with one of the cloud zarr stores. Where can I report this?
