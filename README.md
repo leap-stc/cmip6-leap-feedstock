@@ -23,7 +23,7 @@ Equiped with that list, please open a [request issue](https://github.com/leap-st
 
 ## How to access the newly uploaded data?
 
-We are very excited to announce the new beta for the `Pangeo-ESGF CMIP6 Zarr 2.0` public data 🎉
+We are very excited to announce the new beta for the `Pangeo-ESGF CMIP6 Zarr Data 2.0` 🎉
 
 You can access the data in a similar way to the [legacy CMIP6 zarr catalog](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) by choosing between these three catalogs:
 - The `main` catalog `"catalog.json"` which contains datasets that pass our test and are not retracted.
