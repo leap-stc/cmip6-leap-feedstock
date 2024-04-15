@@ -138,6 +138,30 @@ Thanks for helping to improve everyones experience with CMIP6 data!
 ![](https://media.giphy.com/media/p0xvfeVhS7tlhGzIoh/giphy-downsized-large.gif)
 
 
+## How many datasets have been ingested by LEAP?
+This little snippet can be used to identify how many datasets have been ingested during the second phase (fully based on pangeo-forge): 
+```python
+import intake
+
+def count_new_iids(col_url:str):
+    col = intake.open_esm_datastore(col_url)
+    prefix = [p.replace('gs://cmip6/','').split('/')[0] for p in col.df['zstore'].tolist()]
+    new_iids = [p for p in prefix if p in ['CMIP6_LEAP_legacy','cmip6-pgf-ingestion-test']]
+    return len(new_iids)
+
+url_dict = {
+    'qc':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog.json",
+    'non-qc':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_noqc.json",
+    'retracted':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_retracted.json"
+}
+
+iids_found = []
+for catalog,url in url_dict.items():
+    
+    n_new_iids = count_new_iids(url)
+    print(f"{url_dict=} LEAP ingested datasets {n_new_iids}")
+```
+
 ## How to run recipes locally (with PGF runner)
 - Make sure to set up the environment (TODO: Add this as docs on pangeo-forge-runner)
 - Create a scratch dir (e.g. on the desktop it should not be within a repo)
