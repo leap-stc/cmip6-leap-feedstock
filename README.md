@@ -161,6 +161,7 @@ for catalog,url in url_dict.items():
     n_new_iids = count_new_iids(url)
     print(f"{url_dict=} LEAP ingested datasets {n_new_iids}")
 ```
+Last this was updated we ingested over 4000 datasets already!
 
 ## How to run recipes locally (with PGF runner)
 - Make sure to set up the environment (TODO: Add this as docs on pangeo-forge-runner)
