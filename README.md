@@ -139,7 +139,7 @@ Thanks for helping to improve everyones experience with CMIP6 data!
 
 
 ## How many datasets have been ingested by LEAP?
-This little snippet can be used to identify how many datasets have been ingested during the second phase (fully based on pangeo-forge): 
+This little snippet can be used to identify how many datasets have been ingested during the second phase (fully based on pangeo-forge):
 ```python
 import intake
 
@@ -157,7 +157,7 @@ url_dict = {
 
 iids_found = []
 for catalog,url in url_dict.items():
-    
+
     n_new_iids = count_new_iids(url)
     print(f"{url_dict=} LEAP ingested datasets {n_new_iids}")
 ```
