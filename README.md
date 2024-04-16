@@ -137,6 +137,17 @@ Thanks for helping to improve everyones experience with CMIP6 data!
 
 ![](https://media.giphy.com/media/p0xvfeVhS7tlhGzIoh/giphy-downsized-large.gif)
 
+### My iid does not get submitted. What is wrong?
+Could be a bunch of reasons, but lets go through some debugging together. Ok first lets check if you get any response for a given iid:
+```python
+from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
+setup_logging('DEBUG')
+iids = ['something.that.doesnt.ingest.well']
+url_dict = await get_urls_from_esgf(iids)
+```
+This might give you some useful error messages and will tell you if the issue is parsing urls from the ESGF API (if the url_dict is empty) or if the problems arise when the urls are passed to pangeo-forge-recipes. 
+
+If not we need to dig deeper... Coming soon.
 
 ## How many datasets have been ingested by LEAP?
 This little snippet can be used to identify how many datasets have been ingested during the second phase (fully based on pangeo-forge):
