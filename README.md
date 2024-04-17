@@ -145,7 +145,7 @@ setup_logging('DEBUG')
 iids = ['something.that.doesnt.ingest.well']
 url_dict = await get_urls_from_esgf(iids)
 ```
-This might give you some useful error messages and will tell you if the issue is parsing urls from the ESGF API (if the url_dict is empty) or if the problems arise when the urls are passed to pangeo-forge-recipes. 
+This might give you some useful error messages and will tell you if the issue is parsing urls from the ESGF API (if the url_dict is empty) or if the problems arise when the urls are passed to pangeo-forge-recipes.
 
 If not we need to dig deeper... Coming soon.
 
