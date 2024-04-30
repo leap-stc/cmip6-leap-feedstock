@@ -237,14 +237,14 @@ for iid, urls in url_dict.items():
         | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})
         | Preprocessor()
         | StoreToZarr(
-            store_name=f"{iid}.zarr",
+            store_name=,
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
         )
         | InjectAttrs()
         | ConsolidateDimensionCoordinates()
         | ConsolidateMetadata()
-        | Copy(target=copy_target_prefix)
+        | Copy(target=os.path.join(copy_target_prefix, f"{iid}.zarr"))
         | "Logging to bigquery (non-QC)"
         >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=False)
         | TestDataset(iid=iid)
