@@ -215,7 +215,7 @@ iids_to_skip = set(iids_in_table) - set(overwrite_iids)
 # print(f"{iids_to_skip =}")
 iids_filtered = list(set(iids) - iids_to_skip)
 print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list")
-print(f"iids_filtered")
+print("iids_filtered")
 
 if prune_iids:
     iids_filtered = iids_filtered[0:200]
