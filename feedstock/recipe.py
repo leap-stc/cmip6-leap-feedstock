@@ -7,6 +7,8 @@ from typing import List, Dict
 from dask.utils import parse_bytes
 from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
 from leap_data_management_utils import CMIPBQInterface, LogCMIPToBigQuery
+from leap_data_management_utils.data_management_transforms import Copy, InjectAttrs
+from leap_data_management_utils.cmip_transforms import Preprocessor, TestDataset
 from leap_data_management_utils.cmip_testing import test_all
 from pangeo_forge_esgf.parsing import parse_instance_ids
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
@@ -27,95 +29,6 @@ import yaml
 import zarr
 
 logger = logging.getLogger(__name__)
-
-# Custom Beam Transforms
-
-
-@dataclass
-class Preprocessor(beam.PTransform):
-    """
-    Preprocessor for xarray datasets.
-    Set all data_variables except for `variable_id` attrs to coord
-    Add additional information
-
-    """
-
-    @staticmethod
-    def _keep_only_variable_id(item: Indexed[T]) -> Indexed[T]:
-        """
-        Many netcdfs contain variables other than the one specified in the `variable_id` facet.
-        Set them all to coords
-        """
-        index, ds = item
-        print(f"Preprocessing before {ds =}")
-        new_coords_vars = [
-            var for var in ds.data_vars if var != ds.attrs["variable_id"]
-        ]
-        ds = ds.set_coords(new_coords_vars)
-        print(f"Preprocessing after {ds =}")
-        return index, ds
-
-    @staticmethod
-    def _sanitize_attrs(item: Indexed[T]) -> Indexed[T]:
-        """Removes non-ascii characters from attributes see https://github.com/pangeo-forge/pangeo-forge-recipes/issues/586"""
-        index, ds = item
-        for att, att_value in ds.attrs.items():
-            if isinstance(att_value, str):
-                new_value = att_value.encode("utf-8", "ignore").decode()
-                if new_value != att_value:
-                    print(
-                        f"Sanitized datasets attributes field {att}: \n {att_value} \n ----> \n {new_value}"
-                    )
-                    ds.attrs[att] = new_value
-        return index, ds
-
-    def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
-        return (
-            pcoll
-            | "Fix coordinates" >> beam.Map(self._keep_only_variable_id)
-            | "Sanitize Attrs" >> beam.Map(self._sanitize_attrs)
-        )
-
-
-@dataclass
-class TestDataset(beam.PTransform):
-    """
-    Test stage for data written to zarr store
-    """
-
-    iid: str
-
-    def _test(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
-        test_all(store, self.iid)
-        return store
-
-    def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
-        return pcoll | "Testing - Running all tests" >> beam.Map(self._test)
-
-
-@dataclass
-class Copy(beam.PTransform):
-    target_prefix: str
-
-    def _copy(self, store: zarr.storage.FSStore) -> zarr.storage.FSStore:
-        # We do need the gs:// prefix?
-        # TODO: Determine this dynamically from zarr.storage.FSStore
-        source = f"gs://{os.path.normpath(store.path)}/"  # FIXME more elegant. `.copytree` needs trailing slash
-        target = os.path.join(*[self.target_prefix] + source.split("/")[-3:])
-        # gcs = gcsio.GcsIO()
-        # gcs.copytree(source, target)
-        print(f"HERE: Copying {source} to {target}")
-        import gcsfs
-
-        fs = gcsfs.GCSFileSystem()
-        fs.cp(source, target, recursive=True)
-        # return a new store with the new path that behaves exactly like the input
-        # to this stage (so we can slot this stage right before testing/logging stages)
-        return zarr.storage.FSStore(target)
-
-    def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
-        return pcoll | "Copying Store" >> beam.Map(self._copy)
-
 
 ## Create recipes
 is_test = (
@@ -334,6 +247,7 @@ for iid, urls in url_dict.items():
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
         )
+        | InjectAttrs()
         | ConsolidateDimensionCoordinates()
         | ConsolidateMetadata()
         | Copy(target_prefix=copy_target_bucket)
