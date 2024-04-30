@@ -7,7 +7,7 @@ from dask.utils import parse_bytes
 from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
 from leap_data_management_utils import CMIPBQInterface, LogCMIPToBigQuery
 from leap_data_management_utils.data_management_transforms import Copy, InjectAttrs
-from leap_data_management_utils.cmip_transforms import Preprocessor, TestDataset
+from leap_data_management_utils.cmip_transforms import TestDataset, Preprocessor
 from pangeo_forge_esgf.parsing import parse_instance_ids
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
