@@ -1,1 +1,1 @@
-    - "CMIP6.*.*.*.historical.*.Omon.[tos, so].*.*"
+    - "CMIP6.*.*.[CNRM-CM6-1,CanESM5,MIROC6].historical.*.Omon.[tos, so].*.*"
