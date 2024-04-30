@@ -33,7 +33,7 @@ print(f"{is_test =}")
 
 if is_test:
     setup_logging("DEBUG")
-    copy_target_bucket = "gs://leap-scratch/data-library/cmip6-pr-copied/"
+    copy_target_prefix = "gs://leap-scratch/data-library/cmip6-pr-copied/"
     iid_file = "feedstock/iids_pr.yaml"
     prune_iids = True
     prune_submission = (
@@ -54,7 +54,7 @@ if is_test:
 
 else:
     setup_logging("INFO")
-    copy_target_bucket = "gs://cmip6/cmip6-pgf-ingestion-test/zarr_stores/"
+    copy_target_prefix = "gs://cmip6/cmip6-pgf-ingestion-test/zarr_stores/"
     iid_file = "feedstock/iids.yaml"
     prune_iids = False
     prune_submission = (
@@ -65,7 +65,7 @@ else:
     print(f"{table_id = } {prune_submission = } {iid_file = }")
 
 print("Running with the following parameters:")
-print(f"{copy_target_bucket = }")
+print(f"{copy_target_prefix = }")
 print(f"{iid_file = }")
 print(f"{prune_iids = }")
 print(f"{prune_submission = }")
@@ -245,7 +245,7 @@ for iid, urls in url_dict.items():
         | InjectAttrs()
         | ConsolidateDimensionCoordinates()
         | ConsolidateMetadata()
-        | Copy(target_prefix=copy_target_bucket)
+        | Copy(target=copy_target_prefix)
         | "Logging to bigquery (non-QC)"
         >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=False)
         | TestDataset(iid=iid)
