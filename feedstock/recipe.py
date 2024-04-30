@@ -237,7 +237,7 @@ for iid, urls in url_dict.items():
         | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})
         | Preprocessor()
         | StoreToZarr(
-            store_name=,
+            store_name=f"{iid}.zarr",
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
         )
