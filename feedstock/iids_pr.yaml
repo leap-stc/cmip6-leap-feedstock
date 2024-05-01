@@ -1,1 +1,4 @@
     - "CMIP6.*.*.[CNRM-CM6-1,CanESM5].historical.*.Omon.[tos, so].*.*"
+    - 'CMIP6.HighResMIP.CMCC.CMCC-CM2-VHR4.[hist-1950,highres-future].r1i1p1f1.6hrPlevPt.[vas,uas,psl].gn.*',
+    - 'CMIP6.HighResMIP.EC-Earth-Consortium.EC-Earth3P-HR.[hist-1950,highres-future].r1i1p2f1.6hrPlevPt.[vas,uas,psl].gr.*',
+    - 'CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HM.[hist-1950,highres-future].r1i1p1f1.[3hr, E3hr].[vas,uas,psl].gn.*',
