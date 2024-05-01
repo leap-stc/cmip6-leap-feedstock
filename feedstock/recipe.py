@@ -247,7 +247,11 @@ for iid, urls in url_dict.items():
         | InjectAttrs()
         | ConsolidateDimensionCoordinates()
         | ConsolidateMetadata()
-        | Copy(target=os.path.join(copy_target_prefix, f"{run_id}_{run_attempt}", f"{iid}.zarr"))
+        | Copy(
+            target=os.path.join(
+                copy_target_prefix, f"{run_id}_{run_attempt}", f"{iid}.zarr"
+            )
+        )
         | "Logging to bigquery (non-QC)"
         >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=False)
         | TestDataset(iid=iid)
