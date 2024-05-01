@@ -94,7 +94,7 @@ def parse_wildcards(iids: List[str]) -> List[str]:
 
 
 # parse out wildcard iids using pangeo-forge-esgf
-print(f"{iids_raw = }")
+# print(f"{iids_raw = }")
 iids = parse_wildcards(iids_raw)
 print(f"{iids = }")
 
@@ -123,10 +123,10 @@ del bq_interface
 # Maybe I want a more finegrained check here at some point, but for now this will prevent logged iids from rerunning
 print(f"{overwrite_iids =}")
 iids_to_skip = set(iids_in_table) - set(overwrite_iids)
-print(f"{iids_to_skip =}")
+# print(f"{iids_to_skip =}")
 iids_filtered = list(set(iids) - iids_to_skip)
 print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list")
-
+print("iids_filtered")
 
 if prune_iids:
     iids_filtered = iids_filtered[0:200]
@@ -148,8 +148,8 @@ if prune_submission:
 
 print(f"🚀 Submitting a total of {len(url_dict)} iids")
 
-# Print the actual urls
-print(f"{url_dict = }")
+# # Print the actual urls
+# print(f"{url_dict = }")
 
 
 ## Dynamic Chunking Wrapper
