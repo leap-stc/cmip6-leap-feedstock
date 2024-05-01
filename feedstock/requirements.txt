@@ -1,5 +1,4 @@
-#leap-data-management-utils==0.0.6
-git+https://github.com/leap-stc/leap-data-management-utils.git@improved-attrs-inject
+leap-data-management-utils==0.0.7
 pangeo-forge-esgf==0.2.0
 dynamic-chunks==0.0.3
 git+https://github.com/ranchodeluxe/xarray@ranchodeluxe-patch-1#egg=xarray
