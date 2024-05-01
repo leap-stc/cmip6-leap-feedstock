@@ -31,6 +31,9 @@ is_test = (
 )  # There must be a better way to do this, but for now this will do
 print(f"{is_test =}")
 
+run_id = os.environ["GITHUB_RUN_ID"]
+run_attempt = os.environ["GITHUB_RUN_ATTEMPT"]
+
 if is_test:
     setup_logging("DEBUG")
     copy_target_prefix = "gs://leap-scratch/data-library/cmip6-pr-copied/"
@@ -244,7 +247,7 @@ for iid, urls in url_dict.items():
         | InjectAttrs()
         | ConsolidateDimensionCoordinates()
         | ConsolidateMetadata()
-        | Copy(target=os.path.join(copy_target_prefix, f"{iid}.zarr"))
+        | Copy(target=os.path.join(copy_target_prefix, f"{run_id}_{run_attempt}", f"{iid}.zarr"))
         | "Logging to bigquery (non-QC)"
         >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=False)
         | TestDataset(iid=iid)
