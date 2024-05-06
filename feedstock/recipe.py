@@ -79,13 +79,13 @@ with open(iid_file) as f:
     iids_raw = [iid for iid in iids_raw if iid]
 
 # parse out wildcard/square brackets using pangeo-forge-esgf
-print(f"{iids_raw = }")
+logger.debug(f"{iids_raw = }")
 client = ESGFClient()
 iids = client.expand_instance_id_list(iids_raw)
-print(f"{iids = }")
+logger.info(f"{iids = }")
 
 # Prune the url dict to only include items that have not been logged to BQ yet
-print("Pruning iids that already exist")
+logger.info("Pruning iids that already exist")
 bq_interface = CMIPBQInterface(table_id=table_id)
 # get lists of the iids already logged
 iids_in_table = bq_interface.iid_list_exists(iids)
@@ -102,11 +102,11 @@ overwrite_iids = [
 del bq_interface
 
 # Maybe I want a more finegrained check here at some point, but for now this will prevent logged iids from rerunning
-print(f"{overwrite_iids =}")
+logger.debug(f"{overwrite_iids =}")
 iids_to_skip = set(iids_in_table) - set(overwrite_iids)
-print(f"{iids_to_skip =}")
+logger.debug(f"{iids_to_skip =}")
 iids_filtered = list(set(iids) - iids_to_skip)
-print(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list")
+logger.info(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list")
 
 
 if prune_iids:
@@ -136,7 +136,7 @@ if prune_submission:
 print(f"🚀 Submitting a total of {len(url_dict)} iids")
 
 # Print the actual urls
-print(f"{url_dict = }")
+logger.debug(f"{url_dict = }")
 
 
 ## Dynamic Chunking Wrapper
