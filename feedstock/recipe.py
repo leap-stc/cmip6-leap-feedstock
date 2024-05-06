@@ -78,21 +78,7 @@ with open(iid_file) as f:
     iids_raw = yaml.safe_load(f)
     iids_raw = [iid for iid in iids_raw if iid]
 
-
-def parse_wildcards(iids: List[str]) -> List[str]:
-    """iterate through each list element and
-    if it contains wilcards apply the wildcard parser
-    """
-    iids_parsed = []
-    for iid in iids:
-        if "*" in iid:
-            iids_parsed += parse_instance_ids(iid)
-        else:
-            iids_parsed.append(iid)
-    return iids_parsed
-
-
-# parse out wildcard iids using pangeo-forge-esgf
+# parse out wildcard/square brackets using pangeo-forge-esgf
 print(f"{iids_raw = }")
 client = ESGFClient()
 iids = client.expand_instance_id_list(iids_raw)
