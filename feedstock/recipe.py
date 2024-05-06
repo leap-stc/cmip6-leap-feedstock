@@ -95,7 +95,7 @@ def parse_wildcards(iids: List[str]) -> List[str]:
 # parse out wildcard iids using pangeo-forge-esgf
 print(f"{iids_raw = }")
 client = ESGFClient()
-iids = client.expand_instance_id_list(parse_iids)
+iids = client.expand_instance_id_list(iids_raw)
 print(f"{iids = }")
 
 # Prune the url dict to only include items that have not been logged to BQ yet
