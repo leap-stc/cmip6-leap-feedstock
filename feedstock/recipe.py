@@ -131,6 +131,7 @@ input_dict = client.get_recipe_inputs_from_iid_list(iids_filtered)
 # for now conform to the way this was set up with the async client(this is where we could extract other info,
 # like checksums and tracking_id too!). That will require some sort of matching between dataset and file
 # level results though!
+input_dict_flat = {iid:[(filename, data['url']) for filename, data in file_dict.items()] for iid, file_dict in input_dict.items()}
 url_dict = {}
 for iid, tuple_list in input_dict.items():
     sorted_tuples = sorted(
