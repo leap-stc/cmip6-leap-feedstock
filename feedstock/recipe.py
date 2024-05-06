@@ -8,7 +8,7 @@ from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
 from leap_data_management_utils import CMIPBQInterface, LogCMIPToBigQuery
 from leap_data_management_utils.data_management_transforms import Copy, InjectAttrs
 from leap_data_management_utils.cmip_transforms import TestDataset, Preprocessor
-from pangeo_forge_esgf.parsing import parse_instance_ids
+from pangeo_forge_esgf.client import ESGFClient
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
     OpenURLWithFSSpec,
@@ -95,17 +95,13 @@ def parse_wildcards(iids: List[str]) -> List[str]:
 
 # parse out wildcard iids using pangeo-forge-esgf
 print(f"{iids_raw = }")
-iids = parse_wildcards(iids_raw)
+client = ESGFClient()
+iids = client.expand_instance_id_list(parse_iids)
 print(f"{iids = }")
-
-# exclude dupes
-iids = list(set(iids))
 
 # Prune the url dict to only include items that have not been logged to BQ yet
 print("Pruning iids that already exist")
-
 bq_interface = CMIPBQInterface(table_id=table_id)
-
 # get lists of the iids already logged
 iids_in_table = bq_interface.iid_list_exists(iids)
 
@@ -132,16 +128,16 @@ if prune_iids:
     iids_filtered = iids_filtered[0:200]
 
 print(f"🚀 Requesting a total of {len(iids_filtered)} iids")
-
-# Get the urls from ESGF at Runtime (only for the pruned list to save time)
-url_dict = asyncio.run(
-    get_urls_from_esgf(
-        iids_filtered,
-        limit_per_host=20,
-        max_concurrency=20,
-        max_concurrency_response=20,
-    )
-)
+input_dict = client.get_recipe_inputs_from_iid_list(iids_filtered)
+# for now conform to the way this was set up with the async client(this is where we could extract other info, 
+# like checksums and tracking_id too!). That will require some sort of matching between dataset and file 
+# level results though!
+url_dict = {}
+for iid, tuple_list in input_dict.items():
+    sorted_tuples = sorted(tuple_list) # we are sorting by filename here (which should include the year range)
+    # There might be a more reliable way to do this. 
+    urls = [s[1] for s in sorted_tuples]
+    url_dict[iid] = urls
 
 if prune_submission:
     url_dict = {iid: url_dict[iid] for iid in list(url_dict.keys())[0:10]}
