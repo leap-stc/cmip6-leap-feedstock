@@ -4,7 +4,7 @@
 import apache_beam as beam
 from typing import List, Dict
 from dask.utils import parse_bytes
-from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
+from pangeo_forge_esgf import setup_logging
 from leap_data_management_utils import CMIPBQInterface, LogCMIPToBigQuery
 from leap_data_management_utils.data_management_transforms import Copy, InjectAttrs
 from leap_data_management_utils.cmip_transforms import TestDataset, Preprocessor
@@ -17,7 +17,6 @@ from pangeo_forge_recipes.transforms import (
     ConsolidateMetadata,
     ConsolidateDimensionCoordinates,
 )
-import asyncio
 import logging
 import os
 import xarray as xr
@@ -129,13 +128,15 @@ if prune_iids:
 
 print(f"🚀 Requesting a total of {len(iids_filtered)} iids")
 input_dict = client.get_recipe_inputs_from_iid_list(iids_filtered)
-# for now conform to the way this was set up with the async client(this is where we could extract other info, 
-# like checksums and tracking_id too!). That will require some sort of matching between dataset and file 
+# for now conform to the way this was set up with the async client(this is where we could extract other info,
+# like checksums and tracking_id too!). That will require some sort of matching between dataset and file
 # level results though!
 url_dict = {}
 for iid, tuple_list in input_dict.items():
-    sorted_tuples = sorted(tuple_list) # we are sorting by filename here (which should include the year range)
-    # There might be a more reliable way to do this. 
+    sorted_tuples = sorted(
+        tuple_list
+    )  # we are sorting by filename here (which should include the year range)
+    # There might be a more reliable way to do this.
     urls = [s[1] for s in sorted_tuples]
     url_dict[iid] = urls
 
