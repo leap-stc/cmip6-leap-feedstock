@@ -122,7 +122,7 @@ input_dict_flat = {
     for iid, file_dict in input_dict.items()
 }
 url_dict = {}
-for iid, tuple_list in input_dict.items():
+for iid, tuple_list in input_dict_flat.items():
     sorted_tuples = sorted(
         tuple_list
     )  # we are sorting by filename here (which should include the year range)
