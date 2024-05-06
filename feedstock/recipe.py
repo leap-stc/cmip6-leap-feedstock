@@ -2,7 +2,7 @@
 """Modified transforms from Pangeo Forge"""
 
 import apache_beam as beam
-from typing import List, Dict
+from typing import Dict
 from dask.utils import parse_bytes
 from pangeo_forge_esgf import setup_logging
 from leap_data_management_utils import CMIPBQInterface, LogCMIPToBigQuery
