@@ -121,6 +121,8 @@ input_dict_flat = {
     iid: [(filename, data["url"]) for filename, data in file_dict.items()]
     for iid, file_dict in input_dict.items()
 }
+
+
 def combine_dicts(dicts):
     result = {}
     for d in dicts:
@@ -131,11 +133,16 @@ def combine_dicts(dicts):
                 result[key] = [value]
     return result
 
-recipe_dict = {k:combine_dicts([i[1] for i in sorted(v)]) for k,v in input_dict_flat.items()}
+
+recipe_dict = {
+    k: combine_dicts([i[1] for i in sorted(v)]) for k, v in input_dict_flat.items()
+}
 
 
 if prune_submission:
-    recipe_dict = {iid: {k:v[0:10] for k,v in data.items()} for iid, data in recipe_dict.items()}
+    recipe_dict = {
+        iid: {k: v[0:10] for k, v in data.items()} for iid, data in recipe_dict.items()
+    }
 
 print(f"🚀 Submitting a total of {len(recipe_dict)} iids")
 
@@ -223,7 +230,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
 recipes = {}
 
 for iid, data in recipe_dict.items():
-    urls = data['urls']
+    urls = data["urls"]
     pattern = pattern_from_file_sequence(urls, concat_dim="time")
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
@@ -236,9 +243,7 @@ for iid, data in recipe_dict.items():
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
         )
-        | InjectAttrs({
-            'pangeo_forge_file_data':data
-        })
+        | InjectAttrs({"pangeo_forge_file_data": data})
         | ConsolidateDimensionCoordinates()
         | ConsolidateMetadata()
         | Copy(
