@@ -100,10 +100,13 @@ logger.info(f"{iids = }")
 # Prune the url dict to only include items that have not been logged to BQ yet
 logger.info("Pruning iids that already exist")
 bq_interface = CMIPBQInterface(table_id=table_id)
+
+#TODO: Move this back to the BQ client https://github.com/leap-stc/leap-data-management-utils/issues/33
 # Since we have more than 10k iids to check against the big query database,
 # we need to run this in batches (bq does not take more than 10k inputs per query).
 iids_in_table = []
-iid_batches = [iids[i : i + batchsize] for i in range(0, len(iids), 10000)]
+batchsize = 10000
+iid_batches = [iids[i : i + batchsize] for i in range(0, len(iids), batchsize)]
 for iids_batch in tqdm(iid_batches):
     iids_in_table_batch = bq.iid_list_exists(iids_batch)
     iids_in_table.extend(iids_in_table_batch)
