@@ -1,3 +1,4 @@
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/leap-stc/cmip6-leap-feedstock/main.svg)](https://results.pre-commit.ci/latest/github/leap-stc/cmip6-leap-feedstock/main)
 [![DOI](https://zenodo.org/badge/618127503.svg)](https://zenodo.org/badge/latestdoi/618127503)
 
 # CMIP6-LEAP-feedstock
@@ -22,7 +23,7 @@ Equiped with that list, please open a [request issue](https://github.com/leap-st
 
 ## How to access the newly uploaded data?
 
-We are very excited to announce the new beta for the `Pangeo-ESGF CMIP6 Zarr 2.0` public data 🎉
+We are very excited to announce the new beta for the `Pangeo-ESGF CMIP6 Zarr Data 2.0` 🎉
 
 You can access the data in a similar way to the [legacy CMIP6 zarr catalog](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) by choosing between these three catalogs:
 - The `main` catalog `"catalog.json"` which contains datasets that pass our test and are not retracted.
@@ -41,10 +42,10 @@ url = "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/cat
 col = intake.open_esm_datastore(url)
 ```
 
-> [!WARNING]  
+> [!WARNING]
 > **Expect changes** We are thankful to you for testing the beta version of this catalog but please keep in mind that things can change rapidly (e.g. stores can be moved from one catalog to another) and prepare accordingly. Please check for progress towards the final release [here](https://github.com/leap-stc/cmip6-leap-feedstock/issues/82) .
 
-You can then perform the same operations as with the legacy catalog (please check out the [official docs](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) for more info). 
+You can then perform the same operations as with the legacy catalog (please check out the [official docs](https://pangeo-data.github.io/pangeo-cmip6-cloud/accessing_data.html#loading-an-esm-collection) for more info).
 
 > [!NOTE]
 > Some facet values were renamed to follow the ESGF convention. `'member_id'` is now `'variant_label'` and `'dcpp_init_year'` is now `'sub_experiment_id'`. As described in the [CMIP6 global attributes and filenames controlled vocabulary](https://docs.google.com/document/d/1h0r8RZr_f3-8egBMMh7aqLwy3snpD6_MrDz1q8n5XUk/edit) the faced `'member_id'` is now "a compound construction from sub_experiment_id and variant_label". In most cases `variant_label = member_id`, but if `"sub_experiment_id"` is not none, `member_id = <sub_experiment_id>-<variant_label>`.
@@ -62,15 +63,19 @@ ddict = cat.to_dataset_dict(preprocess=combined_preprocessing)
 You can check if some of your iids are already ingested with this code snippet:
 ```python
 import intake
+
 def zstore_to_iid(zstore: str):
     # this is a bit whacky to account for the different way of storing old/new stores
-    return '.'.join(zstore.replace('gs://','').replace('.zarr','').replace('.','/').split('/')[-11:-1])
+    iid =  '.'.join(zstore.replace('gs://','').replace('.zarr','').replace('.','/').split('/')[-11:-1])
+    if not iid.startswith('CMIP6'):
+        iid =  '.'.join(zstore.replace('gs://','').replace('.zarr','').replace('.','/').split('/')[-10:])
+    return iid
 
 def search_iids(col_url:str):
     col = intake.open_esm_datastore(col_url)
     iids_all= [zstore_to_iid(z) for z in col.df['zstore'].tolist()]
     return [iid for iid in iids_all if iid in iids_requested]
-    
+
 
 iids_requested = [
 'your_fav_iid',
@@ -94,13 +99,26 @@ missing_iids = list(set(iids_requested) - set(iids_found))
 print(f"\n\nStill missing {len(missing_iids)} of {len(iids_requested)}: \n{missing_iids=}")
 ```
 
+## What do you actually do to the data?
+The goal of this feedstock is to make CMIP6 data analysis-ready, but not modify the source data in any way.
+
+The current workflow involves the following steps for every instance id:
+- Query the ESGF API using [pangeo-forge-esgf](https://github.com/jbusecke/pangeo-forge-esgf) to get a list of urls that represent all files for a single dataset
+- [Preprocess](https://github.com/leap-stc/cmip6-leap-feedstock/blob/32041e50485448505182172faf854e607df0606d/feedstock/recipe.py#L35-L70) each dataset resulting from a file. This step sanitizes some attribute formatting and moves additional variables to the coordinates of the dataset. This does **not alter** the data or naming in any way.
+- Combine datasets along the time dimension.
+- [Dynamically rechunk](https://github.com/leap-stc/cmip6-leap-feedstock/blob/32041e50485448505182172faf854e607df0606d/feedstock/recipe.py#L245-L317) and store the data to zarr.
+- Consolidate the metadata and dimension coordinates of the zarr store.
+
+None of these steps attempt to correct any naming issues ([xMIP](https://github.com/jbusecke/xMIP) can do this after you load the data), or at any point modify the data itself! The xarray datasets you load from zarr should give you the same data you would get if you download the netcdf files and open them with xarray locally!
+
+
 ## Troubleshooting
 
 ### I have found an issue with one of the cloud zarr stores. Where can I report this?
 Reporting issues is a vital part of this community work, and if you are reading this, I want to thank you for taking the time to do so!
 
-The first step is identifying the type of error, which will determine where to report the error properly. 
-Here are a few steps to triage the error. 
+The first step is identifying the type of error, which will determine where to report the error properly.
+Here are a few steps to triage the error.
 
 Assuming you are loading the data as instructed above using [intake-esm](https://github.com/intake/intake-esm) and you encounter an issue with the data:
 1. Check if the Problem dissapears when you do not use xmip (omit `preprocess=combined_preprocessing` above). If that fixes the problem, raise an [issue in the xMIP repo](https://github.com/jbusecke/xMIP/issues/new)
@@ -115,10 +133,46 @@ Assuming you are loading the data as instructed above using [intake-esm](https:/
     If this solves your problem, you should head over to intake-esm and check the [discussion topics](https://github.com/intake/intake-esm/discussions) and [issues](https://github.com/intake/intake-esm/issues) and raise either one if appropriate.
 3. If your error persists, this is either related to the ingestion here or is an error in the original ESGF data. Please raise an issue [right here](https://github.com/leap-stc/cmip6-leap-feedstock/issues/new?assignees=&labels=bug&projects=&template=problem.yaml&title=%5BBUG%5D%3A+) and we will get to the bottom of it.
 
-Thanks for helping to improve everyones experience with CMIP6 data! 
+Thanks for helping to improve everyones experience with CMIP6 data!
 
 ![](https://media.giphy.com/media/p0xvfeVhS7tlhGzIoh/giphy-downsized-large.gif)
 
+### My iid does not get submitted. What is wrong?
+Could be a bunch of reasons, but lets go through some debugging together. Ok first lets check if you get any response for a given iid:
+```python
+from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
+setup_logging('DEBUG')
+iids = ['something.that.doesnt.ingest.well']
+url_dict = await get_urls_from_esgf(iids)
+```
+This might give you some useful error messages and will tell you if the issue is parsing urls from the ESGF API (if the url_dict is empty) or if the problems arise when the urls are passed to pangeo-forge-recipes.
+
+If not we need to dig deeper... Coming soon.
+
+## How many datasets have been ingested by LEAP?
+This little snippet can be used to identify how many datasets have been ingested during the second phase (fully based on pangeo-forge):
+```python
+import intake
+
+def count_new_iids(col_url:str):
+    col = intake.open_esm_datastore(col_url)
+    prefix = [p.replace('gs://cmip6/','').split('/')[0] for p in col.df['zstore'].tolist()]
+    new_iids = [p for p in prefix if p in ['CMIP6_LEAP_legacy','cmip6-pgf-ingestion-test']]
+    return len(new_iids)
+
+url_dict = {
+    'qc':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog.json",
+    'non-qc':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_noqc.json",
+    'retracted':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_retracted.json"
+}
+
+iids_found = []
+for catalog,url in url_dict.items():
+
+    n_new_iids = count_new_iids(url)
+    print(f"{url_dict=} LEAP ingested datasets {n_new_iids}")
+```
+Last this was updated we ingested over 4000 datasets already!
 
 ## How to run recipes locally (with PGF runner)
 - Make sure to set up the environment (TODO: Add this as docs on pangeo-forge-runner)

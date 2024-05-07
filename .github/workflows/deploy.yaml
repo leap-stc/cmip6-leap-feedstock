@@ -4,9 +4,19 @@ on:
   workflow_dispatch:
   push:
     branches: ["main"]
+    paths: # only run on changes to feedstock relevant code
+      - 'feedstock/**'
+      - 'configs/**'
+      - '.github/workflows/deploy.yaml'
   pull_request:
     branches: ["main"]
     types: [opened, reopened, synchronize, labeled]
+    paths: # only run on changes to feedstock relevant code
+      - 'feedstock/**'
+      - 'configs/**'
+      - '.github/workflows/deploy.yaml'
+
+
   # schedule:
   #   - cron: "0 * * * SUN" # run every sunday
 
