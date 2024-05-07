@@ -170,7 +170,7 @@ iids_found = []
 for catalog,url in url_dict.items():
 
     n_new_iids = count_new_iids(url)
-    print(f"{url_dict=} LEAP ingested datasets {n_new_iids}")
+    print(f"{url=} LEAP ingested datasets {n_new_iids}")
 ```
 Last this was updated we ingested over 4000 datasets already!
 
