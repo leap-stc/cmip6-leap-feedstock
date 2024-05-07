@@ -237,7 +237,7 @@ for iid, data in recipe_dict.items():
             dynamic_chunking_fn=dynamic_chunking_func,
         )
         | InjectAttrs({
-            'pangeo_forge_file_data' = data
+            'pangeo_forge_file_data':data
         })
         | ConsolidateDimensionCoordinates()
         | ConsolidateMetadata()
