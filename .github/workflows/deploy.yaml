@@ -17,7 +17,7 @@ on:
 
 jobs:
   deploy-recipes:
-    concurrency: 
+    concurrency:
         group: ${{ github.head_ref }}
         cancel-in-progress: true
     name: deploy-recipes
