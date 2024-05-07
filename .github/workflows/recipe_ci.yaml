@@ -18,9 +18,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        env:
-          - IS_TEST: 'true'
-          - IS_TEST: 'false'
+        IS_TEST:
+          - 'true'
+          - 'false'
+    env:
+      IS_TEST: ${{ matrix.IS_TEST }}  # Set environment variable at the job level
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
