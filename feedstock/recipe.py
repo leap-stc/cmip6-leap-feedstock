@@ -131,7 +131,7 @@ logger.info(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from inpu
 
 
 if prune_iids:
-    iids_filtered = iids_filtered[0:200]
+    iids_filtered = iids_filtered[0:20]
 
 
 # Now that we have the iids that are not yet ingested, we can prune the full iid_info_dict and extract the 'id' field
@@ -166,9 +166,7 @@ recipe_dict = {
 logger.debug(f"{recipe_dict=}")
 
 if prune_submission:
-    recipe_dict = {
-        iid: {k: v[0:10] for k, v in data.items()} for iid, data in recipe_dict.items()
-    }
+    recipe_dict = {iid:[recipe_dict[iid] for iid in list(recipe_dict.keys())[0:10]]}
 
 print(f"🚀 Submitting a total of {len(recipe_dict)} iids")
 
