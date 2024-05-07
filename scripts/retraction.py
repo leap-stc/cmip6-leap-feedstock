@@ -3,7 +3,7 @@ import datetime
 import httpx
 import gcsfs
 from tqdm.asyncio import tqdm
-from leap_data_management_utils.cmip_utils import IIDEntry, CMIPBQInterface
+from leap_data_management_utils.cmip_transforms import IIDEntry, CMIPBQInterface
 
 # there is an annoying bug that will make this fail when the number of tasks gathered exceeds `max_connections`
 # https://github.com/encode/httpx/issues/1171
@@ -43,8 +43,8 @@ async def fetch_instance_ids(url, params):
         retracted = await tqdm.gather(*tasks)
 
         retracted_flat = []
-        for l in retracted:
-            retracted_flat.extend(l)
+        for lst in retracted:
+            retracted_flat.extend(lst)
         return retracted_flat
 
 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     ## Create IIDEntry objects for all the entries that need to be retracted
     iid_entries_to_retract = []
-    for idx, row in to_retract.iterrows():  
+    for idx, row in to_retract.iterrows():
         iid_entry = IIDEntry(
             iid=row.instance_id,
             store=row.store,

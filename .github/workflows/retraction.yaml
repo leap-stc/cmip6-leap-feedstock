@@ -20,7 +20,7 @@ jobs:
           python-version: "3.9"
       - name: Install dependencies
         # TODO: base on an actual release
-        run: python -m pip install tqdm httpx gcsfs git+https://github.com/leap-stc/leap-data-management-utils.git@factor-out-cmip
+        run: python -m pip install tqdm httpx gcsfs leap-data-management-utils==0.0.5
       - name: "Run retraction script"
         shell: bash
         run: |
