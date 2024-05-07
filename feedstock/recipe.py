@@ -166,7 +166,7 @@ recipe_dict = {
 logger.debug(f"{recipe_dict=}")
 
 if prune_submission:
-    recipe_dict = {iid: recipe_dict[iid] for iid in list(recipe_dict.keys())[0:10]}
+    recipe_dict = {iid: recipe_dict[iid] for iid in list(recipe_dict.keys())[0:5]}
 
 print(f"🚀 Submitting a total of {len(recipe_dict)} iids")
 
