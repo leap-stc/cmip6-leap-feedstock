@@ -239,7 +239,7 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
 recipes = {}
 
 for iid, data in recipe_dict.items():
-    urls = data["urls"]
+    urls = data["url"]
     pattern = pattern_from_file_sequence(urls, concat_dim="time")
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
