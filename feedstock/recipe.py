@@ -90,9 +90,15 @@ client = ESGFClient(
         "checksum",
         "checksum_type",
     ],
-    dataset_output_fields=["pid", "tracking_id", "further_info_url", "citation_url"],
+    dataset_output_fields=[
+        "pid",
+        "tracking_id",
+        "further_info_url",
+        "citation_url"
+    ],
 )
-iids = client.expand_instance_id_list(iids_raw)
+iid_info_dict = client.expand_instance_id_list(iids_raw)
+iids = iid_info_dict.keys()
 logger.info(f"{iids = }")
 
 # Prune the url dict to only include items that have not been logged to BQ yet
@@ -124,6 +130,19 @@ if prune_iids:
     iids_filtered = iids_filtered[0:200]
 
 
+#Now that we have the iids that are not yet ingested, we can prune the full iid_info_dict and extract the 'id' field
+iid_info_dict_filtered = {k:v for k,v in iid_info_dict.items() if k in iids_filtered}
+dataset_ids_filtered = [v['id'] for v in iid_info_dict_filtered.values()]
+
+print(f"🚀 Requesting a total of {len(dataset_ids_filtered)} datasets")
+input_dict = client.get_recipe_inputs_from_dataset_ids(dataset_ids_filtered)
+
+logger.debug(f"{input_dict=}")
+input_dict_flat = {
+    iid: [(k, v) for k, v in data.items()] for iid, data in input_dict.items()
+}
+logger.debug(f"{input_dict_flat=}")
+
 def combine_dicts(dicts):
     result = {}
     for d in dicts:
@@ -134,14 +153,6 @@ def combine_dicts(dicts):
                 result[key] = [value]
     return result
 
-
-print(f"🚀 Requesting a total of {len(iids_filtered)} iids")
-input_dict = client.get_recipe_inputs_from_iid_list(iids_filtered)
-logger.debug(f"{input_dict=}")
-input_dict_flat = {
-    iid: [(k, v) for k, v in data.items()] for iid, data in input_dict.items()
-}
-logger.debug(f"{input_dict_flat=}")
 recipe_dict = {
     iid: combine_dicts([i[1] for i in sorted(data)])
     for iid, data in input_dict_flat.items()
