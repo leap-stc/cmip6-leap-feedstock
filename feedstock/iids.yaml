@@ -243,3 +243,5 @@
     - CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Amon.ts.gn.v20180927
     - CMIP6.HighResMIP.NERC.HadGEM3-GC31-HM.hist-1950.r1i2p1f1.Amon.pr.gn.v20190401
     - CMIP6.HighResMIP.NERC.HadGEM3-GC31-HM.hist-1950.r1i2p1f1.Amon.ts.gn.v20190401
+    # From https://github.com/leap-stc/cmip6-leap-feedstock/issues/116
+    - "CMIP6.CMIP.MPI-M.MPI-ESM1-2-HR.historical.r1i1p1f1.Amon.tas.gn.*"
