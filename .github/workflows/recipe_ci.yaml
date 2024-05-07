@@ -15,11 +15,12 @@ jobs:
       group: ${{ github.head_ref }}
       cancel-in-progress: true
     runs-on: ubuntu-latest
-    fail-fast: false
-    matrix:
-      env:
-        - IS_TEST: 'true'
-        - IS_TEST: 'false'
+    strategy:
+      fail-fast: false
+      matrix:
+        env:
+          - IS_TEST: 'true'
+          - IS_TEST: 'false'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
