@@ -94,7 +94,7 @@ client = ESGFClient(
     dataset_output_fields=["pid", "tracking_id", "further_info_url", "citation_url"],
 )
 iid_info_dict = client.get_instance_id_input(iids_raw)
-iids = iid_info_dict.keys()
+iids = list(iid_info_dict.keys())
 logger.info(f"{iids = }")
 
 # Prune the url dict to only include items that have not been logged to BQ yet
@@ -108,7 +108,7 @@ iids_in_table = []
 batchsize = 10000
 iid_batches = [iids[i : i + batchsize] for i in range(0, len(iids), batchsize)]
 for iids_batch in tqdm(iid_batches):
-    iids_in_table_batch = bq.iid_list_exists(iids_batch)
+    iids_in_table_batch = bq_interface.iid_list_exists(iids_batch)
     iids_in_table.extend(iids_in_table_batch)
 
 # manual overrides (these will be rewritten each time as long as they exist here)
