@@ -121,22 +121,26 @@ input_dict_flat = {
     iid: [(filename, data["url"]) for filename, data in file_dict.items()]
     for iid, file_dict in input_dict.items()
 }
-url_dict = {}
-for iid, tuple_list in input_dict_flat.items():
-    sorted_tuples = sorted(
-        tuple_list
-    )  # we are sorting by filename here (which should include the year range)
-    # There might be a more reliable way to do this.
-    urls = [s[1] for s in sorted_tuples]
-    url_dict[iid] = urls
+def combine_dicts(dicts):
+    result = {}
+    for d in dicts:
+        for key, value in d.items():
+            if key in result:
+                result[key].append(value)
+            else:
+                result[key] = [value]
+    return result
+    
+recipe_dict = {k:combine_dicts([i[1] for i in sorted(v)]) for k,v in input_dict_flat.items()}
+
 
 if prune_submission:
-    url_dict = {iid: url_dict[iid] for iid in list(url_dict.keys())[0:10]}
+    recipe_dict = {iid: {k:v[0:10] for k,v in data.items()} for iid, data in recipe_dict.items()}
 
-print(f"🚀 Submitting a total of {len(url_dict)} iids")
+print(f"🚀 Submitting a total of {len(recipe_dict)} iids")
 
 # Print the actual urls
-logger.debug(f"{url_dict = }")
+logger.debug(f"{recipe_dict = }")
 
 
 ## Dynamic Chunking Wrapper
@@ -218,7 +222,8 @@ def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
 ## Create the recipes
 recipes = {}
 
-for iid, urls in url_dict.items():
+for iid, data in recipe_dict.items():
+    urls = data['urls']
     pattern = pattern_from_file_sequence(urls, concat_dim="time")
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
@@ -231,7 +236,9 @@ for iid, urls in url_dict.items():
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
         )
-        | InjectAttrs()
+        | InjectAttrs({
+            'pangeo_forge_file_data' = data
+        })
         | ConsolidateDimensionCoordinates()
         | ConsolidateMetadata()
         | Copy(
