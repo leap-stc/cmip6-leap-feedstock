@@ -130,7 +130,7 @@ def combine_dicts(dicts):
             else:
                 result[key] = [value]
     return result
-    
+
 recipe_dict = {k:combine_dicts([i[1] for i in sorted(v)]) for k,v in input_dict_flat.items()}
 
 
