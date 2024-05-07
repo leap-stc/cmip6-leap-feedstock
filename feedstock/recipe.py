@@ -101,7 +101,7 @@ logger.info(f"{iids = }")
 logger.info("Pruning iids that already exist")
 bq_interface = CMIPBQInterface(table_id=table_id)
 
-#TODO: Move this back to the BQ client https://github.com/leap-stc/leap-data-management-utils/issues/33
+# TODO: Move this back to the BQ client https://github.com/leap-stc/leap-data-management-utils/issues/33
 # Since we have more than 10k iids to check against the big query database,
 # we need to run this in batches (bq does not take more than 10k inputs per query).
 iids_in_table = []
