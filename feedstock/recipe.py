@@ -80,7 +80,11 @@ with open(iid_file) as f:
 
 # parse out wildcard/square brackets using pangeo-forge-esgf
 logger.debug(f"{iids_raw = }")
-client = ESGFClient()
+
+client = ESGFClient(
+    file_output_fields=['pid', 'tracking_id', 'further_info_url', 'citation_url', 'checksum', 'checksum_type'], 
+    dataset_output_fields=['pid', 'tracking_id', 'further_info_url', 'citation_url']
+)
 iids = client.expand_instance_id_list(iids_raw)
 logger.info(f"{iids = }")
 
