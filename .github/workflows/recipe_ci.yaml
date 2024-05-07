@@ -1,19 +1,25 @@
-name: "Recipe CI"
+name: "Recipe CI for Pull Requests only"
 
 on:
   pull_request:
     branches: ["main"]
     types: [opened, reopened, synchronize, labeled]
-
+    paths: # only run on changes to feedstock relevant code
+      - 'feedstock/**'
+      - 'configs/**'
+      - '.github/workflows/deploy.yaml'
 
 jobs:
   recipe-ci:
+    concurrency:
+      group: ${{ github.head_ref }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     fail-fast: false
-      matrix:
-        env:
-          - IS_TEST: 'true'
-          - IS_TEST: 'false'
+    matrix:
+      env:
+        - IS_TEST: 'true'
+        - IS_TEST: 'false'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

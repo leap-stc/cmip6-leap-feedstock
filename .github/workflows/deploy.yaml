@@ -17,9 +17,9 @@ on:
 
 jobs:
   deploy-recipes:
-    concurrency: 
-        group: ${{ github.head_ref }}
-        cancel-in-progress: true
+    concurrency:
+      group: ${{ github.head_ref }}
+      cancel-in-progress: true
     name: deploy-recipes
     runs-on: ubuntu-latest
     strategy:

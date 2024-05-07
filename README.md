@@ -196,7 +196,7 @@ pip intall -r feedstock/requirements.txt
 ```
 
 #### Debug recipe locally
-It can be handy to debug the recipe creation locally to shorten the iteration cycle (which is long when every change kicks off a gh deploy action). 
+It can be handy to debug the recipe creation locally to shorten the iteration cycle (which is long when every change kicks off a gh deploy action).
 
 Assuming you have pangeo-forge-runner installed you should be able to do this
 ```
