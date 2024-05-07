@@ -12,7 +12,7 @@ on:
 jobs:
   recipe-ci:
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.environment }}
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}-${{ matrix.environment }}
       cancel-in-progress: true
     runs-on: ubuntu-latest
     strategy:
