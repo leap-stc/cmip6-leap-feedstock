@@ -1,0 +1,25 @@
+name: "Recipe CI"
+
+on:
+  pull_request:
+    branches: ["main"]
+    types: [opened, reopened, synchronize, labeled]
+
+
+jobs:
+  recipe-ci:
+    runs-on: ubuntu-latest
+    fail-fast: false
+      matrix:
+        env:
+          - IS_TEST: 'true'
+          - IS_TEST: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python -m pip install pangeo-forge-runner==0.10.2
+      - name: "Expand meta for the recipes"
+        run: pangeo-forge-runner expand-meta --repo=.

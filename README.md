@@ -133,16 +133,19 @@ Thanks for helping to improve everyones experience with CMIP6 data!
 
 ### Dev Guide
 
-- Set up a local conda environment with `mamba env create -f environment.yml`
-- Make sure to update this (`mamba env update -f environment.yml`) when any changes are made e.g. in `feedstock/requirements.txt` ``
+Set up a local dev environment
+```
+mamba create -n cmip6-feedstock python=3.11 -y
+conda activate cmip6-feedstock
+pip install pangeo-forge-runner==0.10.2 --no-cache-dir
+pip intall -r feedstock/requirements.txt
+```
 
-### How to develop
+#### Debug recipe locally
+It can be handy to debug the recipe creation locally to shorten the iteration cycle (which is long when every change kicks off a gh deploy action). 
 
-- I find it super irritating how hard it is to develop recipes locally. When I run into trouble with running PGF-runnner locally i have to rewrite my whole recipe (add target_root etc). Is there a better way to do this? Some bare bones debug call to PGF runner?
-
-#### Common pitfalls
-
-- Dependencies: This is quite the minefield. Here are some common things and the solutions:
-  - `unpickled = cloudpickle.loads(s);ModuleNotFoundError: No module named '__builtin__'`: Wrong version of cloudpickle. I solved this by reinstalling beam with `pip install apache-beam[gcp]`
-  - Something about 'MetadataCache' not being found: This is a problem with the version of pangeo-forge-recipes or pangeo-forge-runner.
- I locked a working local environment in `environment-local.locked` so I have a ref point for the future.
+Assuming you have pangeo-forge-runner installed you should be able to do this
+```
+export IS_TEST=true; export GITHUB_RUN_ID=a;export GITHUB_RUN_ATTEMPT=bb;pangeo-forge-runner expand-meta --repo=.
+```
+in the base repo. If this succeeds these recipes should be submittable (I hope).

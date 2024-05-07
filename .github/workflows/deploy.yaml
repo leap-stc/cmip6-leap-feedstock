@@ -1,17 +1,23 @@
-name: Deploy recipes
+name: "Deploy recipes"
 
 on:
   workflow_dispatch:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
-    types: [opened, reopened, synchronize, labeled]
+  workflow_run:
+    workflows: ["Recipe CI"]
+    types: [completed]
+
+  
   # schedule:
   #   - cron: "0 * * * SUN" # run every sunday
 
 jobs:
   deploy-recipes:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    concurrency: 
+        group: ${{ github.head_ref }}
+        cancel-in-progress: true
     name: deploy-recipes
     runs-on: ubuntu-latest
     strategy:
