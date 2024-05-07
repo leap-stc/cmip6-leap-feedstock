@@ -1,4 +1,4 @@
-name: "Recipe CI for Pull Requests only"
+name: "Recipe CI w/o deployment"
 
 on:
   pull_request:

@@ -9,7 +9,7 @@ on:
       - 'configs/**'
       - '.github/workflows/deploy.yaml'
   workflow_run:
-    workflows: ["Recipe CI"]
+    workflows: ["Recipe CI w/o deployment"]
     types: [completed]
 
   # schedule:
