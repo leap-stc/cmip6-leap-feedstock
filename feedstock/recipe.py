@@ -132,6 +132,7 @@ input_dict_flat = {
     iid: [(filename, data["url"]) for filename, data in file_dict.items()]
     for iid, file_dict in input_dict.items()
 }
+logger.debug(f"{input_dict_flat=}")
 
 
 def combine_dicts(dicts):
@@ -148,6 +149,7 @@ def combine_dicts(dicts):
 recipe_dict = {
     k: combine_dicts([i[1] for i in sorted(v)]) for k, v in input_dict_flat.items()
 }
+logger.debug(f"{recipe_dict=}")
 
 
 if prune_submission:
