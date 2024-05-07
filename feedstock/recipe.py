@@ -123,18 +123,6 @@ logger.info(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from inpu
 if prune_iids:
     iids_filtered = iids_filtered[0:200]
 
-print(f"🚀 Requesting a total of {len(iids_filtered)} iids")
-input_dict = client.get_recipe_inputs_from_iid_list(iids_filtered)
-# for now conform to the way this was set up with the async client(this is where we could extract other info,
-# like checksums and tracking_id too!). That will require some sort of matching between dataset and file
-# level results though!
-input_dict_flat = {
-    iid: [(filename, data["url"]) for filename, data in file_dict.items()]
-    for iid, file_dict in input_dict.items()
-}
-logger.debug(f"{input_dict_flat=}")
-
-
 def combine_dicts(dicts):
     result = {}
     for d in dicts:
@@ -145,12 +133,13 @@ def combine_dicts(dicts):
                 result[key] = [value]
     return result
 
-
-recipe_dict = {
-    k: combine_dicts([i[1] for i in sorted(v)]) for k, v in input_dict_flat.items()
-}
+print(f"🚀 Requesting a total of {len(iids_filtered)} iids")
+input_dict = client.get_recipe_inputs_from_iid_list(iids_filtered)
+logger.debug(f"{input_dict=}")
+input_dict_flat = {iid: [(k,v) for k,v in data.items()] for iid, data in input_dict.items()}
+logger.debug(f"{input_dict_flat=}")
+recipe_dict = {iid:combine_dicts([i[1] for i in sorted(data)]) for iid, data in input_dict_flat.items()}
 logger.debug(f"{recipe_dict=}")
-
 
 if prune_submission:
     recipe_dict = {
@@ -161,7 +150,6 @@ print(f"🚀 Submitting a total of {len(recipe_dict)} iids")
 
 # Print the actual urls
 logger.debug(f"{recipe_dict = }")
-
 
 ## Dynamic Chunking Wrapper
 def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
