@@ -2,7 +2,7 @@ name: Kill all the zombies 🧟‍♂️
 
 on:
   schedule:
-    - cron: '0 */3 * * *'
+    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
 
           jobs = json.loads(subprocess.check_output([
             "gcloud", "dataflow", "jobs", "list",
-            "--created-before=-p6h", "--status=active",
+            "--created-before=-p3h", "--status=active",
             "--filter=name:a618127503*", "--format=json",
             "--region=us-central1"
           ]))
