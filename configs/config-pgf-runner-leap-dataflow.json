@@ -9,7 +9,7 @@
         "project_id": "leap-pangeo",
         "temp_gcs_location": "gs://leap-scratch/data-library/cmip6-pgf-ingestion/temp",
         "use_dataflow_prime": true,
-        "max_num_workers": 50
+        "max_num_workers": 15
     },
     "TargetStorage": {
         "fsspec_class": "gcsfs.GCSFileSystem",
