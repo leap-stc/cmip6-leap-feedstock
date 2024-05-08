@@ -18,7 +18,7 @@ on:
 jobs:
   deploy-recipes:
     concurrency:
-      group: ${{ github.head_ref }}
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
       cancel-in-progress: true
     name: deploy-recipes
     runs-on: ubuntu-latest
