@@ -2,8 +2,6 @@
 """Modified transforms from Pangeo Forge"""
 
 import apache_beam as beam
-from typing import Dict
-from dask.utils import parse_bytes
 from pangeo_forge_esgf import setup_logging
 from leap_data_management_utils import CMIPBQInterface, LogCMIPToBigQuery
 from leap_data_management_utils.data_management_transforms import Copy, InjectAttrs
@@ -19,7 +17,6 @@ from pangeo_forge_recipes.transforms import (
 )
 import logging
 import os
-import xarray as xr
 import yaml
 from tqdm.auto import tqdm
 
