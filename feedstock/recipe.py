@@ -129,10 +129,8 @@ logger.debug(f"{iids_to_skip =}")
 iids_filtered = list(set(iids) - iids_to_skip)
 logger.info(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from input list")
 
-
 if prune_iids:
     iids_filtered = iids_filtered[0:20]
-
 
 # Now that we have the iids that are not yet ingested, we can prune the full iid_info_dict and extract the 'id' field
 iid_info_dict_filtered = {k: v for k, v in iid_info_dict.items() if k in iids_filtered}
@@ -172,83 +170,6 @@ print(f"🚀 Submitting a total of {len(recipe_dict)} iids")
 
 # Print the actual urls
 logger.debug(f"{recipe_dict = }")
-
-
-## Dynamic Chunking Wrapper
-def dynamic_chunking_func(ds: xr.Dataset) -> Dict[str, int]:
-    import warnings
-
-    # trying to import inside the function
-    from dynamic_chunks.algorithms import (
-        even_divisor_algo,
-        iterative_ratio_increase_algo,
-        NoMatchingChunks,
-    )
-
-    logger.info(f"Input Dataset for dynamic chunking {ds =}")
-
-    target_chunk_size = "150MB"
-    target_chunks_aspect_ratio = {
-        "time": 10,
-        "x": 1,
-        "i": 1,
-        "ni": 1,
-        "xh": 1,
-        "nlon": 1,
-        "lon": 1,  # TODO: Maybe import all the known spatial dimensions from xmip?
-        "y": 1,
-        "j": 1,
-        "nj": 1,
-        "yh": 1,
-        "nlat": 1,
-        "lat": 1,
-    }
-    size_tolerance = 0.5
-
-    # Some datasets are smaller than the target chunk size and should not be chunked at all
-    if ds.nbytes < parse_bytes(target_chunk_size):
-        target_chunks = dict(ds.dims)
-
-    else:
-        try:
-            target_chunks = even_divisor_algo(
-                ds,
-                target_chunk_size,
-                target_chunks_aspect_ratio,
-                size_tolerance,
-                allow_extra_dims=True,
-            )
-
-        except NoMatchingChunks:
-            warnings.warn(
-                "Primary algorithm using even divisors along each dimension failed "
-                "with. Trying secondary algorithm."
-                f"Input {ds=}"
-            )
-            try:
-                target_chunks = iterative_ratio_increase_algo(
-                    ds,
-                    target_chunk_size,
-                    target_chunks_aspect_ratio,
-                    size_tolerance,
-                    allow_extra_dims=True,
-                )
-            except NoMatchingChunks:
-                raise ValueError(
-                    (
-                        "Could not find any chunk combinations satisfying "
-                        "the size constraint with either algorithm."
-                        f"Input {ds=}"
-                    )
-                )
-            # If something fails
-            except Exception as e:
-                raise e
-        except Exception as e:
-            raise e
-    logger.info(f"Dynamic Chunking determined {target_chunks =}")
-    return target_chunks
-
 
 ## Create the recipes
 recipes = {}
