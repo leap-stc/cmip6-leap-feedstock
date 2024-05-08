@@ -5,7 +5,7 @@ import apache_beam as beam
 from pangeo_forge_esgf import setup_logging
 from leap_data_management_utils import CMIPBQInterface, LogCMIPToBigQuery
 from leap_data_management_utils.data_management_transforms import Copy, InjectAttrs
-from leap_data_management_utils.cmip_transforms import TestDataset, Preprocessor
+from leap_data_management_utils.cmip_transforms import TestDataset, Preprocessor, dynamic_chunking_func
 from pangeo_forge_esgf.client import ESGFClient
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
