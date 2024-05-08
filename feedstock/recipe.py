@@ -184,7 +184,7 @@ for iid, data in recipe_dict.items():
     pattern = pattern_from_file_sequence(urls, concat_dim="time")
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
-        | OpenURLWithFSSpec()
+        | OpenURLWithFSSpec(max_concurrency=8)
         # do not specify file type to accomodate both ncdf3 and ncdf4
         | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})
         | Preprocessor()
