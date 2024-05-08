@@ -1,11 +1,11 @@
     # from https://github.com/Timh37/CMIP6cex/issues/2
-    - "CMIP6.*.*.*.[historical, ssp245, ssp585].*.day.[psl, pr, sfcWind].*.*"
+    # - "CMIP6.*.*.*.[historical, ssp245, ssp585].*.day.[psl, pr, sfcWind].*.*"
     # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/144
     - 'CMIP6.HighResMIP.CMCC.CMCC-CM2-VHR4.[hist-1950,highres-future].r1i1p1f1.6hrPlevPt.[vas,uas,psl].gn.*'
     - 'CMIP6.HighResMIP.EC-Earth-Consortium.EC-Earth3P-HR.[hist-1950,highres-future].r1i1p2f1.6hrPlevPt.[vas,uas,psl].gr.*'
     - 'CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HM.[hist-1950,highres-future].r1i1p1f1.[3hr, E3hr].[vas,uas,psl].gn.*'
     # from https://github.com/pangeo-forge/cmip6-feedstock/issues/22
-    - "CMIP6.*.*.*.[historical, ssp126, ssp245, ssp585].*.Omon.zmeso.*.*"
+    # - "CMIP6.*.*.*.[historical, ssp126, ssp245, ssp585].*.Omon.zmeso.*.*"
 #     # PMIP velocities
 #     - 'CMIP6.PMIP.MIROC.MIROC-ES2L.lgm.r1i1p1f2.Omon.uo.gn.v20191002'
 #     - 'CMIP6.PMIP.AWI.AWI-ESM-1-1-LR.lgm.r1i1p1f1.Odec.uo.gn.v20200212'
