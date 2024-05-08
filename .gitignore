@@ -132,3 +132,7 @@ feedstock/local_storage
 
 *.csv
 old/
+catalog_noqc.json
+catalog_retracted.json
+catalog.json
+.vscode/settings.json

@@ -1,4 +1,4 @@
-name: Deploy recipes
+name: "Deploy recipes"
 
 on:
   workflow_dispatch:
@@ -8,20 +8,18 @@ on:
       - 'feedstock/**'
       - 'configs/**'
       - '.github/workflows/deploy.yaml'
-  pull_request:
-    branches: ["main"]
-    types: [opened, reopened, synchronize, labeled]
-    paths: # only run on changes to feedstock relevant code
-      - 'feedstock/**'
-      - 'configs/**'
-      - '.github/workflows/deploy.yaml'
-
+  workflow_run:
+    workflows: ["Recipe CI w/o deployment"]
+    types: [completed]
 
   # schedule:
   #   - cron: "0 * * * SUN" # run every sunday
 
 jobs:
   deploy-recipes:
+    concurrency:
+      group: ${{ github.head_ref }}
+      cancel-in-progress: true
     name: deploy-recipes
     runs-on: ubuntu-latest
     strategy:
@@ -35,7 +33,7 @@ jobs:
         with:
           credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
       - name: "Deploy recipes PR"
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' }} and ${{ github.event.workflow_run.conclusion == 'success' }}
         uses: "pangeo-forge/deploy-recipe-action@v0.3"
         with:
           select_recipe_by_label: "" #to circumvent https://github.com/leap-stc/cmip6-leap-feedstock/issues/6#issuecomment-1668577971

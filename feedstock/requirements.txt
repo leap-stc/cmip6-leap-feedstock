@@ -1,4 +1,4 @@
-leap-data-management-utils==0.0.7
+leap-data-management-utils==0.0.9
 #pangeo-forge-esgf==0.2.0
 git+https://github.com/jbusecke/pangeo-forge-esgf.git@new-request-scheme
 dynamic-chunks==0.0.3
