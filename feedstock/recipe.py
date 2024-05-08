@@ -91,7 +91,11 @@ client = ESGFClient(
         "checksum",
         "checksum_type",
     ],
-    dataset_output_fields=["pid", "further_info_url", "citation_url"],#!Most datasets do not seem to have tracking_id as a field.
+    dataset_output_fields=[
+        "pid",
+        "further_info_url",
+        "citation_url",
+    ],  #!Most datasets do not seem to have tracking_id as a field.
 )
 iid_info_dict = client.get_instance_id_input(iids_raw)
 iids = list(iid_info_dict.keys())
