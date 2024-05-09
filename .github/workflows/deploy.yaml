@@ -8,10 +8,12 @@ on:
       - 'feedstock/**'
       - 'configs/**'
       - '.github/workflows/deploy.yaml'
-  workflow_run:
-    workflows: ["Recipe CI w/o deployment"]
-    types: [completed]
-
+  pull_request:
+    branches: ["main"]
+    paths: # only run on changes to feedstock relevant code
+      - 'feedstock/**'
+      - 'configs/**'
+      - '.github/workflows/deploy.yaml'
   # schedule:
   #   - cron: "0 * * * SUN" # run every sunday
 
