@@ -192,7 +192,7 @@ Set up a local dev environment
 mamba create -n cmip6-feedstock python=3.11 -y
 conda activate cmip6-feedstock
 pip install pangeo-forge-runner==0.10.2 --no-cache-dir
-pip intall -r feedstock/requirements.txt
+pip install -r feedstock/requirements.txt
 ```
 
 #### Debug recipe locally
