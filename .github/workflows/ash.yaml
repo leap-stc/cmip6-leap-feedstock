@@ -27,7 +27,7 @@ jobs:
 
           jobs = json.loads(subprocess.check_output([
             "gcloud", "dataflow", "jobs", "list",
-            "--created-before=-p3h", "--status=active",
+            "--created-before=-p6h", "--status=active",
             "--filter=name:a618127503*", "--format=json",
             "--region=us-central1"
           ]))
