@@ -3,14 +3,15 @@
 
 import apache_beam as beam
 from pangeo_forge_esgf import setup_logging
-from leap_data_management_utils import CMIPBQInterface, LogCMIPToBigQuery
 from leap_data_management_utils.data_management_transforms import Copy, InjectAttrs
 from leap_data_management_utils.cmip_transforms import (
     TestDataset,
     Preprocessor,
     dynamic_chunking_func,
+    CMIPBQInterface,
+    LogCMIPToBigQuery
 )
-from pangeo_forge_esgf.client import ESGFClient
+from pangeo_forge_esgf.async_client import ESGFAsyncClient,get_sorted_http_urls_from_iid_dict
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
     OpenURLWithFSSpec,
@@ -20,6 +21,7 @@ from pangeo_forge_recipes.transforms import (
     ConsolidateDimensionCoordinates,
 )
 import logging
+import asyncio
 import os
 import yaml
 from tqdm.auto import tqdm
@@ -83,24 +85,12 @@ with open(iid_file) as f:
 # parse out wildcard/square brackets using pangeo-forge-esgf
 logger.debug(f"{iids_raw = }")
 
-client = ESGFClient(
-    file_output_fields=[
-        "pid",
-        "tracking_id",
-        "further_info_url",
-        "citation_url",
-        "checksum",
-        "checksum_type",
-    ],
-    dataset_output_fields=[
-        "pid",
-        "further_info_url",
-        "citation_url",
-    ],  #!Most datasets do not seem to have tracking_id as a field.
-)
-iid_info_dict = client.get_instance_id_input(iids_raw)
-iids = list(iid_info_dict.keys())
-logger.info(f"{iids = }")
+async def parse_iids():
+    async with ESGFAsyncClient() as client:
+        return await client.expand_iids(iids_raw)
+    
+iids = asyncio.run(parse_iids())
+logger.info(f"Submitted {iids = }")
 
 # Prune the url dict to only include items that have not been logged to BQ yet
 logger.info("Pruning iids that already exist")
@@ -109,19 +99,14 @@ bq_interface = CMIPBQInterface(table_id=table_id)
 # TODO: Move this back to the BQ client https://github.com/leap-stc/leap-data-management-utils/issues/33
 # Since we have more than 10k iids to check against the big query database,
 # we need to run this in batches (bq does not take more than 10k inputs per query).
-iids_in_table = []
-batchsize = 10000
-iid_batches = [iids[i : i + batchsize] for i in range(0, len(iids), batchsize)]
-for iids_batch in tqdm(iid_batches):
-    iids_in_table_batch = bq_interface.iid_list_exists(iids_batch)
-    iids_in_table.extend(iids_in_table_batch)
+iids_in_table = bq_interface.iid_list_exists(iids)
 
 # manual overrides (these will be rewritten each time as long as they exist here)
 overwrite_iids = [
-    "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.thetao.gn.v20200514",
-    "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.thetao.gn.v20200514",
-    "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.so.gn.v20200514",
-    "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.so.gn.v20200514",
+    # "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.thetao.gn.v20200514",
+    # "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.thetao.gn.v20200514",
+    # "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.highres-future.r1i1p1f1.Omon.so.gn.v20200514",
+    # "CMIP6.HighResMIP.NERC.HadGEM3-GC31-HH.hist-1950.r1i1p1f1.Omon.so.gn.v20200514",
 ]
 
 # beam does NOT like to pickle client objects (https://github.com/googleapis/google-cloud-python/issues/3191#issuecomment-289151187)
@@ -137,50 +122,26 @@ logger.info(f"Pruned {len(iids) - len(iids_filtered)}/{len(iids)} iids from inpu
 if prune_iids:
     iids_filtered = iids_filtered[0:20]
 
-# Now that we have the iids that are not yet ingested, we can prune the full iid_info_dict and extract the 'id' field
-iid_info_dict_filtered = {k: v for k, v in iid_info_dict.items() if k in iids_filtered}
-dataset_ids_filtered = [v["id"] for v in iid_info_dict_filtered.values()]
-
-print(f"🚀 Requesting a total of {len(dataset_ids_filtered)} datasets")
-input_dict = client.get_recipe_inputs_from_dataset_ids(dataset_ids_filtered)
-
-logger.debug(f"{input_dict=}")
-input_dict_flat = {
-    iid: [(k, v) for k, v in data.items()] for iid, data in input_dict.items()
-}
-logger.debug(f"{input_dict_flat=}")
-
-
-def combine_dicts(dicts):
-    result = {}
-    for d in dicts:
-        for key, value in d.items():
-            if key in result:
-                result[key].append(value)
-            else:
-                result[key] = [value]
-    return result
-
-
-recipe_dict = {
-    iid: combine_dicts([i[1] for i in sorted(data)])
-    for iid, data in input_dict_flat.items()
-}
-logger.debug(f"{recipe_dict=}")
+print(f"🚀 Requesting a total of {len(iids_filtered)} datasets")
+async def get_recipe_inputs():
+    async with ESGFAsyncClient() as client:
+        return await client.recipe_data(iids_filtered)
+recipe_data = asyncio.run(get_recipe_inputs())
+logger.info(f"Got urls for iids: {list(recipe_data.keys())}")
 
 if prune_submission:
-    recipe_dict = {iid: recipe_dict[iid] for iid in list(recipe_dict.keys())[0:5]}
+    recipe_dict = {i: recipe_data[i] for i in list(recipe_data.keys())[0:5]}
 
-print(f"🚀 Submitting a total of {len(recipe_dict)} iids")
+logger.info(f"🚀 Submitting a total of {len(recipe_dict)} iids")
 
-# Print the actual urls
-logger.debug(f"{recipe_dict = }")
+# Print the actual data
+logger.debug(f"{recipe_data=}")
 
 ## Create the recipes
 recipes = {}
 
-for iid, data in recipe_dict.items():
-    urls = data["url"]
+for iid, data in recipe_data.items():
+    urls = get_sorted_http_urls_from_iid_dict(data)
     pattern = pattern_from_file_sequence(urls, concat_dim="time")
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
@@ -193,7 +154,7 @@ for iid, data in recipe_dict.items():
             combine_dims=pattern.combine_dim_keys,
             dynamic_chunking_fn=dynamic_chunking_func,
         )
-        | InjectAttrs({"pangeo_forge_file_data": data})
+        | InjectAttrs({"pangeo_forge_api_responses": data})
         | ConsolidateDimensionCoordinates()
         | ConsolidateMetadata()
         | Copy(
