@@ -138,9 +138,9 @@ recipe_data = asyncio.run(get_recipe_inputs())
 logger.info(f"Got urls for iids: {list(recipe_data.keys())}")
 
 if prune_submission:
-    recipe_dict = {i: recipe_data[i] for i in list(recipe_data.keys())[0:5]}
+    recipe_data = {i: recipe_data[i] for i in list(recipe_data.keys())[0:5]}
 
-logger.info(f"🚀 Submitting a total of {len(recipe_dict)} iids")
+logger.info(f"🚀 Submitting a total of {len(recipe_data)} iids")
 
 # Print the actual data
 logger.debug(f"{recipe_data=}")
