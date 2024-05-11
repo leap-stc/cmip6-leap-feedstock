@@ -9,9 +9,12 @@ from leap_data_management_utils.cmip_transforms import (
     Preprocessor,
     dynamic_chunking_func,
     CMIPBQInterface,
-    LogCMIPToBigQuery
+    LogCMIPToBigQuery,
 )
-from pangeo_forge_esgf.async_client import ESGFAsyncClient,get_sorted_http_urls_from_iid_dict
+from pangeo_forge_esgf.async_client import (
+    ESGFAsyncClient,
+    get_sorted_http_urls_from_iid_dict,
+)
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
     OpenURLWithFSSpec,
@@ -24,7 +27,6 @@ import logging
 import asyncio
 import os
 import yaml
-from tqdm.auto import tqdm
 
 logger = logging.getLogger(__name__)
 
@@ -85,10 +87,12 @@ with open(iid_file) as f:
 # parse out wildcard/square brackets using pangeo-forge-esgf
 logger.debug(f"{iids_raw = }")
 
+
 async def parse_iids():
     async with ESGFAsyncClient() as client:
         return await client.expand_iids(iids_raw)
-    
+
+
 iids = asyncio.run(parse_iids())
 logger.info(f"Submitted {iids = }")
 
@@ -123,9 +127,13 @@ if prune_iids:
     iids_filtered = iids_filtered[0:20]
 
 print(f"🚀 Requesting a total of {len(iids_filtered)} datasets")
+
+
 async def get_recipe_inputs():
     async with ESGFAsyncClient() as client:
         return await client.recipe_data(iids_filtered)
+
+
 recipe_data = asyncio.run(get_recipe_inputs())
 logger.info(f"Got urls for iids: {list(recipe_data.keys())}")
 
