@@ -12,8 +12,8 @@
     - 'CMIP6.PMIP.*.*.lgm.*.[Omon, Odec].[uo, vo].*.*'
     # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/41
     - "CMIP6.*.*.*.[historical, ssp126, ssp245, ssp585].*.SImon.[sifb,siitdthick].*.*"
-    # # for CMIP6 pco2 testbed (these got stuck in the client somehow)
-    # - "CMIP6.*.*.*.[historical, ssp245].*.Omon.[dpco2,tos,sos,chl,mlotst].*.*"
+    # for CMIP6 pco2 testbed (these got stuck in the client somehow)
+    - "CMIP6.*.*.*.[historical, ssp245].*.Omon.[dpco2,tos,sos,chl,mlotst].*.*"
     # # from https://github.com/leap-stc/cmip6-leap-feedstock/issues/72
     # - "CMIP6.HighResMIP.MOHC.HadGEM3-GC31-HH.[highres-future,hist-1950].r1i1p1f1.Omon.[thetao,so].gn.*"
     # From https://github.com/leap-stc/cmip6-leap-feedstock/issues/101
