@@ -1,0 +1,9 @@
+# All the information important to cataloging.
+"ncviewjs:meta_yaml_url": "https://github.com/leap-stc/cmip6-leap-feedstock/blob/main/feedstock/meta.yaml"
+tags:
+  - cmip6
+  - gcs
+  - zarr
+links:
+  - label: DOI
+    url: https://zenodo.org/badge/latestdoi/618127503
