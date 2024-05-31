@@ -35,7 +35,7 @@ for filename, bq_df in [
         print(df_all.head().columns)
         print(df_all.head().instance_id.tolist())
         print(df_all.head().store.tolist())
-        
+
         intake_esm_df = bq_df_to_intake_esm(bq_df)
         intake_esm_df.to_csv(filename, index=False)
         if fs.exists(path):
