@@ -25,7 +25,7 @@ jobs:
           python-version: "3.9"
       - name: Install dependencies
         # TODO: base on an actual release
-        run: python -m pip install gcsfs git+https://github.com/leap-stc/leap-data-management-utils.git@factor-out-cmip
+        run: python -m pip install gcsfs "leap-data-management-utils[bigquery]==0.0.14"
       - name: "Parse catalog"
         shell: bash
         run: |

@@ -1,4 +1,4 @@
-from leap_data_management_utils import CMIPBQInterface
+from leap_data_management_utils.bq_interfaces import CMIPBQInterface
 from leap_data_management_utils.cmip_catalog import bq_df_to_intake_esm
 import os
 import gcsfs
@@ -32,6 +32,10 @@ for filename, bq_df in [
     )
 
     if len(bq_df) > 0:
+        print(df_all.head().columns)
+        print(df_all.head().instance_id.tolist())
+        print(df_all.head().store.tolist())
+
         intake_esm_df = bq_df_to_intake_esm(bq_df)
         intake_esm_df.to_csv(filename, index=False)
         if fs.exists(path):
