@@ -32,6 +32,7 @@ for filename, bq_df in [
     )
 
     if len(bq_df) > 0:
+        print(bq_df.head())
         intake_esm_df = bq_df_to_intake_esm(bq_df)
         intake_esm_df.to_csv(filename, index=False)
         if fs.exists(path):
