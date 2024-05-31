@@ -1,4 +1,4 @@
-from leap_data_management_utils.cmip_transforms import CMIPBQInterface
+from leap_data_management_utils.bq_interfaces import CMIPBQInterface
 from leap_data_management_utils.cmip_catalog import bq_df_to_intake_esm
 import os
 import gcsfs
