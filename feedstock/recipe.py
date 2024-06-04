@@ -162,8 +162,10 @@ for iid, data in recipe_data.items():
         f"Creating {iid}" >> beam.Create(pattern.items())
         | CheckpointFileTransfer(
             transfer_target=cache_target,
-            max_executors=5,
+            max_executors=1,
             concurrency_per_executor=2,
+            initial_backoff = 3.0, # Try with super long backoff and 
+            backoff_factor = 2.0,
             fsspec_sync_patch=True,
         )
         | OpenURLWithFSSpec(cache=None, fsspec_sync_patch=True)
