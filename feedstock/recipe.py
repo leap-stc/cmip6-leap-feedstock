@@ -163,8 +163,8 @@ for iid, data in recipe_data.items():
         | CheckpointFileTransfer(
             transfer_target=cache_target,
             max_executors=5,
-            concurrency_per_executor=3,
-            # fsspec_sync_patch=True,
+            concurrency_per_executor=2,
+            fsspec_sync_patch=True,
         )
         | OpenURLWithFSSpec(cache=None, fsspec_sync_patch=True)
         | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})
