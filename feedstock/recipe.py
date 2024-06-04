@@ -167,7 +167,6 @@ for iid, data in recipe_data.items():
             # fsspec_sync_patch=True,
         )
         | OpenURLWithFSSpec(cache=None, fsspec_sync_patch=True)
-        # do not specify file type to accomodate both ncdf3 and ncdf4
         | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})
         | Preprocessor()
         | StoreToZarr(
