@@ -2,12 +2,12 @@ name: "Deploy recipes"
 
 on:
   workflow_dispatch:
-  push:
-    branches: ["main"]
-    paths: # only run on changes to feedstock relevant code
-      - 'feedstock/**'
-      - 'configs/**'
-      - '.github/workflows/deploy.yaml'
+  # push:
+  #   branches: ["main"]
+  #   paths: # only run on changes to feedstock relevant code
+  #     - 'feedstock/**'
+  #     - 'configs/**'
+  #     - '.github/workflows/deploy.yaml'
   pull_request:
     branches: ["main"]
     paths: # only run on changes to feedstock relevant code
