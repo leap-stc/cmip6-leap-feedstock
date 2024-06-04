@@ -151,8 +151,8 @@ logger.debug(f"{recipe_data=}")
 recipes = {}
 
 cache_target = CacheFSSpecTarget(
-    fs = gcsfs.GCSFileSystem(),
-    root_path="gs://leap-scratch/data-library/cmip6-pgf-ingestion/cache"
+    fs=gcsfs.GCSFileSystem(),
+    root_path="gs://leap-scratch/data-library/cmip6-pgf-ingestion/cache",
 )
 
 for iid, data in recipe_data.items():
@@ -160,7 +160,7 @@ for iid, data in recipe_data.items():
     pattern = pattern_from_file_sequence(urls, concat_dim="time")
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
-        |CheckpointFileTransfer(
+        | CheckpointFileTransfer(
             transfer_target=cache_target,
             max_executors=2,
             concurrency_per_executor=8,
