@@ -22,11 +22,15 @@ from pangeo_forge_recipes.transforms import (
     StoreToZarr,
     ConsolidateMetadata,
     ConsolidateDimensionCoordinates,
+    CheckpointFileTransfer,
 )
+from pangeo_forge_recipes.storage import CacheFSSpecTarget
+
 import logging
 import asyncio
 import os
 import yaml
+import gcsfs
 
 logger = logging.getLogger(__name__)
 
@@ -146,12 +150,23 @@ logger.debug(f"{recipe_data=}")
 ## Create the recipes
 recipes = {}
 
+cache_target = CacheFSSpecTarget(
+    fs=gcsfs.GCSFileSystem(),
+    root_path="gs://leap-scratch/data-library/cmip6-pgf-ingestion/cache",
+)
+
 for iid, data in recipe_data.items():
     urls = get_sorted_http_urls_from_iid_dict(data)
     pattern = pattern_from_file_sequence(urls, concat_dim="time")
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
-        | OpenURLWithFSSpec(max_concurrency=8)
+        | CheckpointFileTransfer(
+            transfer_target=cache_target,
+            max_executors=2,
+            concurrency_per_executor=8,
+            fsspec_sync_patch=True,
+        )
+        | OpenURLWithFSSpec(cache=None, fsspec_sync_patch=True)
         # do not specify file type to accomodate both ncdf3 and ncdf4
         | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})
         | Preprocessor()
