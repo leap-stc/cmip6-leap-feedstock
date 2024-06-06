@@ -162,12 +162,13 @@ for iid, data in recipe_data.items():
         f"Creating {iid}" >> beam.Create(pattern.items())
         | CheckpointFileTransfer(
             transfer_target=cache_target,
-            max_executors=1,
-            concurrency_per_executor=2,
-            fsspec_sync_patch=True,
+            max_executors=10,
+            concurrency_per_executor=3,
+            initial_backoff=3.0,  # Try with super long backoff and
+            backoff_factor=2.0,
+            fsspec_sync_patch=False,
         )
         | OpenURLWithFSSpec(cache=None, fsspec_sync_patch=True)
-        # do not specify file type to accomodate both ncdf3 and ncdf4
         | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})
         | Preprocessor()
         | StoreToZarr(
