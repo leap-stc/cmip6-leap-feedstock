@@ -1,7 +1,8 @@
 leap-data-management-utils==0.0.12
 git+https://github.com/jbusecke/pangeo-forge-esgf.git@new-request-scheme
 dynamic-chunks==0.0.3
-git+https://github.com/pangeo-forge/pangeo-forge-recipes@feature/concurrency-control
+#git+https://github.com/pangeo-forge/pangeo-forge-recipes@feature/concurrency-control
+git+https://github.com/pangeo-forge/pangeo-forge-recipes
 zarr==2.16.1
 gcsfs
 apache-beam[gcp]
