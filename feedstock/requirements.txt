@@ -5,4 +5,5 @@ git+https://github.com/pangeo-forge/pangeo-forge-recipes@feature/concurrency-con
 zarr==2.16.1
 gcsfs
 apache-beam[gcp]
-git+https://github.com/moradology/httpfs-sync.git@feature/pool-reuse
+#git+https://github.com/moradology/httpfs-sync.git@feature/pool-reuse
+httpfs-sync>=0.0.2
