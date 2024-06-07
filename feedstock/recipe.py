@@ -160,15 +160,15 @@ for iid, data in recipe_data.items():
     pattern = pattern_from_file_sequence(urls, concat_dim="time")
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
-        | CheckpointFileTransfer(
-            transfer_target=cache_target,
-            max_executors=10,
-            concurrency_per_executor=4,
-            initial_backoff=3.0,  # Try with super long backoff and
-            backoff_factor=2.0,
-            fsspec_sync_patch=False,
-        )
-        | OpenURLWithFSSpec(cache=None, fsspec_sync_patch=True)
+        # | CheckpointFileTransfer(
+        #     transfer_target=cache_target,
+        #     max_executors=10,
+        #     concurrency_per_executor=4,
+        #     initial_backoff=3.0,  # Try with super long backoff and
+        #     backoff_factor=2.0,
+        #     fsspec_sync_patch=False,
+        # )
+        | OpenURLWithFSSpec(cache=cache_target, fsspec_sync_patch=True)
         | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})
         | Preprocessor()
         | StoreToZarr(
