@@ -22,7 +22,7 @@ from pangeo_forge_recipes.transforms import (
     StoreToZarr,
     ConsolidateMetadata,
     ConsolidateDimensionCoordinates,
-    CheckpointFileTransfer,
+    # CheckpointFileTransfer,
 )
 from pangeo_forge_recipes.storage import CacheFSSpecTarget
 
