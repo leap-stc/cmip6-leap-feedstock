@@ -168,7 +168,10 @@ for iid, data in recipe_data.items():
         #     backoff_factor=2.0,
         #     fsspec_sync_patch=False,
         # )
-        | OpenURLWithFSSpec(cache=cache_target, fsspec_sync_patch=True)
+        | OpenURLWithFSSpec(
+            cache=cache_target, 
+            # fsspec_sync_patch=True
+        )
         | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})
         | Preprocessor()
         | StoreToZarr(
