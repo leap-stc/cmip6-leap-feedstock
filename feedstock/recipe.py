@@ -169,7 +169,7 @@ for iid, data in recipe_data.items():
         #     fsspec_sync_patch=False,
         # )
         | OpenURLWithFSSpec(
-            cache=cache_target, 
+            cache=cache_target,
             # fsspec_sync_patch=True
         )
         | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})

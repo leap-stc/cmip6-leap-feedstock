@@ -11,4 +11,3 @@ git+https://github.com/pangeo-forge/pangeo-forge-recipes@jb/xarray-hack #see @gc
 zarr==2.16.1
 gcsfs
 apache-beam[gcp]
-
