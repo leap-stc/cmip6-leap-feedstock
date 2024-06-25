@@ -64,4 +64,5 @@
     # # From  https://github.com/leap-stc/cmip6-leap-feedstock/issues/123
     # - "CMIP6.HighResMIP.*.*.[highresSST-present,hist-1950].*.Amon.[pr, ts].gn.*"
     # For m2lines/ocean_emulators
-    - "CMIP6.*.*.GFDL-CM4.piControl.*.[Amon, Omon].[uo, vo, thetao, so, zos, tauuo, tauvo, hfss, hfls].gn.*"
+    - "CMIP6.*.*.GFDL-CM4.piControl.*.[Amon, Omon].[uo, vo, thetao, so, zos, tauuo, tauvo, hfss, hfls, hfds].[gn,gr].*"
+    - 'CMIP6.*.*.CESM2.piControl.*.*.[volcello, thkcello, areacello, deptho].*.*'
