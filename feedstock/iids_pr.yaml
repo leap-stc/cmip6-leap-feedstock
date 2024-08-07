@@ -1,3 +1,2 @@
-   # - "CMIP6.*.*.[CNRM-CM6-1,CanESM5].historical.r1i1p1f1.Omon.[tos, so].*.*"
-   # - 'CMIP6.HighResMIP.CMCC.CMCC-CM2-VHR4.[hist-1950,highres-future].r1i1p1f1.6hrPlevPt.[vas,uas,psl].gn.*'
-   - "CMIP6.*.*.*.historical.*.Omon.zos.gn.*"
+   - "CMIP6.*.*.[CNRM-CM6-1,CanESM5].historical.r1i1p1f1.Omon.[tos, so].*.*"
+   - 'CMIP6.HighResMIP.CMCC.CMCC-CM2-VHR4.[hist-1950,highres-future].r1i1p1f1.6hrPlevPt.[vas,uas,psl].gn.*'
