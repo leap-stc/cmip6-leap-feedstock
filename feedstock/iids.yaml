@@ -66,3 +66,5 @@
     # For m2lines/ocean_emulators
     - "CMIP6.*.*.GFDL-CM4.piControl.*.[Amon, Omon].[uo, vo, thetao, so, zos, tauuo, tauvo, hfss, hfls, hfds].[gn,gr].*"
     - 'CMIP6.*.*.CESM2.piControl.*.*.[volcello, thkcello, areacello, deptho].*.*'
+    # for 178
+    - "CMIP6.*.*.*.historical.*.Omon.zos.gn.*"
