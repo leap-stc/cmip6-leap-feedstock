@@ -70,4 +70,3 @@
     - "CMIP6.*.*.*.historical.*.Omon.zos.gn.*"
     # for 180
     - "CMIP6.HighResMIP.*.*.hist-1950.*.SImon.[sivol,siconc].gn.*"
-
