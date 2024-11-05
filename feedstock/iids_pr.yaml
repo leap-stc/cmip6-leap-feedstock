@@ -1,1 +1,2 @@
-   - "CMIP6.*.*.[CNRM-CM6-1,CanESM5].historical.r1i1p1f1.Omon.[tos, so].*.*"
+   # - "CMIP6.*.*.[CNRM-CM6-1,CanESM5].historical.r1i1p1f1.Omon.[tos, so].*.*"
+   - 'CMIP6.RFMIP.*.*.rad-irf.*.Efx.*.*.*'
