@@ -160,11 +160,11 @@ for iid, data in recipe_data.items():
     pattern = pattern_from_file_sequence(urls, concat_dim="time")
 
     # to accomodate single file we cannot parse target chunks (https://github.com/pangeo-forge/pangeo-forge-recipes/issues/275)
-    if len(urls)>1:
+    if len(urls) > 1:
         chunk_fn = dynamic_chunking_func
     else:
         chunk_fn = None
-        
+
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
         # | CheckpointFileTransfer(
