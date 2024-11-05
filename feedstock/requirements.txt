@@ -1,4 +1,5 @@
-leap-data-management-utils==0.0.12
+git+https://github.com/leap-stc/leap-data-management-utils.git@allow-no-time-in-tests
+#leap-data-management-utils==0.0.12
 git+https://github.com/jbusecke/pangeo-forge-esgf.git@new-request-scheme
 dynamic-chunks==0.0.3
 #git+https://github.com/pangeo-forge/pangeo-forge-recipes@feature/concurrency-control
