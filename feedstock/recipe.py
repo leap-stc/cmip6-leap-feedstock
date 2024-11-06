@@ -162,8 +162,10 @@ for iid, data in recipe_data.items():
     # to accomodate single file we cannot parse target chunks (https://github.com/pangeo-forge/pangeo-forge-recipes/issues/275)
     if len(urls) > 1:
         chunk_fn = dynamic_chunking_func
+        combine_dims = pattern.combine_dim_keys
     else:
         chunk_fn = None
+        combine_dims = []
 
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
@@ -183,7 +185,7 @@ for iid, data in recipe_data.items():
         | Preprocessor()
         | StoreToZarr(
             store_name=f"{iid}.zarr",
-            combine_dims=pattern.combine_dim_keys,
+            combine_dims=combine_dims,
             dynamic_chunking_fn=chunk_fn,
         )
         | InjectAttrs({"pangeo_forge_api_responses": data})
