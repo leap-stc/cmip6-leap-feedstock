@@ -67,7 +67,7 @@
     - "CMIP6.*.*.GFDL-CM4.piControl.*.[Amon, Omon].[uo, vo, thetao, so, zos, tauuo, tauvo, hfss, hfls, hfds].[gn,gr].*"
     - 'CMIP6.*.*.CESM2.piControl.*.*.[volcello, thkcello, areacello, deptho].*.*'
     ## for 178
-    # Deactivating for now to avoid https://github.com/leap-stc/cmip6-leap-feedstock/pull/185#issuecomment-2504788341 
+    # Deactivating for now to avoid https://github.com/leap-stc/cmip6-leap-feedstock/pull/185#issuecomment-2504788341
     #
     #- "CMIP6.*.*.*.historical.*.Omon.zos.gn.*"
     # for 180
