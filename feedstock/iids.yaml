@@ -66,7 +66,12 @@
     # For m2lines/ocean_emulators
     - "CMIP6.*.*.GFDL-CM4.piControl.*.[Amon, Omon].[uo, vo, thetao, so, zos, tauuo, tauvo, hfss, hfls, hfds].[gn,gr].*"
     - 'CMIP6.*.*.CESM2.piControl.*.*.[volcello, thkcello, areacello, deptho].*.*'
-    # for 178
-    - "CMIP6.*.*.*.historical.*.Omon.zos.gn.*"
+    ## for 178
+    # Deactivating for now to avoid https://github.com/leap-stc/cmip6-leap-feedstock/pull/185#issuecomment-2504788341
+    #
+    #- "CMIP6.*.*.*.historical.*.Omon.zos.gn.*"
     # for 180
     - "CMIP6.HighResMIP.*.*.hist-1950.*.SImon.[sivol,siconc].gn.*"
+    # for 185
+    - "CMIP6.*.*.*.historical.*.Amon.psl.gn.*"
+    - "CMIP6.*.*.*.[omip1,omip2].*.Omon.[zos, tos].gn.*"
