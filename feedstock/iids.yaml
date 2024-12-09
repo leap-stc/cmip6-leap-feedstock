@@ -70,6 +70,7 @@
     # Deactivating for now to avoid https://github.com/leap-stc/cmip6-leap-feedstock/pull/185#issuecomment-2504788341
     #
     #- "CMIP6.*.*.*.historical.*.Omon.zos.gn.*"
+    - "CMIP6.*.*.*.piControl.*.Omon.zos.gn.*"
     # for 180
     - "CMIP6.HighResMIP.*.*.hist-1950.*.SImon.[sivol,siconc].gn.*"
     # for 185
