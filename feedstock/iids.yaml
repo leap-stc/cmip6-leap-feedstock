@@ -76,4 +76,4 @@
     - "CMIP6.*.*.*.historical.*.Amon.psl.gn.*"
     - "CMIP6.*.*.*.[omip1,omip2].*.Omon.[zos,tos].gn.*"
     # for 184
-    - "CMIP6.CMIP.*.*.historical.*.Omon.[uo,vo,wo,dissicnat].*.*"
+    - "CMIP6.CMIP.*.[CESM2,CESM2-FV2,CESM2-WACCM,CESM2-WACCM-FV2,CanESM5,MRI-ESM2-0,NorESM2-LM,NorESM2-MM].historical.*.Omon.[uo,vo,wo,dissicnat].*.*"
