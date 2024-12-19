@@ -8,7 +8,8 @@
         "service_account_email": "public-cmip-google-cloud@leap-pangeo.iam.gserviceaccount.com",
         "project_id": "leap-pangeo",
         "temp_gcs_location": "gs://leap-scratch/data-library/cmip6-pgf-ingestion/temp",
-        "use_dataflow_prime": true,
+        "use_dataflow_prime": false,
+        "machine_type": "e2-highmem-8",
         "max_num_workers": 60
     },
     "TargetStorage": {
