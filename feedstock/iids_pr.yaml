@@ -1,3 +1,1 @@
-   # - "CMIP6.*.*.[CNRM-CM6-1,CanESM5].historical.r1i1p1f1.Omon.[tos, so].*.*"
-   # Adding one of the OOM instances here for testing (see https://github.com/leap-stc/cmip6-leap-feedstock/issues/194)
-   - "CMIP6.HighResMIP.BCC.BCC-CSM2-HR.hist-1950.r1i1p1f1.SImon.siconc.gn.v20200921"
+   - "CMIP6.*.*.[CNRM-CM6-1,CanESM5].historical.r1i1p1f1.Omon.[tos, so].*.*"
