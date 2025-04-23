@@ -9,6 +9,6 @@ git+https://github.com/pangeo-forge/pangeo-forge-recipes@jb/xarray-hack #see @gc
 #git+https://github.com/moradology/httpfs-sync.git@feature/pool-reuse
 #httpfs-sync>=0.0.2
 zarr==2.16.1
-numcodecs<0.16
+numcodecs<0.16 #Temporary fix, see https://github.com/zarr-developers/numcodecs/issues/721
 gcsfs
 apache-beam[gcp]
