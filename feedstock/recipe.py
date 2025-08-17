@@ -29,7 +29,6 @@ import logging
 import asyncio
 import os
 import yaml
-import gcsfs
 
 logger = logging.getLogger(__name__)
 

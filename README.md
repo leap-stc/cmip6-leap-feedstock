@@ -155,7 +155,7 @@ Last this was updated we ingested over 5000 datasets already!
 ### Setting up environment
 
 >[!WARN]
-> I am trying to refactor this repo to use uv, but have not yet fully migrated the feedstock dependencies. 
+> I am trying to refactor this repo to use uv, but have not yet fully migrated the feedstock dependencies.
 > For now keep using mamba here.
 
 Set up a local development environment
@@ -171,7 +171,7 @@ It can be handy to debug the recipe creation locally to shorten the iteration cy
 
 
 #### Expanding metadata
-This will generate the recipes but not actually execute them. 
+This will generate the recipes but not actually execute them.
 
 Assuming you have pangeo-forge-runner installed **and are authenticated for Google Cloud (big query access**)** you should be able to do this
 ```
@@ -189,7 +189,7 @@ This can be very handy to detect issues with the ESGF API (or pangeo-forge-esgf)
 `GOOGLE_CLOUD_PROJECT` is needed to properly access the bigquery tables (**NOTE: You will also have to generate [Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc) locally).
 
 #### Executing the recipe
-If you want to debug the actual execution of the recipe you need to 'bake' the recipe. 
+If you want to debug the actual execution of the recipe you need to 'bake' the recipe.
 
 ```
 export IS_TEST=true; \
@@ -256,4 +256,4 @@ This script searches for specified CMIP6 Instance IDs (IIDs) within various CMIP
 TODO: How to use uv to run these notebooks
 
 
-### 
+###
