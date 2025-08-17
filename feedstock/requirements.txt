@@ -14,5 +14,3 @@ zarr==2.16.1
 numcodecs<0.16 #Temporary fix, see https://github.com/zarr-developers/numcodecs/issues/721
 gcsfs
 apache-beam[gcp]
-
-
