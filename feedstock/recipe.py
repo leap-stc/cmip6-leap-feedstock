@@ -28,7 +28,6 @@ import logging
 import asyncio
 import os
 import yaml
-import gcsfs
 
 logger = logging.getLogger(__name__)
 
@@ -154,10 +153,12 @@ for iid, data in recipe_data.items():
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
         | OpenURLWithFSSpec()
-        | OpenWithXarray(xarray_open_kwargs={
-            "use_cftime": True, 
-            "chunks":{},
-            })
+        | OpenWithXarray(
+            xarray_open_kwargs={
+                "use_cftime": True,
+                "chunks": {},
+            }
+        )
         | Preprocessor()
         | StoreToZarr(
             store_name=f"{iid}.zarr",
