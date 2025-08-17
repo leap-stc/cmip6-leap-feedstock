@@ -3,16 +3,19 @@
 git+https://github.com/leap-stc/leap-data-management-utils.git@bugfix-sanitizer
 git+https://github.com/jbusecke/pangeo-forge-esgf.git@new-request-scheme
 dynamic-chunks==0.0.3
+# If I deactivate these I get the `cannot pickle 'module' object` error again.
 git+https://github.com/ranchodeluxe/xarray@ranchodeluxe-patch-1#egg=xarray
 git+https://github.com/ranchodeluxe/rioxarray
 git+https://github.com/ranchodeluxe/datatree@main#egg=xarray-datatree
 # xarray
-git+https://github.com/pangeo-forge/pangeo-forge-recipes@jb/xarray-hack #see @gc/cached_disabled but with cache
-# pangeo-forge-recipes==0.10.8
-zarr==2.16.1
-# zarr==2.18.7
-numcodecs<0.16 #Temporary fix, see https://github.com/zarr-developers/numcodecs/issues/721
-gcsfs
-apache-beam[gcp]
+pangeo-forge-recipes==0.10.8
+zarr==2.18.7
+gcsfs==2025.7.0
+apache-beam[gcp]==2.67.0
 
+# deactivated but might be necessary for larger datasets (if so, use this as a template)
+# git+https://github.com/pangeo-forge/pangeo-forge-recipes@jb/xarray-hack #see @gc/cached_disabled but with cache
 
+# pretty sure these can go
+# zarr==2.16.1
+# numcodecs<0.16 #Temporary fix, see https://github.com/zarr-developers/numcodecs/issues/721

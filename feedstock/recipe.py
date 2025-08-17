@@ -156,7 +156,7 @@ for iid, data in recipe_data.items():
         | OpenWithXarray(
             xarray_open_kwargs={
                 "use_cftime": True,
-                "chunks": {},
+                "chunks": {},  # not sure this actually helped...
             }
         )
         | Preprocessor()
