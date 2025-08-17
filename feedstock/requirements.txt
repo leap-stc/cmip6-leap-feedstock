@@ -1,13 +1,10 @@
 leap-data-management-utils==0.0.12
 git+https://github.com/jbusecke/pangeo-forge-esgf.git@new-request-scheme
 dynamic-chunks==0.0.3
-#git+https://github.com/pangeo-forge/pangeo-forge-recipes@feature/concurrency-control
 git+https://github.com/ranchodeluxe/xarray@ranchodeluxe-patch-1#egg=xarray
 git+https://github.com/ranchodeluxe/rioxarray
 git+https://github.com/ranchodeluxe/datatree@main#egg=xarray-datatree
 git+https://github.com/pangeo-forge/pangeo-forge-recipes@jb/xarray-hack #see @gc/cached_disabled but with cache
-#git+https://github.com/moradology/httpfs-sync.git@feature/pool-reuse
-#httpfs-sync>=0.0.2
 zarr==2.16.1
 numcodecs<0.16 #Temporary fix, see https://github.com/zarr-developers/numcodecs/issues/721
 gcsfs

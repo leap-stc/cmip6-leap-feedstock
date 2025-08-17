@@ -15,5 +15,9 @@
     "TargetStorage": {
         "fsspec_class": "gcsfs.GCSFileSystem",
         "root_path": "gs://leap-scratch/data-library/cmip6-pgf-ingestion/jobs/{job_name}"
+    },
+    "InputCacheStorage": {
+        "fsspec_class": "gcsfs.GCSFileSystem",
+        "root_path": "gs://leap-scratch/data-library/cmip6-pgf-ingestion/cache"
     }
 }

@@ -150,11 +150,6 @@ logger.debug(f"{recipe_data=}")
 ## Create the recipes
 recipes = {}
 
-cache_target = CacheFSSpecTarget(
-    fs=gcsfs.GCSFileSystem(),
-    root_path="gs://leap-scratch/data-library/cmip6-pgf-ingestion/cache",
-)
-
 for iid, data in recipe_data.items():
     urls = get_sorted_http_urls_from_iid_dict(data)
     pattern = pattern_from_file_sequence(urls, concat_dim="time")

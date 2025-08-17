@@ -60,14 +60,20 @@ def load_iids_from_file(filepath: str) -> set:
 
 
 def main():
-    """Search for requested IIDs in multiple CMIP6 catalogs."""
+    """Search for requested IIDs in all CMIP6 catalogs."""
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Search for requested IIDs in multiple CMIP6 catalogs."
+        description="Search for requested IIDs in all CMIP6 catalogs."
     )
     parser.add_argument("iid_file", help="Path to text file containing IIDs (one per line)")
     parser.add_argument("--count-only", action="store_true", help="Only print counts, not lists")
+    parser.add_argument(
+        "--search-string",
+        type=str,
+        default=None,
+        help="Optional string to search for. Results matching are displayed in addition to general results.",
+    )
     args = parser.parse_args()
 
     iids_requested = load_iids_from_file(args.iid_file)
@@ -99,9 +105,14 @@ def main():
         for iid in sorted(missing_iids):
             print(f"  - {iid}")
 
-    ## sum up all iids that have "fx." in them
-    fx_iids = [iid for iid in iids_requested if "fx." in iid]
-    print(f"Total 'fx.' IIDs found: {len(fx_iids)}")
+    if args.search_string:
+        searched_iids = [iid for iid in iids_requested if args.search_string in iid]
+        if args.count_only:
+            print(f"Total '{args.search_string}' IIDs found in request: {len(searched_iids)}")
+        else:
+            print(f"Total '{args.search_string}' IIDs found in request: {len(searched_iids)}")
+            for iid in sorted(searched_iids):
+                print(f"  - {iid}")
 
 
 if __name__ == "__main__":
