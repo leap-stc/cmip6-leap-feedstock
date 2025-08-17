@@ -174,6 +174,22 @@ for catalog,url in url_dict.items():
 ```
 Last this was updated we ingested over 5000 datasets already!
 
+## Dev Guide
+
+### Running Recipes Locally 
+Set up a local development environment
+```
+mamba create -n cmip6-feedstock python=3.11 -y
+conda activate cmip6-feedstock
+pip install pangeo-forge-runner==0.10.2 --no-cache-dir
+pip install -r feedstock/requirements.txt
+```
+
+Create a scratch directory and cd into it
+
+You can then 
+
+
 ## How to run recipes locally (with PGF runner)
 - Make sure to set up the environment (TODO: Add this as docs on pangeo-forge-runner)
 - Create a scratch dir (e.g. on the desktop it should not be within a repo)
@@ -187,13 +203,7 @@ Last this was updated we ingested over 5000 datasets already!
 
 ### Dev Guide
 
-Set up a local dev environment
-```
-mamba create -n cmip6-feedstock python=3.11 -y
-conda activate cmip6-feedstock
-pip install pangeo-forge-runner==0.10.2 --no-cache-dir
-pip install -r feedstock/requirements.txt
-```
+
 
 #### Debug recipe locally
 It can be handy to debug the recipe creation locally to shorten the iteration cycle (which is long when every change kicks off a gh deploy action).
@@ -203,3 +213,33 @@ Assuming you have pangeo-forge-runner installed you should be able to do this
 export IS_TEST=true; export GITHUB_RUN_ID=a;export GITHUB_RUN_ATTEMPT=bb;pangeo-forge-runner expand-meta --repo=.
 ```
 in the base repo. If this succeeds these recipes should be submittable (I hope).
+
+### Script Documentation
+
+#### `scripts/dump_bigquery_to_csv.py`
+Uses latest entries from bigquery to generate a csv file (which is backwards compatible with the intake catalog). Before writing a new version it renames the current copy of the file to generate a dated backup.
+>[!NOTE]
+> This is a pretty horrible way to do this and any larger refactor of this should definitely include a way to do this within a single file/database (Apache Iceberg might be a good fit?)
+
+#### `scripts/retraction.py`
+Queries the ESGF API, compares retracted datasets to the bigquery table, and adds new entries if there are newly retracted datasets.
+
+#### `scripts/legacy/*`
+These are one-off notebooks that were used to re-test and catalog the 'legacy stores' (manually ingested before this pipeline was built).
+>[!WARNING]
+>These are purely for provenance. Running them again now might result in unexpected outcomes.
+
+#### `scripts/monitoring/convert_csv_to_yaml.py`
+This script converts a CSV file into a YAML file. It reads a specified column from the CSV and outputs its values as a YAML list. This is useful for preparing lists of identifiers (e.g., IIDs) from spreadsheets for use in other scripts.
+
+#### `scripts/monitoring/convert_yaml_to_list.py`
+This script converts a YAML file containing a list into a plain text file, with each item on a new line. This is useful for transforming YAML-formatted lists into a simple line-delimited format that can be easily consumed by command-line tools or other scripts.
+
+#### `scripts/monitoring/search_iids_from_file.py`
+This script searches for specified CMIP6 Instance IDs (IIDs) within various CMIP6 intake catalogs. It takes a file containing a list of IIDs as input and reports which IIDs are found in different catalogs (e.g., 'qc', 'non-qc', 'retracted'). It can also provide a count-only summary. This is the primary tool for monitoring the ingestion status of CMIP6 data.
+
+TODO: Fill the other ones in
+
+### Jupyter Notebook documentation
+
+TODO: How to use uv to run these notebooks
