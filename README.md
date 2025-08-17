@@ -199,6 +199,7 @@ export GOOGLE_CLOUD_PROJECT=leap-pangeo; \
 pangeo-forge-runner bake --repo=. --config=configs/config_local.json --Bake.job_name=cmip6localtest
 ```
 
+This will create a folder `local_storage` where the cache and ouput will be placed.
 
 
 ## How to run recipes locally (with PGF runner)
