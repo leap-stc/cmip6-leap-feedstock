@@ -5,7 +5,7 @@ dynamic-chunks==0.0.3
 apache-beam[gcp]
 
 # these are just waiting for a release
-git+https://github.com/leap-stc/leap-data-management-utils.git@bugfix-sanitizer
+git+https://github.com/leap-stc/leap-data-management-utils.git@allow-no-time-in-tests
 git+https://github.com/jbusecke/pangeo-forge-esgf.git@new-request-scheme
 
 # If I deactivate these I get the `cannot pickle 'module' object` error again (I got it locally, not sure if DF has the same)
