@@ -1,11 +1,18 @@
-leap-data-management-utils==0.0.12
+# leap-data-management-utils==0.0.12
+# leap-data-management-utils==0.0.18
+git+https://github.com/leap-stc/leap-data-management-utils.git@bugfix-sanitizer
 git+https://github.com/jbusecke/pangeo-forge-esgf.git@new-request-scheme
 dynamic-chunks==0.0.3
 git+https://github.com/ranchodeluxe/xarray@ranchodeluxe-patch-1#egg=xarray
 git+https://github.com/ranchodeluxe/rioxarray
 git+https://github.com/ranchodeluxe/datatree@main#egg=xarray-datatree
+# xarray
 git+https://github.com/pangeo-forge/pangeo-forge-recipes@jb/xarray-hack #see @gc/cached_disabled but with cache
+# pangeo-forge-recipes==0.10.8
 zarr==2.16.1
+# zarr==2.18.7
 numcodecs<0.16 #Temporary fix, see https://github.com/zarr-developers/numcodecs/issues/721
 gcsfs
 apache-beam[gcp]
+
+

@@ -198,8 +198,12 @@ export GITHUB_RUN_ATTEMPT=bb; \
 export GOOGLE_CLOUD_PROJECT=leap-pangeo; \
 pangeo-forge-runner bake --repo=. --config=configs/config_local.json --Bake.job_name=cmip6localtest
 ```
+>[!NOTE]
+> This will currently never finish the stage, because the copy stage will fail. Just keep that in mind. You should still be able to inspect the ouput locally!
 
 This will create a folder `local_storage` where the cache and ouput will be placed.
+
+You might want to delete that folder before rerunning 
 
 
 ## How to run recipes locally (with PGF runner)
