@@ -24,7 +24,6 @@ from pangeo_forge_recipes.transforms import (
     ConsolidateDimensionCoordinates,
     # CheckpointFileTransfer,
 )
-from pangeo_forge_recipes.storage import CacheFSSpecTarget
 
 import logging
 import asyncio
@@ -164,7 +163,6 @@ for iid, data in recipe_data.items():
         #     fsspec_sync_patch=False,
         # )
         | OpenURLWithFSSpec(
-            cache=cache_target,
             # fsspec_sync_patch=True
         )
         | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})
