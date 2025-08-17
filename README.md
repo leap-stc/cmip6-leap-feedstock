@@ -160,8 +160,8 @@ Last this was updated we ingested over 5000 datasets already!
 
 Set up a local development environment
 ```
-mamba create -n cmip6-feedstock python=3.11 -y
-conda activate cmip6-feedstock
+mamba create -n cmip6-feedstock python=3.10 -y
+mamba activate cmip6-feedstock
 pip install pangeo-forge-runner==0.10.2 --no-cache-dir
 pip install -r feedstock/requirements.txt
 ```

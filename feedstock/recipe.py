@@ -147,9 +147,14 @@ logger.debug(f"{recipe_data=}")
 ## Create the recipes
 recipes = {}
 
+no_time_indicators = ["fx"]
+
 for iid, data in recipe_data.items():
     urls = get_sorted_http_urls_from_iid_dict(data)
-    pattern = pattern_from_file_sequence(urls, concat_dim="time")
+    if any([indicator in iid for indicator in no_time_indicators]):
+        pattern = pattern_from_file_sequence(urls, concat_dim=None)
+    else:
+        pattern = pattern_from_file_sequence(urls, concat_dim="time")
     recipes[iid] = (
         f"Creating {iid}" >> beam.Create(pattern.items())
         | OpenURLWithFSSpec()
