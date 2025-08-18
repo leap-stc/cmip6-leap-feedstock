@@ -42,6 +42,7 @@ jobs:
           pangeo_forge_runner_config: "./configs/config-pgf-runner-leap-dataflow-pr.json"
         env:
           IS_TEST: true
+          IS_LOCAL: false
           GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
       - name: "Deploy recipes Production"
         if: ${{ github.event_name != 'pull_request' }}
@@ -51,4 +52,5 @@ jobs:
           pangeo_forge_runner_config: "./configs/config-pgf-runner-leap-dataflow.json"
         env:
           IS_TEST: false
+          IS_LOCAL: false
           GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
