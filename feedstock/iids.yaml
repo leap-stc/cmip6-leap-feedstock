@@ -188,104 +188,104 @@
 - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Amon.zg.gn.v20191120
 - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.Amon.zg.gn.v20190710
 - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Amon.zg.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.rootd.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.rootd.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.rootd.gn.v20190710
-# - CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.fx.rootd.gr.v20200709
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.rootd.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.rootd.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.rootd.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.mrsofc.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.mrsofc.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.mrsofc.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.mrsofc.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.mrsofc.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.mrsofc.gn.v20190710
-# - CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.fx.mrsofc.gr.v20200709
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.areacella.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.areacella.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.areacella.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.fx.areacella.gn.v20200129
-# - CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.fx.areacella.gr.v20200709
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.fx.areacella.gn.v20191120
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.areacella.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.areacella.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.areacella.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.orog.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.orog.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.fx.orog.gn.v20191120
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.fx.orog.gn.v20200129
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.orog.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.orog.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.orog.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.orog.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.sftgif.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.sftgif.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.fx.sftgif.gn.v20191120
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.sftgif.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.fx.sftgif.gn.v20200129
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.sftgif.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.sftgif.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.sftgif.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.fx.sftlf.gn.v20191120
-# - CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.fx.sftlf.gr.v20200709
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.sftlf.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.sftlf.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.sftlf.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.fx.sftlf.gn.v20200129
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.sftlf.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.sftlf.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.sftlf.gn.v20190710
-# - CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.fx.zfull.gr.v20200709
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.areacello.gr.v20200129
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.areacello.gn.v20190710
-# - CMIP6.GeoMIP.CNRM-CERFACS.CNRM-ESM2-1.G6sulfur.r2i1p1f2.Ofx.areacello.gn.v20190711
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.areacello.gn.v20200129
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.areacello.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.areacello.gn.v20190710
-# - CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.Ofx.areacello.gn.v20200709
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.areacello.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.areacello.gn.v20191120
-# - CMIP6.GeoMIP.CNRM-CERFACS.CNRM-ESM2-1.G6sulfur.r3i1p1f2.Ofx.areacello.gn.v20190711
-# - CMIP6.GeoMIP.CNRM-CERFACS.CNRM-ESM2-1.G6sulfur.r1i1p1f2.Ofx.areacello.gn.v20190711
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.areacello.gr.v20191120
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.Ofx.basin.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.basin.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.Ofx.basin.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.basin.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.basin.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.basin.gn.v20190710
-# - CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.Ofx.basin.gn.v20200709
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.deptho.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.deptho.gr.v20191120
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.deptho.gn.v20191120
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.deptho.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.deptho.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.deptho.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.deptho.gn.v20200129
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.deptho.gr.v20200129
-# - CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.Ofx.hfgeou.gn.v20200709
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.masscello.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.masscello.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.Ofx.masscello.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.masscello.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.masscello.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.Ofx.sftof.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.sftof.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.sftof.gn.v20200129
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.sftof.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.sftof.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.sftof.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.sftof.gn.v20191120
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.volcello.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.volcello.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.volcello.gn.v20200129
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.volcello.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.volcello.gr.v20191120
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.volcello.gn.v20191120
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.volcello.gn.v20190710
-# - CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.volcello.gr.v20200129
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.Ofx.volcello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.rootd.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.rootd.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.rootd.gn.v20190710
+- CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.fx.rootd.gr.v20200709
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.rootd.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.rootd.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.rootd.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.mrsofc.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.mrsofc.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.mrsofc.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.mrsofc.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.mrsofc.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.mrsofc.gn.v20190710
+- CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.fx.mrsofc.gr.v20200709
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.areacella.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.areacella.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.areacella.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.fx.areacella.gn.v20200129
+- CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.fx.areacella.gr.v20200709
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.fx.areacella.gn.v20191120
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.areacella.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.areacella.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.areacella.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.orog.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.orog.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.fx.orog.gn.v20191120
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.fx.orog.gn.v20200129
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.orog.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.orog.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.orog.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.orog.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.sftgif.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.sftgif.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.fx.sftgif.gn.v20191120
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.sftgif.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.fx.sftgif.gn.v20200129
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.sftgif.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.sftgif.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.sftgif.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.fx.sftlf.gn.v20191120
+- CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.fx.sftlf.gr.v20200709
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.sftlf.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.fx.sftlf.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.fx.sftlf.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.fx.sftlf.gn.v20200129
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.fx.sftlf.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.fx.sftlf.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.fx.sftlf.gn.v20190710
+- CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.fx.zfull.gr.v20200709
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.areacello.gr.v20200129
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.areacello.gn.v20190710
+- CMIP6.GeoMIP.CNRM-CERFACS.CNRM-ESM2-1.G6sulfur.r2i1p1f2.Ofx.areacello.gn.v20190711
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.areacello.gn.v20200129
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.areacello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.areacello.gn.v20190710
+- CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.Ofx.areacello.gn.v20200709
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.areacello.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.areacello.gn.v20191120
+- CMIP6.GeoMIP.CNRM-CERFACS.CNRM-ESM2-1.G6sulfur.r3i1p1f2.Ofx.areacello.gn.v20190711
+- CMIP6.GeoMIP.CNRM-CERFACS.CNRM-ESM2-1.G6sulfur.r1i1p1f2.Ofx.areacello.gn.v20190711
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.areacello.gr.v20191120
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.Ofx.basin.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.basin.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.Ofx.basin.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.basin.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.basin.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.basin.gn.v20190710
+- CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.Ofx.basin.gn.v20200709
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.deptho.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.deptho.gr.v20191120
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.deptho.gn.v20191120
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.deptho.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.deptho.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.deptho.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.deptho.gn.v20200129
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.deptho.gr.v20200129
+- CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.Ofx.hfgeou.gn.v20200709
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.masscello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.masscello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.Ofx.masscello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.masscello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.masscello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.Ofx.sftof.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.sftof.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.sftof.gn.v20200129
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.sftof.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.sftof.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.sftof.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.sftof.gn.v20191120
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.volcello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.volcello.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.volcello.gn.v20200129
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.volcello.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.volcello.gr.v20191120
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.Ofx.volcello.gn.v20191120
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.volcello.gn.v20190710
+- CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r2i1p1f2.Ofx.volcello.gr.v20200129
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.Ofx.volcello.gn.v20190710
 - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r1i1p1f1.Amon.evspsbl.gn.v20190710
 - CMIP6.GeoMIP.CNRM-CERFACS.CNRM-ESM2-1.G6sulfur.r1i1p1f2.Amon.evspsbl.gr.v20190711
 - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r2i1p1f1.Amon.evspsbl.gn.v20190710
@@ -1256,7 +1256,7 @@
 - CMIP6.GeoMIP.MOHC.UKESM1-0-LL.G6sulfur.r4i1p1f2.day.vas.gn.v20191115
 - CMIP6.GeoMIP.MOHC.UKESM1-0-LL.G6sulfur.r8i1p1f2.day.vas.gn.v20191119
 - CMIP6.GeoMIP.CNRM-CERFACS.CNRM-ESM2-1.G6sulfur.r1i1p1f2.day.vas.gr.v20190711
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.thkcello.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.thkcello.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.thkcello.gn.v20190710
-# - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.thkcello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r1i1p1f1.Ofx.thkcello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.thkcello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.thkcello.gn.v20190710
+- CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.thkcello.gn.v20190710

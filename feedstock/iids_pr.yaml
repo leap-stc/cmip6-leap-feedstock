@@ -1,4 +1,1 @@
    - "CMIP6.*.*.[CNRM-CM6-1,CanESM5].historical.r1i1p1f1.Omon.[tos, so].*.*"
-   - "CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.fx.sftgif.gn.v20190710"
-   - "CMIP6.GeoMIP.IPSL.IPSL-CM6A-LR.G6sulfur.r1i1p1f1.fx.areacella.gr.v20200709"
-   - "CMIP6.GeoMIP.NCAR.CESM2-WACCM.G6sulfur.r1i1p1f2.fx.orog.gn.v20191120"

@@ -207,35 +207,6 @@ This will create a folder `local_storage` where the cache and ouput will be plac
 
 You might want to delete that folder before rerunning
 
-
-## How to run recipes locally (with PGF runner)
-- Create a scratch dir (e.g. on the desktop it should not be within a repo)
-- call  pfg with a local path `pangeo-forge-runner bake --repo path_to_repo -f path_to_config.json`
-- data will be generated in this (scratch) dir.
-> Example call: `pangeo-forge-runner bake --repo=/Users/juliusbusecke/Code/CMIP6-LEAP-feedstock --config /Users/juliusbusecke/Code/CMIP6-LEAP-feedstock/configs/config_local.json --Bake.job_name=cmip6test`
-- TODO: In pgf-runner error if all the storage locations are not just an abstract filestystem
-- From charles: install pgf recipes locally with editable flag
-  - Get a debugger running within the pgf code (TODO: ask charles again how to do ti.
-  )
-
-### Dev Guide
-
-
-
-
-
-
-
-
-pangeo-forge-runner bake \
-            --repo=${{ github.server_url }}/${{ github.repository }}.git \
-            --ref=${{ github.sha }} \
-            --feedstock-subdir='feedstock' \
-            --Bake.job_name=${{ env.JOB_NAME }} \
-            --Bake.recipe_id=${{ github.event.inputs.recipe_id }} \
-            -f configs/config_dataflow.py
-in the base repo. If this succeeds these recipes should be submittable (I hope).
-
 ### Script Documentation
 
 #### `scripts/dump_bigquery_to_csv.py`
