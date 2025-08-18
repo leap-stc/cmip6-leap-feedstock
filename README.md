@@ -176,6 +176,7 @@ This will generate the recipes but not actually execute them.
 Assuming you have pangeo-forge-runner installed **and are authenticated for Google Cloud (big query access**)** you should be able to do this
 ```
 export IS_TEST=true; \
+export IS_LOCAL=true; \
 export GITHUB_RUN_ID=a; \
 export GITHUB_RUN_ATTEMPT=bb; \
 export GOOGLE_CLOUD_PROJECT=leap-pangeo; \
@@ -184,7 +185,7 @@ pangeo-forge-runner expand-meta --repo=.
 
 This can be very handy to detect issues with the ESGF API (or pangeo-forge-esgf)
 
-`IS_TEST` is usually used for a set of test iids in CI, but will do a couple of things here. It will grab iids from feedstock/iids_pr.yaml and provides more detailed logging.
+`IS_TEST` and `IS_LOCAL` will grab iids from feedstock/iids_pr.yaml and provides more detailed logging.
 `GITHUB_RUN_ID` and `GITHUB_RUN_ATTEMPT` are simply dummy values that the recipe expects in the environment
 `GOOGLE_CLOUD_PROJECT` is needed to properly access the bigquery tables (**NOTE: You will also have to generate [Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc) locally).
 
@@ -193,13 +194,14 @@ If you want to debug the actual execution of the recipe you need to 'bake' the r
 
 ```
 export IS_TEST=true; \
+export IS_LOCAL=true; \
 export GITHUB_RUN_ID=a; \
 export GITHUB_RUN_ATTEMPT=bb; \
 export GOOGLE_CLOUD_PROJECT=leap-pangeo; \
 pangeo-forge-runner bake --repo=. --config=configs/config_local.json --Bake.job_name=cmip6localtest
 ```
->[!NOTE]
-> This will currently never finish the stage, because the copy stage will fail. Just keep that in mind. You should still be able to inspect the ouput locally!
+`IS_TEST` and `IS_LOCAL` in this context will supress the writing to big query and copying of the data, but tests will still be run.
+
 
 This will create a folder `local_storage` where the cache and ouput will be placed.
 

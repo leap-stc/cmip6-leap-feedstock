@@ -36,6 +36,11 @@ is_test = (
     os.environ["IS_TEST"] == "true"
 )  # There must be a better way to do this, but for now this will do
 print(f"{is_test =}")
+## Create recipes
+is_local = (
+    os.environ["IS_LOCAL"] == "true"
+)  # There must be a better way to do this, but for now this will do
+print(f"{is_local =}")
 
 run_id = os.environ["GITHUB_RUN_ID"]
 run_attempt = os.environ["GITHUB_RUN_ATTEMPT"]
@@ -155,7 +160,7 @@ for iid, data in recipe_data.items():
         pattern = pattern_from_file_sequence(urls, concat_dim=None)
     else:
         pattern = pattern_from_file_sequence(urls, concat_dim="time")
-    recipes[iid] = (
+    recipe = (
         f"Creating {iid}" >> beam.Create(pattern.items())
         | OpenURLWithFSSpec()
         | OpenWithXarray(
@@ -173,14 +178,23 @@ for iid, data in recipe_data.items():
         | InjectAttrs({"pangeo_forge_api_responses": data})
         | ConsolidateDimensionCoordinates()
         | ConsolidateMetadata()
-        | Copy(
-            target=os.path.join(
-                copy_target_prefix, f"{run_id}_{run_attempt}", f"{iid}.zarr"
-            )
-        )
-        | "Logging to bigquery (non-QC)"
-        >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=False)
-        | TestDataset(iid=iid)
-        | "Logging to bigquery (QC)"
-        >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=True)
     )
+    if not is_local:
+        recipe = (
+            recipe
+            | Copy(
+                target=os.path.join(
+                    copy_target_prefix, f"{run_id}_{run_attempt}", f"{iid}.zarr"
+                )
+            )
+            | "Logging to bigquery (non-QC)"
+            >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=False)
+        )
+
+    recipe = recipe | TestDataset(iid=iid)
+
+    if not is_local:
+        recipe = recipe | "Logging to bigquery (QC)" >> LogCMIPToBigQuery(
+            iid=iid, table_id=table_id, tests_passed=True
+        )
+    recipes[iid] = recipe
