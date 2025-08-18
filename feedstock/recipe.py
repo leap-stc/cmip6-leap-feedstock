@@ -22,15 +22,12 @@ from pangeo_forge_recipes.transforms import (
     StoreToZarr,
     ConsolidateMetadata,
     ConsolidateDimensionCoordinates,
-    # CheckpointFileTransfer,
 )
-from pangeo_forge_recipes.storage import CacheFSSpecTarget
 
 import logging
 import asyncio
 import os
 import yaml
-import gcsfs
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +36,11 @@ is_test = (
     os.environ["IS_TEST"] == "true"
 )  # There must be a better way to do this, but for now this will do
 print(f"{is_test =}")
+## Create recipes
+is_local = (
+    os.environ["IS_LOCAL"] == "true"
+)  # There must be a better way to do this, but for now this will do
+print(f"{is_local =}")
 
 run_id = os.environ["GITHUB_RUN_ID"]
 run_attempt = os.environ["GITHUB_RUN_ATTEMPT"]
@@ -150,29 +152,23 @@ logger.debug(f"{recipe_data=}")
 ## Create the recipes
 recipes = {}
 
-cache_target = CacheFSSpecTarget(
-    fs=gcsfs.GCSFileSystem(),
-    root_path="gs://leap-scratch/data-library/cmip6-pgf-ingestion/cache",
-)
+no_time_indicators = ["fx"]
 
 for iid, data in recipe_data.items():
     urls = get_sorted_http_urls_from_iid_dict(data)
-    pattern = pattern_from_file_sequence(urls, concat_dim="time")
-    recipes[iid] = (
+    if any([indicator in iid for indicator in no_time_indicators]):
+        pattern = pattern_from_file_sequence(urls, concat_dim=None)
+    else:
+        pattern = pattern_from_file_sequence(urls, concat_dim="time")
+    recipe = (
         f"Creating {iid}" >> beam.Create(pattern.items())
-        # | CheckpointFileTransfer(
-        #     transfer_target=cache_target,
-        #     max_executors=10,
-        #     concurrency_per_executor=4,
-        #     initial_backoff=3.0,  # Try with super long backoff and
-        #     backoff_factor=2.0,
-        #     fsspec_sync_patch=False,
-        # )
-        | OpenURLWithFSSpec(
-            cache=cache_target,
-            # fsspec_sync_patch=True
+        | OpenURLWithFSSpec()
+        | OpenWithXarray(
+            xarray_open_kwargs={
+                "use_cftime": True,
+                "chunks": {},  # not sure this actually helped...
+            }
         )
-        | OpenWithXarray(xarray_open_kwargs={"use_cftime": True})
         | Preprocessor()
         | StoreToZarr(
             store_name=f"{iid}.zarr",
@@ -182,14 +178,23 @@ for iid, data in recipe_data.items():
         | InjectAttrs({"pangeo_forge_api_responses": data})
         | ConsolidateDimensionCoordinates()
         | ConsolidateMetadata()
-        | Copy(
-            target=os.path.join(
-                copy_target_prefix, f"{run_id}_{run_attempt}", f"{iid}.zarr"
-            )
-        )
-        | "Logging to bigquery (non-QC)"
-        >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=False)
-        | TestDataset(iid=iid)
-        | "Logging to bigquery (QC)"
-        >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=True)
     )
+    if not is_local:
+        recipe = (
+            recipe
+            | Copy(
+                target=os.path.join(
+                    copy_target_prefix, f"{run_id}_{run_attempt}", f"{iid}.zarr"
+                )
+            )
+            | "Logging to bigquery (non-QC)"
+            >> LogCMIPToBigQuery(iid=iid, table_id=table_id, tests_passed=False)
+        )
+
+    recipe = recipe | TestDataset(iid=iid)
+
+    if not is_local:
+        recipe = recipe | "Logging to bigquery (QC)" >> LogCMIPToBigQuery(
+            iid=iid, table_id=table_id, tests_passed=True
+        )
+    recipes[iid] = recipe

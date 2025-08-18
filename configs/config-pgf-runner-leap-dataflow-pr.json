@@ -9,11 +9,15 @@
         "project_id": "leap-pangeo",
         "temp_gcs_location": "gs://leap-scratch/data-library/cmip6-pgf-ingestion/temp",
         "use_dataflow_prime": false,
-        "machine_type": "e2-highmem-8",
+        "machine_type": "n1-standard-1",
         "max_num_workers": 5
     },
     "TargetStorage": {
         "fsspec_class": "gcsfs.GCSFileSystem",
         "root_path": "gs://leap-scratch/data-library/cmip6-pgf-ingestion/pr/{job_name}"
+    },
+    "InputCacheStorage": {
+        "fsspec_class": "gcsfs.GCSFileSystem",
+        "root_path": "gs://leap-scratch/data-library/cmip6-pgf-ingestion/cache"
     }
 }

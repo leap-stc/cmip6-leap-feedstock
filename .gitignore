@@ -128,7 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .DS_Store
-feedstock/local_storage
 
 *.csv
 old/
@@ -136,3 +135,6 @@ catalog_noqc.json
 catalog_retracted.json
 catalog.json
 .vscode/settings.json
+
+# ignore local dev products
+local_storage/

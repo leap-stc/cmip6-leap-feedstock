@@ -1,14 +1,22 @@
-leap-data-management-utils==0.0.12
-git+https://github.com/jbusecke/pangeo-forge-esgf.git@new-request-scheme
+zarr==2.18.3
+numcodecs<0.16 #Temporary fix, see https://github.com/zarr-developers/numcodecs/issues/721. We cannot update the zarr version to include the fix because we use python 310
+gcsfs==2025.7.0
 dynamic-chunks==0.0.3
-#git+https://github.com/pangeo-forge/pangeo-forge-recipes@feature/concurrency-control
+apache-beam[gcp]
+leap-data-management-utils==0.0.19
+
+# these are just waiting for a release
+git+https://github.com/jbusecke/pangeo-forge-esgf.git@new-request-scheme
+
+# If I deactivate these I get the `cannot pickle 'module' object` error again (I got it locally, not sure if DF has the same)
 git+https://github.com/ranchodeluxe/xarray@ranchodeluxe-patch-1#egg=xarray
 git+https://github.com/ranchodeluxe/rioxarray
 git+https://github.com/ranchodeluxe/datatree@main#egg=xarray-datatree
-git+https://github.com/pangeo-forge/pangeo-forge-recipes@jb/xarray-hack #see @gc/cached_disabled but with cache
-#git+https://github.com/moradology/httpfs-sync.git@feature/pool-reuse
-#httpfs-sync>=0.0.2
-zarr==2.16.1
-numcodecs<0.16 #Temporary fix, see https://github.com/zarr-developers/numcodecs/issues/721
-gcsfs
-apache-beam[gcp]
+# xarray
+
+# testing if I can hack pgf recipes to allow single file input.
+git+https://github.com/pangeo-forge/pangeo-forge-recipes@hack-single-file-input #see @gc/cached_disabled but with cache
+# pangeo-forge-recipes==0.10.8
+
+# deactivated but might be necessary for larger datasets (if so, use this as a template)
+# git+https://github.com/pangeo-forge/pangeo-forge-recipes@jb/xarray-hack #see @gc/cached_disabled but with cache

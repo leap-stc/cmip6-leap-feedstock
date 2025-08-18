@@ -60,44 +60,20 @@ ddict = cat.to_dataset_dict(preprocess=combined_preprocessing)
 ```
 
 ## I filed a request and want to check progress. How do I do that?
-You can check if some of your iids are already ingested with this code snippet:
-```python
-import intake
 
-def zstore_to_iid(zstore: str):
-    # this is a bit whacky to account for the different way of storing old/new stores
-    iid =  '.'.join(zstore.replace('gs://','').replace('.zarr','').replace('.','/').split('/')[-11:-1])
-    if not iid.startswith('CMIP6'):
-        iid =  '.'.join(zstore.replace('gs://','').replace('.zarr','').replace('.','/').split('/')[-10:])
-    return iid
+We provide a script to monitor a given request. Clone this repo, install [uv](https://docs.astral.sh/uv/) (if not already installed) and create a file with all the requested instance ids as a simple text file (You can use the helper scripts `scripts/monitoring/convert_yaml_to_list.py` if needed) and run
 
-def search_iids(col_url:str):
-    col = intake.open_esm_datastore(col_url)
-    iids_all= [zstore_to_iid(z) for z in col.df['zstore'].tolist()]
-    return [iid for iid in iids_all if iid in iids_requested]
-
-
-iids_requested = [
-'your_fav_iid',
-'your_second_fav_id',
-...
-]
-
-url_dict = {
-    'qc':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog.json",
-    'non-qc':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_noqc.json",
-    'retracted':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_retracted.json"
-}
-
-iids_found = []
-for catalog,url in url_dict.items():
-    iids = search_iids(url)
-    iids_found.extend(iids)
-    print(f"Found in {catalog=}: {iids=}\n")
-
-missing_iids = list(set(iids_requested) - set(iids_found))
-print(f"\n\nStill missing {len(missing_iids)} of {len(iids_requested)}: \n{missing_iids=}")
 ```
+uv run python scripts/monitoring/search_iids_from_file.py <path/to/your/request_file.txt> --count-only
+```
+The `--count-only` flag gives a short summary, omit if you want to see the list of actual instance_ids.
+
+You can also provide a search string which will display the count of full list of instance ids that contain the string.
+```
+uv run python scripts/monitoring/search_iids_from_file.py <path/to/your/request_file.txt> --count-only --search-string=".historical."
+```
+this can be useful if you know that there is an issue with e.g. a particular model, experiment etc and you want to compare missing iids with known failures.
+
 
 ## What do you actually do to the data?
 The goal of this feedstock is to make CMIP6 data analysis-ready, but not modify the source data in any way.
@@ -174,32 +150,87 @@ for catalog,url in url_dict.items():
 ```
 Last this was updated we ingested over 5000 datasets already!
 
-## How to run recipes locally (with PGF runner)
-- Make sure to set up the environment (TODO: Add this as docs on pangeo-forge-runner)
-- Create a scratch dir (e.g. on the desktop it should not be within a repo)
-- call  pfg with a local path `pangeo-forge-runner bake --repo path_to_repo -f path_to_config.json`
-- data will be generated in this (scratch) dir.
-> Example call: `pangeo-forge-runner bake --repo=/Users/juliusbusecke/Code/CMIP6-LEAP-feedstock -f /Users/juliusbusecke/Code/CMIP6-LEAP-feedstock/configs/config_local.json --Bake.job_name=cmip6test`
-- TODO: In pgf-runner error if all the storage locations are not just an abstract filestystem
-- From charles: install pgf recipes locally with editable flag
-  - Get a debugger running within the pgf code (TODO: ask charles again how to do ti.
-  )
+## Dev Guide
 
-### Dev Guide
+### Setting up environment
 
-Set up a local dev environment
+>[!WARN]
+> I am trying to refactor this repo to use uv, but have not yet fully migrated the feedstock dependencies.
+> For now keep using mamba here.
+
+Set up a local development environment
 ```
-mamba create -n cmip6-feedstock python=3.11 -y
-conda activate cmip6-feedstock
+mamba create -n cmip6-feedstock python=3.10 -y
+mamba activate cmip6-feedstock
 pip install pangeo-forge-runner==0.10.2 --no-cache-dir
 pip install -r feedstock/requirements.txt
 ```
 
-#### Debug recipe locally
+### Debug recipe locally
 It can be handy to debug the recipe creation locally to shorten the iteration cycle (which is long when every change kicks off a gh deploy action).
 
-Assuming you have pangeo-forge-runner installed you should be able to do this
+
+#### Expanding metadata
+This will generate the recipes but not actually execute them.
+
+Assuming you have pangeo-forge-runner installed **and are authenticated for Google Cloud (big query access**)** you should be able to do this
 ```
-export IS_TEST=true; export GITHUB_RUN_ID=a;export GITHUB_RUN_ATTEMPT=bb;pangeo-forge-runner expand-meta --repo=.
+export IS_TEST=true; \
+export IS_LOCAL=true; \
+export GITHUB_RUN_ID=a; \
+export GITHUB_RUN_ATTEMPT=bb; \
+export GOOGLE_CLOUD_PROJECT=leap-pangeo; \
+pangeo-forge-runner expand-meta --repo=.
 ```
-in the base repo. If this succeeds these recipes should be submittable (I hope).
+
+This can be very handy to detect issues with the ESGF API (or pangeo-forge-esgf)
+
+`IS_TEST` and `IS_LOCAL` will grab iids from feedstock/iids_pr.yaml and provides more detailed logging.
+`GITHUB_RUN_ID` and `GITHUB_RUN_ATTEMPT` are simply dummy values that the recipe expects in the environment
+`GOOGLE_CLOUD_PROJECT` is needed to properly access the bigquery tables (**NOTE: You will also have to generate [Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc) locally).
+
+#### Executing the recipe
+If you want to debug the actual execution of the recipe you need to 'bake' the recipe.
+
+```
+export IS_TEST=true; \
+export IS_LOCAL=true; \
+export GITHUB_RUN_ID=a; \
+export GITHUB_RUN_ATTEMPT=bb; \
+export GOOGLE_CLOUD_PROJECT=leap-pangeo; \
+pangeo-forge-runner bake --repo=. --config=configs/config_local.json --Bake.job_name=cmip6localtest
+```
+`IS_TEST` and `IS_LOCAL` in this context will supress the writing to big query and copying of the data, but tests will still be run.
+
+
+This will create a folder `local_storage` where the cache and ouput will be placed.
+
+You might want to delete that folder before rerunning
+
+### Script Documentation
+
+#### `scripts/dump_bigquery_to_csv.py`
+Uses latest entries from bigquery to generate a csv file (which is backwards compatible with the intake catalog). Before writing a new version it renames the current copy of the file to generate a dated backup.
+>[!NOTE]
+> This is a pretty horrible way to do this and any larger refactor of this should definitely include a way to do this within a single file/database (Apache Iceberg might be a good fit?)
+
+#### `scripts/retraction.py`
+Queries the ESGF API, compares retracted datasets to the bigquery table, and adds new entries if there are newly retracted datasets.
+
+#### `scripts/legacy/*`
+These are one-off notebooks that were used to re-test and catalog the 'legacy stores' (manually ingested before this pipeline was built).
+>[!WARNING]
+>These are purely for provenance. Running them again now might result in unexpected outcomes.
+
+#### `scripts/monitoring/convert_yaml_to_list.py`
+This script converts a YAML file containing a list into a plain text file, with each item on a new line. This is useful for transforming YAML-formatted lists into a simple line-delimited format that can be easily consumed by command-line tools or other scripts.
+
+#### `scripts/monitoring/search_iids_from_file.py`
+This script searches for specified CMIP6 Instance IDs (IIDs) within various CMIP6 intake catalogs. It takes a file containing a list of IIDs as input and reports which IIDs are found in different catalogs (e.g., 'qc', 'non-qc', 'retracted'). It can also provide a count-only summary. This is the primary tool for monitoring the ingestion status of CMIP6 data.
+
+### Jupyter Notebook documentation
+
+TODO: How to use uv to run these notebooks
+
+
+###
