@@ -23,6 +23,7 @@ jobs:
           - 'false'
     env:
       IS_TEST: ${{ matrix.IS_TEST }}  # Set environment variable at the job level
+      IS_LOCAL: 'false'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
