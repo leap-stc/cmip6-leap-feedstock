@@ -1260,3 +1260,5 @@
 - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r2i1p1f1.Ofx.thkcello.gn.v20190710
 - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-LR.G6sulfur.r3i1p1f1.Ofx.thkcello.gn.v20190710
 - CMIP6.GeoMIP.MPI-M.MPI-ESM1-2-HR.G6sulfur.r3i1p1f1.Ofx.thkcello.gn.v20190710
+# from https://github.com/jbusecke/pangeo-forge-esgf/issues/72
+- "CMIP6.*.*.[CESM2,CESM2-WACCM].[historical,ssp245].*.Omon.[tos,sos,chl,spco2,mlotst].*.*"
