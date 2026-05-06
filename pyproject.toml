@@ -8,6 +8,7 @@ dependencies = [
     "aiohttp>=3.12.15",
     "intake-esm>=2025.7.9",
     "requests>=2.32.4",
+    "tomli>=2.0.0",
 ]
 
 [tool.ruff.lint]
