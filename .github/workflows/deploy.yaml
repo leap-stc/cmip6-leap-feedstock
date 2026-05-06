@@ -34,22 +34,23 @@ jobs:
         uses: "google-github-actions/auth@v3"
         with:
           credentials_json: "${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}"
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Install Runner
+        run: python -m pip install pangeo-forge-runner==0.10.2
+      - name: Install dependencies
+        run: python -m pip install -r feedstock/requirements.txt
       - name: "Deploy recipes PR"
         if: ${{ github.event_name == 'pull_request' }}
-        uses: "pangeo-forge/deploy-recipe-action@v0.3"
-        with:
-          select_recipe_by_label: "" #to circumvent https://github.com/leap-stc/cmip6-leap-feedstock/issues/6#issuecomment-1668577971
-          pangeo_forge_runner_config: "./configs/config-pgf-runner-leap-dataflow-pr.json"
+        run: pangeo-forge-runner bake --repo=. -f=./configs/config-pgf-runner-leap-dataflow-pr.json
         env:
           IS_TEST: true
           IS_LOCAL: false
           GOOGLE_APPLICATION_CREDENTIALS: "${{ steps.auth.outputs.credentials_file_path }}"
       - name: "Deploy recipes Production"
         if: ${{ github.event_name != 'pull_request' }}
-        uses: "pangeo-forge/deploy-recipe-action@v0.3"
-        with:
-          select_recipe_by_label: "" #to circumvent https://github.com/leap-stc/cmip6-leap-feedstock/issues/6#issuecomment-1668577971
-          pangeo_forge_runner_config: "./configs/config-pgf-runner-leap-dataflow.json"
+        run: pangeo-forge-runner bake --repo=. -f=./configs/config-pgf-runner-leap-dataflow.json
         env:
           IS_TEST: false
           IS_LOCAL: false
