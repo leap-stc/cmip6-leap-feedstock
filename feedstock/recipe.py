@@ -1,33 +1,33 @@
 ### needs to be here otherwise the import fails
 """Modified transforms from Pangeo Forge"""
 
+import asyncio
+import logging
+import os
+
 import apache_beam as beam
-from pangeo_forge_esgf import setup_logging
-from leap_data_management_utils.data_management_transforms import Copy, InjectAttrs
+import yaml
 from leap_data_management_utils.cmip_transforms import (
-    TestDataset,
-    Preprocessor,
-    dynamic_chunking_func,
     CMIPBQInterface,
     LogCMIPToBigQuery,
+    Preprocessor,
+    TestDataset,
+    dynamic_chunking_func,
 )
+from leap_data_management_utils.data_management_transforms import Copy, InjectAttrs
+from pangeo_forge_esgf import setup_logging
 from pangeo_forge_esgf.async_client import (
     ESGFAsyncClient,
     get_sorted_http_urls_from_iid_dict,
 )
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
+    ConsolidateDimensionCoordinates,
+    ConsolidateMetadata,
     OpenURLWithFSSpec,
     OpenWithXarray,
     StoreToZarr,
-    ConsolidateMetadata,
-    ConsolidateDimensionCoordinates,
 )
-
-import logging
-import asyncio
-import os
-import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +63,7 @@ if is_test:
     client = bigquery.Client()
     for table in [table_id]:
         client.delete_table(table, not_found_ok=True)  # Make an API request.
-        print("Deleted table '{}'.".format(table))
+        print(f"Deleted table '{table}'.")
     del client
 
 else:
