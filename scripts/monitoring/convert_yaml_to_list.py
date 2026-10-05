@@ -33,8 +33,7 @@ def main():
 
     try:
         with open(output_path, "w") as outfile:
-            for item in data:
-                outfile.write(f"{item}\n")
+            outfile.writelines(f"{item}\n" for item in data)
     except Exception as e:
         print(f"Error writing to output file: {e}")
         sys.exit(1)

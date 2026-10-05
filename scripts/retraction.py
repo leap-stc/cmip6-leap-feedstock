@@ -1,9 +1,10 @@
 import asyncio
 import datetime
-import httpx
+
 import gcsfs
+import httpx
+from leap_data_management_utils.cmip_transforms import CMIPBQInterface, IIDEntry
 from tqdm.asyncio import tqdm
-from leap_data_management_utils.cmip_transforms import IIDEntry, CMIPBQInterface
 
 # there is an annoying bug that will make this fail when the number of tasks gathered exceeds `max_connections`
 # https://github.com/encode/httpx/issues/1171

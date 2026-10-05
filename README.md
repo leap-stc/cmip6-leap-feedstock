@@ -7,10 +7,10 @@ This repository contains the [pangeo-forge](https://pangeo-forge.org) feedstock 
 ## How can I request new data?
 To request new data, please create a list of instance_ids as strings which is copy-pasteable to python like this:
 ```python
-'CMIP6.CMIP.THU.CIESM.piControl.r1i1p1f1.Omon.uo.gn.v20200220',
+("CMIP6.CMIP.THU.CIESM.piControl.r1i1p1f1.Omon.uo.gn.v20200220",)
 ...
-'CMIP6.CMIP.THU.CIESM.piControl.r1i1p1f1.Omon.vo.gn.v20200220',
-'CMIP6.CMIP.CNRM-CERFACS.CNRM-CM6-1-HR.historical.r1i1p1f2.Omon.so.gn.v20191021',
+("CMIP6.CMIP.THU.CIESM.piControl.r1i1p1f1.Omon.vo.gn.v20200220",)
+("CMIP6.CMIP.CNRM-CERFACS.CNRM-CM6-1-HR.historical.r1i1p1f2.Omon.so.gn.v20191021",)
 ```
 You can use [pangeo-forge-esgf](https://github.com/jbusecke/pangeo-forge-esgf#parsing-a-list-of-instance-ids-using-wildcards) to make your life easier here.
 
@@ -35,8 +35,9 @@ You can access the data in a similar way to the [legacy CMIP6 zarr catalog](http
 
 ```python
 import intake
+
 # uncomment/comment lines to swap catalogs
-url = "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog.json" # Only stores that pass current tests
+url = "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog.json"  # Only stores that pass current tests
 # url = "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_noqc.json" # Only stores that fail current tests
 # url = "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_retracted.json" # Only stores that have been retracted by ESGF
 col = intake.open_esm_datastore(url)
@@ -53,9 +54,10 @@ You can then perform the same operations as with the legacy catalog (please chec
 Also please consider using [xMIP](https://github.com/jbusecke/xMIP) to preprocess the data and take care of common data cleaning tasks.
 
 ```python
-cat = col.search(variable_id='pr', experiment_id='historical')
+cat = col.search(variable_id="pr", experiment_id="historical")
 
 from xmip.preprocessing import combined_preprocessing
+
 ddict = cat.to_dataset_dict(preprocess=combined_preprocessing)
 ```
 
@@ -101,10 +103,11 @@ Assuming you are loading the data as instructed above using [intake-esm](https:/
 2. Check if the problem disspears when you load the raw zarr store. You can do so by inspecting the `zstore` column of the pandas dataframe underlying the intake-esm collection:
     ```python
     display(cat.df)
-    print(cat.df['zstore'].tolist())
+    print(cat.df["zstore"].tolist())
     # you can then open each of the urls like this
     import xarray as xr
-    ds_test = xr.open_dataset(url, engine='zarr', chunks={})
+
+    ds_test = xr.open_dataset(url, engine="zarr", chunks={})
     ```
     If this solves your problem, you should head over to intake-esm and check the [discussion topics](https://github.com/intake/intake-esm/discussions) and [issues](https://github.com/intake/intake-esm/issues) and raise either one if appropriate.
 3. If your error persists, this is either related to the ingestion here or is an error in the original ESGF data. Please raise an issue [right here](https://github.com/leap-stc/cmip6-leap-feedstock/issues/new?assignees=&labels=bug&projects=&template=problem.yaml&title=%5BBUG%5D%3A+) and we will get to the bottom of it.
@@ -117,8 +120,9 @@ Thanks for helping to improve everyones experience with CMIP6 data!
 Could be a bunch of reasons, but lets go through some debugging together. Ok first lets check if you get any response for a given iid:
 ```python
 from pangeo_forge_esgf import get_urls_from_esgf, setup_logging
-setup_logging('DEBUG')
-iids = ['something.that.doesnt.ingest.well']
+
+setup_logging("DEBUG")
+iids = ["something.that.doesnt.ingest.well"]
 url_dict = await get_urls_from_esgf(iids)
 ```
 This might give you some useful error messages and will tell you if the issue is parsing urls from the ESGF API (if the url_dict is empty) or if the problems arise when the urls are passed to pangeo-forge-recipes.
@@ -130,21 +134,26 @@ This little snippet can be used to identify how many datasets have been ingested
 ```python
 import intake
 
-def count_new_iids(col_url:str):
+
+def count_new_iids(col_url: str):
     col = intake.open_esm_datastore(col_url)
-    prefix = [p.replace('gs://cmip6/','').split('/')[0] for p in col.df['zstore'].tolist()]
-    new_iids = [p for p in prefix if p in ['CMIP6_LEAP_legacy','cmip6-pgf-ingestion-test']]
+    prefix = [
+        p.replace("gs://cmip6/", "").split("/")[0] for p in col.df["zstore"].tolist()
+    ]
+    new_iids = [
+        p for p in prefix if p in ["CMIP6_LEAP_legacy", "cmip6-pgf-ingestion-test"]
+    ]
     return len(new_iids)
 
+
 url_dict = {
-    'qc':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog.json",
-    'non-qc':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_noqc.json",
-    'retracted':"https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_retracted.json"
+    "qc": "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog.json",
+    "non-qc": "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_noqc.json",
+    "retracted": "https://storage.googleapis.com/cmip6/cmip6-pgf-ingestion-test/catalog/catalog_retracted.json",
 }
 
 iids_found = []
-for catalog,url in url_dict.items():
-
+for catalog, url in url_dict.items():
     n_new_iids = count_new_iids(url)
     print(f"{url=} LEAP ingested datasets {n_new_iids}")
 ```

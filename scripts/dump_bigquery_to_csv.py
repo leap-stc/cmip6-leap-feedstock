@@ -1,8 +1,9 @@
+import os
+from datetime import date
+
+import gcsfs
 from leap_data_management_utils.bq_interfaces import CMIPBQInterface
 from leap_data_management_utils.cmip_catalog import bq_df_to_intake_esm
-import os
-import gcsfs
-from datetime import date
 
 table_id = "leap-pangeo.testcmip6.cmip6_consolidated_manual_testing"
 target_prefix = "gs://cmip6/cmip6-pgf-ingestion-test/catalog/"
